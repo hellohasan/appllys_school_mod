@@ -1,0 +1,51 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Mada');
+
+// Variables
+@import 'variables';
+$fa-font-path: "../webfonts";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+@import "~select2/dist/css/select2.min.css";
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+@import "~datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
+@import "~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css";
+
+@import '~admin-lte/dist/css/adminlte.css';
+@import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~vue-multiselect/dist/vue-multiselect.min.css";
+@import 'elements/buttons';
+@import "~placeholder-loading/src/scss/placeholder-loading";
+@import "~summernote/dist/summernote-bs4.min.css";
+@import "~nprogress/nprogress.css";
+
+
+@font-face {
+    font-family: 'SolaimanLipiNormal';
+    font-style: normal;
+    font-weight: normal;
+    src: local('SolaimanLipiNormal'), url('../fonts/solaimanlipi.woff') format('woff');
+}
+
+#nprogress .bar {
+    background: #28a745;
+    height: 4px;
+    z-index: 99999
+}
+
+.router-link-exact-active{
+    background-color: #007bff;
+    color: #ffffff !important;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+

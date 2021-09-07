@@ -145,6 +145,7 @@ Route::group(['middleware' => 'jwt'], function () {
     /*Accountant Route List*/
     Route::apiResource('bill-items','API\Accountant\BillItemController',['except' => ['create','show','destroy']]);
     Route::post('bill-item-export-excel',[\App\Http\Controllers\Api\Accountant\BillItemController::class,'exportExcel']);
+    Route::post('bill-item-export-pdf',[\App\Http\Controllers\Api\Accountant\BillItemController::class,'exportPDF']);
 
 
 });

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use PDF;
 
 class HomeController extends Controller
 {
@@ -35,5 +37,16 @@ class HomeController extends Controller
         $user->givePermissionTo('posts.*');
 
         echo 'Done';
+    }
+
+    public function exportPDF(Request $request)
+    {
+
+        $pdf = PDF::loadView('export.exportPDF', [], [], [
+            'title' => 'Another Title',
+            'default_font' => 'Nikosh'
+        ]);
+        $fileName = Str::random(5).'Tabulation.pdf';
+        return $pdf->stram($fileName);
     }
 }

@@ -1,15 +1,14 @@
-import {getLocalUser} from "../helpers/auth"
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import { getLocalUser } from "../helpers/auth";
 const user = getLocalUser();
 const {locale, locales} = window.config
-const {basicData} = getBasicData();
 
 export default({
   modules:{
 
   },
   state: {
-    basicData: basicData,
+    basicData: [],
     currentUser: user,
     isLoggedIn: !!user,
     loading: false,
@@ -62,7 +61,7 @@ export default({
       state.isLoggedIn = true;
       state.loading = false;
       state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
-      state.basicData = Object.assign({}, payload.basic);
+      state.basicData = JSON.stringify(Object.assign({}, payload.basic));
       localStorage.setItem("user", JSON.stringify(state.currentUser));
       localStorage.setItem("basic", JSON.stringify(state.basicData));
     },
@@ -134,12 +133,6 @@ function getLocale(locales, fallback) {
   }
   return fallback
 }
-
 export function getBasicData(){
-
-  const basicStr = localStorage.getItem("basic");
-  if (!basicStr) {
-    return null;
-  }
-  return JSON.parse(basicStr)
+  return {}
 }

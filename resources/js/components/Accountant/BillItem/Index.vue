@@ -140,7 +140,19 @@ export default {
                             titleAttr: "Export as PDF",
                             className: "btn btn-success btn-sm",
                             action: function ( e, dt, node, config ) {
-                                alert( 'Pdf activated' );
+                                $.ajax({
+                                    url: "/api/bill-item-export-pdf",
+                                    type: 'POST',
+                                    headers: {"Authorization": 'Bearer '+token},
+                                    success: function(response) {
+                                        let a = document.createElement("a");
+                                        a.href = response.file;
+                                        a.download = response.name;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        a.remove();
+                                    }
+                                });
                             }
                         },
                     ]

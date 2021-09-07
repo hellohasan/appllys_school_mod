@@ -2,20 +2,32 @@
 
 namespace App\Exports;
 
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CustomExport implements FromCollection, WithHeadings,ShouldAutoSize, WithStyles, WithCustomStartCell
+class CustomExport implements
+    FromCollection,
+    WithHeadings,
+    ShouldAutoSize,
+    WithStyles,
+    WithCustomStartCell,
+    WithEvents
 {
+    use Exportable;
+
     protected $rows;
     protected $heading;
     protected $title;
 
-    function __construct($headings,$rows,$title) {
+    function __construct($headings, $rows, $title)
+    {
         $this->rows = $rows;
         $this->heading = $headings;
         $this->title = $title;
@@ -36,7 +48,7 @@ class CustomExport implements FromCollection, WithHeadings,ShouldAutoSize, WithS
         $cells = $this->headingCellLength();
         $startCells = $this->startCellLength();
         $sheet->mergeCells($cells);
-        $sheet->setCellValue('A1',$this->title);
+        $sheet->setCellValue('A1', $this->title);
         $sheet->getStyle('A1')->getFont();
         $sheet->getStyle($cells)->getFont()->setBold(true);
         $sheet->getStyle($startCells)->getFont()->setBold(true);
@@ -47,7 +59,7 @@ class CustomExport implements FromCollection, WithHeadings,ShouldAutoSize, WithS
                 ],
                 'font' => [
                     'bold' => true,
-                    'size' => 25
+                    'size' => 20
                 ],
 
             ]
@@ -57,18 +69,25 @@ class CustomExport implements FromCollection, WithHeadings,ShouldAutoSize, WithS
     public function headingCellLength(): string
     {
         $string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        return 'A1:'.$string[count($this->heading)-1].'1';
+        return 'A1:' . $string[count($this->heading) - 1] . '1';
     }
 
     public function startCellLength(): string
     {
         $string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        return 'A2:'.$string[count($this->heading)-1].'2';
+        return 'A2:' . $string[count($this->heading) - 1] . '2';
     }
 
     public function startCell(): string
     {
         return 'A2';
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+
+        ];
     }
 
 }

@@ -23,6 +23,7 @@ Route::get('/login', function () {
 
 Route::view('test-view','test');
 
+Route::get('bill-export-pdf',[\App\Http\Controllers\HomeController::class,'exportPDF']);
 
 Route::get('/clear-cache', function() {
     Artisan::call('optimize:clear');

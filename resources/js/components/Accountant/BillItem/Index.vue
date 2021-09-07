@@ -121,8 +121,9 @@ export default {
                             className: "btn btn-primary btn-sm",
                             action: function ( e, dt, node, config ) {
                                 $.ajax({
-                                    url: "/api/bill-item-export-excel",
+                                    url: "/api/bill-item-export",
                                     type: 'POST',
+                                    data:{type:'excel'},
                                     headers: {"Authorization": 'Bearer '+token},
                                     success: function(response) {
                                         let a = document.createElement("a");
@@ -141,16 +142,22 @@ export default {
                             className: "btn btn-success btn-sm",
                             action: function ( e, dt, node, config ) {
                                 $.ajax({
-                                    url: "/api/bill-item-export-pdf",
+                                    url: "/api/bill-item-export",
                                     type: 'POST',
+                                    data:{type:'pdf'},
                                     headers: {"Authorization": 'Bearer '+token},
+                                    xhrFields: {
+                                        responseType: 'blob'
+                                    },
                                     success: function(response) {
-                                        let a = document.createElement("a");
-                                        a.href = response.file;
-                                        a.download = response.name;
-                                        document.body.appendChild(a);
-                                        a.click();
-                                        a.remove();
+                                        var blob = new Blob([response]);
+                                        var link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        link.download = "Bill Item List.pdf";
+                                        link.click();
+                                    },
+                                    error: function(blob){
+                                        console.log(blob);
                                     }
                                 });
                             }

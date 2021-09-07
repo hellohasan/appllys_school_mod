@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillItem;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use PDF;
 
 class HomeController extends Controller
 {
@@ -42,11 +42,52 @@ class HomeController extends Controller
     public function exportPDF(Request $request)
     {
 
-        $pdf = PDF::loadView('export.exportPDF', [], [], [
+        $data['tableHead'] = [
+            'ID','Title','Bill For','Default Amount','Status'
+        ];
+        $tableRows = [];
+        $billItems = BillItem::get();
+        foreach ($billItems as  $bill){
+            $tableRows[] = [
+                $bill->id,
+                $bill->title,
+                $bill->item_for,
+                $bill->default_amount,
+                $bill->activated
+            ];
+        }
+
+        $data['tableRows'] = $tableRows;
+
+        return view('export.exportPDF',$data);
+
+
+
+        $data = [
+            'name' => 'আমি কি চাই আমি নিজেই জানি না।'
+        ];
+        $mPdf = new \Mpdf\Mpdf([
+            'default_font_size' => 12,
+            'default_font' => 'solaimanlipi'
+        ]);
+
+        $html = view('export.exportPDF', $data);
+        $html = $html->render();
+        $fileName = Str::random(5).'Tabulation.pdf';
+        $mPdf->WriteHTML($html);
+        $mPdf->Output($fileName,'D');
+
+
+        /*$pdf = PDF::loadView('export.exportPDF', $data, [], [
             'title' => 'Another Title',
             'default_font' => 'Nikosh'
         ]);
         $fileName = Str::random(5).'Tabulation.pdf';
-        return $pdf->stram($fileName);
+        return $pdf->stream($fileName);*/
+    }
+
+    public function pdfData()
+    {
+        return 'আমি কি চাই আমি নিজেই জানি না।';
     }
 }

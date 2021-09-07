@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api\Accountant;
 
 use App\Exports\CustomExport;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CommonTrait;
 use App\Models\BillItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
-use PDF;
 
 class BillItemController extends Controller
 {
+    use CommonTrait;
     /**
      * Display a listing of the resource.
      *
@@ -85,96 +87,32 @@ class BillItemController extends Controller
         //
     }
 
-    public function exportExcel(Request $request)
+    public function exportExcelPDF(Request $request)
     {
-        $items = BillItem::get();
-        $rows = [];
-        $heading = ['Title', 'Default Amount'];
-        $title = "Bill Item Lists";
-        foreach ($items as $item) {
-            $rows[] = [
-                'Title' => $item->title,
-                'Default Amount' => $item->default_amount,
+        if ($request->has('type')) {
+            $type = $request->input("type");
+            $title = 'Billing Item List';
+            $headings = [
+                'ID', 'Title', 'Bill For', 'Default Amount', 'Status'
             ];
+            $rows = [];
+            $billItems = BillItem::get();
+            foreach ($billItems as $bill) {
+                $rows[] = [
+                    $bill->id,
+                    $bill->title,
+                    $bill->item_for,
+                    $bill->default_amount,
+                    $bill->activated ? 'Activated' : 'Deactivated'
+                ];
+            }
+            if ($type == 'excel') {
+                return response()->json($this->listExcelDownload($headings, $rows, $title));
+            }elseif ($type == 'pdf') {
+                $this->listPDFDownload($headings,$rows);
+            }
+
         }
-
-        $myFile = Excel::raw(new CustomExport($heading, $rows, $title), \Maatwebsite\Excel\Excel::XLSX);
-        $response = array('name' => $title, 'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . base64_encode($myFile));
-        return response()->json($response);
     }
 
-    public function exportPDF(Request $request)
-    {
-
-        $data = [
-            'foo' => 'bar'
-        ];
-
-        $pdf = PDF::setPaper('a4', 'landscape')->loadView('export.exportPDF')
-            ->setPaper('a4', 'landscape')
-            ->setWarnings(false);
-        return $pdf->download('invoice.pdf');
-
-
-
-        /*$data = [
-            'foo' => 'bar'
-        ];
-
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true,])->loadView('export.exportPDF', $data);
-        $fileName = 'Tabulation.pdf';
-        return $pdf->download($fileName);*/
-
-
-        /*$mpdf = new \Mpdf\Mpdf([
-            'default_font_size' => 12,
-            'default_font' => 'nikosh'
-        ]);
-
-        $data = [
-            'foo' => 'bar'
-        ];
-
-        $html = view('export.exportPDF',[
-            'data' => $data
-        ]);
-
-        $html = $html->render();
-        //$mpdf->WriteHTML($bootstrap,1);
-        $mpdf->WriteHTML($html);
-        $mpdf->Output('document','I');*/
-
-        /*$config = [
-            'default_font_size' => 12,
-            'default_font' => 'solaimanlipi'
-        ];
-        $data = [
-            'foo' => 'bar'
-        ];
-        $pdf = PDF::loadView('export.exportPDF', $data, [], $config);
-        return $pdf->stream('document.pdf');*/
-
-
-        /*$font_family = "'kalpurush','sans-serif'";
-        $config = [
-            'format'           => 'A4',
-            'display_mode'     => 'fullpage',
-            'orientation' => 'landscape',
-            'font_path' => public_path('fonts'),
-        ];
-
-        $data = [
-            'order' =>  BillItem::get(),
-            'font_family' => $font_family,
-        ];
-        $temp = 'export.exportPDF';
-        $mode = 'portrait';
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true,])->loadView($temp,$data )->setPaper('a4', $mode);
-        return $pdf->download('fff.pdf');*/
-    }
-
-    public function mydata()
-    {
-        return 'মাই হইলাম হাসান সাহেব Hasan Rhaman';
-    }
 }

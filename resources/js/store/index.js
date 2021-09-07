@@ -1,14 +1,13 @@
 import Cookies from 'js-cookie';
-import { getLocalUser } from "../helpers/auth";
+import {getLocalUser} from "../helpers/auth";
+
 const user = getLocalUser();
 const {locale, locales} = window.config
+const {basicData} = getBasicData();
 
-export default({
-  modules:{
-
-  },
+export default ({
   state: {
-    basicData: [],
+    basicData: basicData,
     currentUser: user,
     isLoggedIn: !!user,
     loading: false,
@@ -61,7 +60,7 @@ export default({
       state.isLoggedIn = true;
       state.loading = false;
       state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
-      state.basicData = JSON.stringify(Object.assign({}, payload.basic));
+      state.basicData = Object.assign({}, payload.basic);
       localStorage.setItem("user", JSON.stringify(state.currentUser));
       localStorage.setItem("basic", JSON.stringify(state.basicData));
     },
@@ -133,6 +132,12 @@ function getLocale(locales, fallback) {
   }
   return fallback
 }
-export function getBasicData(){
-  return {}
+
+export function getBasicData() {
+  const basicStr = localStorage.getItem("basic");
+  if (basicStr === null) {
+    let basic = {'title' : 'Develop by Softwarezon'}
+    return basic
+  }
+  return JSON.parse(basicStr)
 }

@@ -2,6 +2,7 @@ import {setDocumentDirectionPerLocale, setDocumentLang} from "../plugins/documen
 import i18n from "../plugins/i18n";
 import Swal from "sweetalert2";
 import NProgress from 'nprogress';
+import {getBasicData} from '../store/index'
 
 export function initialize(store, router) {
 
@@ -13,7 +14,7 @@ export function initialize(store, router) {
     const requireAuth = to.matched.some(record => record.meta.requireAuth);
     const currentUser = store.state.currentUser;
 
-    document.title = getPageTitle(to, store);
+    document.title = getPageTitle(to);
 
     const lang = i18n.locale;
     if (lang === 'ar') {
@@ -78,8 +79,13 @@ export function initialize(store, router) {
 
 }
 
-function getPageTitle(route, store) {
-
+function getPageTitle(route) {
+  let basic = getBasicData()
+  if (basic){
+    return route.meta.title+' - '+basic.title
+  }else{
+    return route.meta.title
+  }
 }
 
 function canAccess(store, route) {

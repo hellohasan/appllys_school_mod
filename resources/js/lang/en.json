@@ -190,5 +190,10 @@
     "TotalStudent": "Total Student",
     "SerialNumbers" : "Serial Number",
     "ViewAssign" : "View Assign",
-    "Details": "Details"
+    "Details": "Details",
+    "AccountantSection": "Accountant Section",
+    "BillReceive" : "Bill Receive",
+    "NewReceive": "New Receive",
+    "ReceiveList": "Receive List",
+    "ViewReceive": "View Receive"
 }

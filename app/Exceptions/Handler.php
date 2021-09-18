@@ -60,12 +60,9 @@ class Handler extends ExceptionHandler
         } elseif ($exception instanceof JWTException) {
             return response()->json(['error' => 'Authentication token is missing'], 401);
         }
-        
+
         if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
-            return response()->json([
-                'responseMessage' => 'You do not have the required authorization.',
-                'responseStatus'  => 403,
-            ]);
+            response()->json(['error' => 'You do not have the required authorization.'], 403);
         }
 
         return parent::render($request, $exception);

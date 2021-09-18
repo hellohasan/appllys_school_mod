@@ -152,7 +152,7 @@ Route::group(['middleware' => 'jwt'], function () {
 
     Route::get('bill-assign-list',[BillAssignController::class,'billAssignList']);
     Route::post('bill-assign-submit',[BillAssignController::class,'billAssignSubmit']);
-    Route::get('bill-assign-view/{custom}',[BillAssignController::class,'billAssignView']);
+    Route::get('bill-assign-view/{custom}',[BillAssignController::class,'billAssignView'])->middleware('permission:bill-assign-view');
     Route::delete('bill-assign-delete',[BillAssignController::class,'billAssignDelete'])->middleware('permission:bill-assign-delete');
 
     Route::get('load-student-for-class',[CommonController::class,'loadStudentForClass']);

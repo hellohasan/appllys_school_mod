@@ -1,6 +1,6 @@
 <template>
     <Fragment>
-        <li class="nav-header">Accountant Section</li>
+        <li v-role="['Super Admin','Admin','Accountant']" class="nav-header">{{ $t('AccountantSection') }}</li>
 
         <li v-role="['Super Admin','Admin','Accountant']" class="nav-item has-treeview">
             <a href="#!" class="nav-link">
@@ -18,6 +18,27 @@
                     <router-link to="/bill-assigns" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>{{ $t('AssignList') }}</p>
+                    </router-link>
+                </li>
+            </ul>
+        </li>
+
+        <li v-role="['Super Admin','Admin','Accountant']"  v-permission="['bill-receive-new','bill-receive-list']" class="nav-item has-treeview">
+            <a href="#!" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>{{ $t('BillReceive') }}<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+                <li v-permission="['bill-receive-new']" class="nav-item">
+                    <router-link to="/bill-receive/new" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('NewReceive') }}</p>
+                    </router-link>
+                </li>
+                <li v-permission="['bill-receive-list']"  class="nav-item">
+                    <router-link to="/bill-receive" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('ReceiveList') }}</p>
                     </router-link>
                 </li>
             </ul>
@@ -41,12 +62,13 @@
 
 <script>
 import role from "../../directive/role/index";
+import permission from "../../directive/permission/permission";
 import {Fragment} from "vue-fragment";
 
 export default {
     name: "Accountant",
     components: {Fragment},
-    directives: {role}
+    directives: {role,permission}
 };
 </script>
 

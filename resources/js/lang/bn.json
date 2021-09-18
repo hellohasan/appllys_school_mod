@@ -189,5 +189,10 @@
     "TotalStudent": "মোট শিক্ষার্থী",
     "SerialNumbers" : "ক্রমিক নম্বর",
     "ViewAssign" : "বিল বিবরণ",
-    "Details": "বিবরণ"
+    "Details": "বিবরণ",
+    "AccountantSection": "হিসাবরক্ষক বিভাগ",
+    "BillReceive" : "বিল গ্রহণ",
+    "NewReceive": "নতুন গ্রহণ",
+    "ReceiveList": "গ্রহণ তালিকা",
+    "ViewReceive": "গ্রহণ দেখুন"
 }

@@ -42,19 +42,17 @@ export function initialize(store, router) {
 
   /* Checking api return unauthorized */
   axios.interceptors.response.use(null, (error) => {
-
     if (error.response.status === 401) {
-      NProgress.done()
       store.commit('logout');
       router.push('/login');
-    }
 
-    if (error.response.status === 422) {
+    }else if (error.response.status === 422) {
       NProgress.done()
-    }
+      //validation error
+    }else if (error.response.status === 403) {
+      router.push('/unauthorized');
 
-    if (error.response.status === 500) {
-      NProgress.done()
+    }else if (error.response.status === 500) {
       Swal.fire({
         icon: 'error',
         title: i18n.t('error_alert_title'),
@@ -64,6 +62,7 @@ export function initialize(store, router) {
         cancelButtonText: i18n.t('cancel')
       })
     }
+    NProgress.done()
     return Promise.reject(error);
   });
 

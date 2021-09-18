@@ -14,7 +14,7 @@ class BillAssignController extends Controller
 
     public function __construct()
     {
-
+        //$this->middleware('permission:bill-assign-view',['only'=>['billAssignView']]);
     }
 
     public function billAssignList()
@@ -32,6 +32,7 @@ class BillAssignController extends Controller
             ->withCount('billStudents')
             ->get();
     }
+
     public function customPad($start,$prefix,$length) {
         return $prefix.(str_pad((int)$start, $length, '0', STR_PAD_LEFT));
     }

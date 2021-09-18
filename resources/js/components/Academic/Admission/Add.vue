@@ -706,6 +706,7 @@ export default {
                 this.form.type = data.class.type
                 this.admission_fee = data.fee
                 this.optionalSubjects = {}
+                this.sections = {}
 
                 if (data.class.type === 1) {
                     this.groups = data.class.academic_groups

@@ -14,6 +14,7 @@ class AcademicSubject extends Model
         'academic_group_id',
         'academic_department_id',
         'academic_section_id',
+        'academic_year_id',
         'name',
         'code',
         'mark_type',

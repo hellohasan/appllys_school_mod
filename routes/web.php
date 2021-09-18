@@ -17,13 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', function () {
-    return view('layouts.master');
-});
+Route::view('/login','layouts.master');
 
 Route::view('test-view','test');
 
-Route::get('bill-export-pdf',[\App\Http\Controllers\HomeController::class,'exportPDF']);
 
 Route::get('/clear-cache', function() {
     Artisan::call('optimize:clear');

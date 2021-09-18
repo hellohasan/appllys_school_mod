@@ -12,7 +12,7 @@ export const test = [
     path: "/test-datatable",
     name: "test-datatable",
     component: () =>
-      import(/*webpackChunkName: "test"*/ "../components/test/DataTable2"),
+      import(/*webpackChunkName: "test"*/ "../components/test/DataTable"),
     meta: {
       requireAuth: true
     }

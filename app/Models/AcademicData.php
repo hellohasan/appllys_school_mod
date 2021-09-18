@@ -35,6 +35,11 @@ class AcademicData extends Model
         return $this->belongsTo(AcademicSection::class, 'academic_section_id');
     }
 
+    public function year()
+    {
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    }
+
     public function getGroupDepartmentAttribute()
     {
         if ($this->type == 2) {

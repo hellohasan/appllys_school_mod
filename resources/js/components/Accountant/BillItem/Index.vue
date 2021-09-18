@@ -77,7 +77,7 @@
 </template>
 
 <script>
-require('../../../helpers/datatable2')
+require('../../../helpers/datatable')
 import dom from '../../../helpers/datatableDom'
 export default {
     name: "Index",

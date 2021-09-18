@@ -74,7 +74,7 @@ class AdmissionController extends Controller
             if ($serial) {
                 return $serial->custom + 1;
             }
-            return $sessionCode.$this->customPad($classId,null,2).$this->customPad($this->findSerial($classId,$type,$groupDepartment),null,2).$this->customPad(1,null,3);
+            return $sessionCode.$this->customPad($classId,null,2).$this->customPad($groupDepartment,'0',2).$this->customPad(1,null,3);
         }
 
         $serial = AcademicData::whereAcademicSessionId($sessionId)
@@ -187,8 +187,7 @@ class AdmissionController extends Controller
             if($request->image){
                 $name = time().'_profile.' . AppHelper::getFileExtension($request->image);
                 $path = "storage/images/users/$user->id".'/'.$name;
-                Image::make($request->image)->resize(120,150)
-                    ->save(public_path($path));
+                Image::make($request->image)->resize(120,150)->save(public_path($path));
                 $user->photo = $path;
             }
             $studentRole = Role::findByName('Student')->first();
@@ -213,7 +212,7 @@ class AdmissionController extends Controller
             }else{
                 $academic['custom'] = $this->createAcademicId($request->input("session_id"),$request->input("academic_class_id"),$request->input("type"),$request->input("academic_department_id"));
                 $academic['academic_department_id'] = $request->input("academic_department_id");
-                $academic['academic_section_id'] = $request->input("academic_year_id");
+                $academic['academic_year_id'] = $request->input("academic_year_id");
             }
             $academic = AcademicData::create($academic);
             $user->custom = $academic->custom;
@@ -445,13 +444,13 @@ class AdmissionController extends Controller
                 $compolsory = AcademicSubject::whereAcademicClassId($class->id)
                     ->where('religion_type', '!=', 1)
                     ->whereAcademicDepartmentId($request->input("academic_department_id"))
-                    ->whereAcademicSectionId($request->input("academic_year_id"))
+                    ->whereAcademicYearId($request->input("academic_year_id"))
                     ->pluck('id')
                     ->toArray();
 
                 $religion = AcademicSubject::whereAcademicClassId($class->id)
                     ->whereAcademicDepartmentId($request->input("academic_department_id"))
-                    ->whereAcademicSectionId($request->input("academic_year_id"))
+                    ->whereAcademicYearId($request->input("academic_year_id"))
                     ->whereReligionId($request->input("religion_id"))
                     ->pluck('id')
                     ->toArray();

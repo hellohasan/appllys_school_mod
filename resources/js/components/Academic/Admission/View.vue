@@ -189,8 +189,14 @@
                     </div>
 
                     <div class="form-group col-md-3 form-group-mb-0">
-                        <label for="data">Section: {{academic.section.name}}</label>
+                        <template v-if="academic.type == 2">
+                            <label for="data">Year: {{academic.year.name}}</label>
+                        </template>
+                        <template v-else>
+                            <label for="data">Section: {{academic.section.name}}</label>
+                        </template>
                     </div>
+
                     <template v-if="optional.length">
                         <div class="form-group col-md-12 form-group-mb-0">
                             <label for="data">Optional Subject: {{optional[0].academic_subject.name}}</label>

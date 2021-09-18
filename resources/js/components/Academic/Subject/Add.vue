@@ -36,9 +36,9 @@
                                     <has-error :form="form" field="academic_department_id"></has-error>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="academic_section_id">Select Year</label>
-                                    <custom-select-empty :options="years" v-model="form.academic_section_id" placeholder="Select One"></custom-select-empty>
-                                    <has-error :form="form" field="academic_section_id"></has-error>
+                                    <label for="academic_year_id">Select Year</label>
+                                    <custom-select-empty :options="years" v-model="form.academic_year_id" placeholder="Select One"></custom-select-empty>
+                                    <has-error :form="form" field="academic_year_id"></has-error>
                                 </div>
                             </div>
                         </template>
@@ -175,6 +175,7 @@ export default {
                 academic_group_id: '',
                 academic_department_id: '',
                 academic_section_id: '',
+                academic_year_id: '',
                 name: '',
                 code: '',
                 mark_type: '',
@@ -223,8 +224,8 @@ export default {
                     title: this.$t('success_message')
                 })
                 //this.$router.push('/academic-subject')
-                //this.form.clear();
-                //this.form.reset();
+                this.form.clear();
+                this.form.reset();
             })
         },
         classChange: function (e) {

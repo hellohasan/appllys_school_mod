@@ -1,3 +1,4 @@
+import i18n from '../plugins/i18n'
 export const academic = [
   /*Academic Information*/
   {
@@ -12,21 +13,21 @@ export const academic = [
         path: "/",
         component: require("../components/Academic/Session").default,
         meta:{
-          title: 'Academic Session'
+          title: i18n.tc('Academic_Session')
         }
       },
       {
         path: "add",
         component: require("../components/Academic/Session/Add").default,
         meta: {
-          title: 'Add Academic Session',
+          title: i18n.tc('Academic_Session')
         }
       },
       {
         path: ":id/edit",
         component: require("../components/Academic/Session/Edit").default,
         meta: {
-          title: 'Edit Academic Session',
+          title: i18n.tc('Academic_Session'),
         }
       }
     ]

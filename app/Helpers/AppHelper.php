@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class AppHelper
 {
+
     public static function putPermanentEnv($key, $value)
     {
         $path = app()->environmentFilePath();

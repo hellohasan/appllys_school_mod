@@ -20,8 +20,9 @@ class SubjectController extends Controller
             'academic_class_id' => 'required',
             'academic_class_type' => 'required',
             'academic_group_id' => 'required_if:academic_class_type,1',
+            'academic_section_id' => 'required_if:academic_class_type,1',
             'academic_department_id' => 'required_if:academic_class_type,2',
-            'academic_section_id' => 'required_if:academic_class_type,2',
+            'academic_year_id' => 'required_if:academic_class_type,2',
         ];
 
         if ($request->input("academic_class_type") == 1) {
@@ -31,8 +32,8 @@ class SubjectController extends Controller
             ]);
         }elseif ($request->input("academic_class_type") == 2) {
             $rules = array_merge($rules,[
-                'name' => 'required|max:191|unique_with:academic_subjects,academic_class_id,academic_department_id,academic_section_id',
-                'code' => 'required|max:191|unique_with:academic_subjects,academic_class_id,academic_department_id,academic_section_id'
+                'name' => 'required|max:191|unique_with:academic_subjects,academic_class_id,academic_department_id,academic_year_id',
+                'code' => 'required|max:191|unique_with:academic_subjects,academic_class_id,academic_department_id,academic_year_id'
             ]);
         }else{
             $rules = array_merge($rules,[
@@ -60,6 +61,7 @@ class SubjectController extends Controller
             'academic_group_id',
             'academic_department_id',
             'academic_section_id',
+            'academic_year_id',
             'full_mark',
             'theory',
             'practical',
@@ -71,9 +73,10 @@ class SubjectController extends Controller
 
         if ($request->input("academic_class_type") == 1) {
             $in['academic_group_id'] = $request->input("academic_group_id");
-        }else{
-            $in['academic_department_id'] = $request->input("academic_department_id");
             $in['academic_section_id'] = $request->input("academic_section_id");
+        }elseif ($request->input("academic_class_type") == 2) {
+            $in['academic_department_id'] = $request->input("academic_department_id");
+            $in['academic_year_id'] = $request->input("academic_year_id");
         }
 
         if ($request->input("mark_type")) {

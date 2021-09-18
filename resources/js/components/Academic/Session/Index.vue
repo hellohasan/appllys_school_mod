@@ -36,15 +36,15 @@
                     <td>{{ session.code }}</td>
                     <td>{{ session.off_day }}</td>
                     <td>
-                        <span v-if="session.status" class="badge badge-primary font-weight-bold text-uppercase">Activated</span>
-                        <span v-else class="badge badge-danger font-weight-bold text-uppercase">Deactivated</span>
+                        <span v-if="session.status" class="badge badge-primary font-weight-bold text-uppercase">{{$t('Activated')}}</span>
+                        <span v-else class="badge badge-danger font-weight-bold text-uppercase">{{$t('Deactivated')}}</span>
                     </td>
                     <td>
-                        <span v-if="session.isCurrent" class="badge badge-success font-weight-bold text-uppercase">Running</span>
-                        <span v-else class="badge badge-danger font-weight-bold text-uppercase">Pass Out</span>
+                        <span v-if="session.isCurrent" class="badge badge-success font-weight-bold text-uppercase">{{$t('Running')}}</span>
+                        <span v-else class="badge badge-danger font-weight-bold text-uppercase">{{$t('PassOut')}}</span>
                     </td>
                     <td>
-                        <router-link :to="`/academic-session/${session.id}/edit`" class="btn btn-success btn-sm text-uppercase font-weight-bold"><i class="far fa-edit"></i> Edit</router-link>
+                        <router-link :to="`/academic-session/${session.id}/edit`" class="btn btn-success btn-sm text-uppercase font-weight-bold"><i class="far fa-edit"></i> {{$t('Edit')}}</router-link>
                     </td>
                 </tr>
             </tbody>

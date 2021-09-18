@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\Academic\ClassPeriodController;
 use App\Http\Controllers\API\Academic\GradeController;
 use App\Http\Controllers\API\Academic\SubjectController;
 use App\Http\Controllers\API\Academic\TeacherManageController;
+use App\Http\Controllers\API\Accountant\BillAssignController;
+use App\Http\Controllers\Api\Accountant\BillItemController;
 use App\Http\Controllers\API\AdmissionController;
 use App\Http\Controllers\CommonController;
 use Illuminate\Http\Request;
@@ -144,8 +146,18 @@ Route::group(['middleware' => 'jwt'], function () {
 
     /*Accountant Route List*/
     Route::apiResource('bill-items','API\Accountant\BillItemController',['except' => ['create','show','destroy']]);
-    Route::post('bill-item-export',[\App\Http\Controllers\Api\Accountant\BillItemController::class,'exportExcelPDF']);
+    Route::post('bill-item-export',[BillItemController::class,'exportExcelPDF']);
 
+    Route::get('load-bill-for-student',[CommonController::class,'loadBillForStudent']);
+
+    Route::get('bill-assign-list',[BillAssignController::class,'billAssignList']);
+    Route::post('bill-assign-submit',[BillAssignController::class,'billAssignSubmit']);
+    Route::get('bill-assign-view/{custom}',[BillAssignController::class,'billAssignView']);
+    Route::delete('bill-assign-delete',[BillAssignController::class,'billAssignDelete'])->middleware('permission:bill-assign-delete');
+
+    Route::get('load-student-for-class',[CommonController::class,'loadStudentForClass']);
+    Route::get('load-student-for-class-group',[CommonController::class,'loadStudentForClassGroup']);
+    Route::get('load-student-for-class-department-year',[CommonController::class,'loadStudentForClassDepartmentYear']);
 
 });
 

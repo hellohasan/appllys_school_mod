@@ -1,6 +1,6 @@
 import Vue from "vue";
 import moment from "moment";
-
+import store from '../store/index'
 Vue.filter("capitalize", function(value) {
     if (!value) return "";
     value = value.toString();
@@ -20,3 +20,25 @@ Vue.filter("myDateTime", function(created) {
 Vue.filter("myDate", function(created) {
     return moment(created).format("MMMM Do YYYY");
 });
+
+Vue.filter('withCurrencySymbol', function (amount){
+  return '৳ '+amount;
+})
+
+Vue.filter('withCurrency', function (amount){
+  if (store.state.locale === 'en'){
+    return amount+' BDT';
+  }else if (store.state.locale === 'bn'){
+    return amount+' টাকা';
+  }
+  return '';
+})
+
+Vue.filter('students', function (data){
+  if (store.state.locale === 'en'){
+    return data+' Students';
+  }else if (store.state.locale === 'bn'){
+    return data+' শিক্ষার্থী';
+  }
+  return '';
+})

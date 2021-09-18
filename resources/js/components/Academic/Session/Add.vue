@@ -3,15 +3,15 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="title">Session Title</label>
-                    <input type="text" v-model="form.title" :class="{ 'is-invalid': form.errors.has('title') }" id="title" placeholder="Session Title" class="form-control">
+                    <label for="title">{{$t('SessionTitle')}}</label>
+                    <input type="text" v-model="form.title" :class="{ 'is-invalid': form.errors.has('title') }" id="title" :placeholder="$t('SessionTitle')" class="form-control">
                     <has-error :form="form" field="title"></has-error>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="code">Code for ID</label>
-                    <input type="text" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" placeholder="Code for ID" class="form-control">
+                    <label for="code">{{$t('CodeForID')}}</label>
+                    <input type="text" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" :placeholder="$t('CodeForID')" class="form-control">
                     <has-error :form="form" field="code"></has-error>
                 </div>
             </div>
@@ -19,22 +19,22 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="start_year">Start Year</label>
-                    <input type="number" v-model="form.start_year" :class="{ 'is-invalid': form.errors.has('start_year') }" id="start_year" placeholder="Start Year" class="form-control">
+                    <label for="start_year">{{$t('StartYear')}}</label>
+                    <input type="number" v-model="form.start_year" :class="{ 'is-invalid': form.errors.has('start_year') }" id="start_year" :placeholder="$t('StartYear')" class="form-control">
                     <has-error :form="form" field="start_year"></has-error>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="end_year">End Year</label>
-                    <input type="number" v-model="form.end_year" :class="{ 'is-invalid': form.errors.has('end_year') }" id="end_year" placeholder="End Year" class="form-control">
+                    <label for="end_year">{{$t('EndYear')}}</label>
+                    <input type="number" v-model="form.end_year" :class="{ 'is-invalid': form.errors.has('end_year') }" id="end_year" :placeholder="$t('EndYear')" class="form-control">
                     <has-error :form="form" field="end_year"></has-error>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="duration">Duration</label>
-                    <input type="text" readonly :value="durationShown" :class="{ 'is-invalid': form.errors.has('duration') }" id="duration" placeholder="Duration" class="form-control">
+                    <label for="duration">{{$t('Duration')}}</label>
+                    <input type="text" readonly :value="durationShown" :class="{ 'is-invalid': form.errors.has('duration') }" id="duration" :placeholder="$t('Duration')" class="form-control">
                     <has-error :form="form" field="duration"></has-error>
                 </div>
             </div>
@@ -42,21 +42,21 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="off_day">Weekly Off Day</label>
-                    <select2 :options="days" v-model="form.off_day" placeholder="Select One" name="type"></select2>
+                    <label for="off_day">{{$t('WeeklyOffDay')}}</label>
+                    <select2 :options="days" v-model="form.off_day" :placeholder="$t('Select_One')" name="type"></select2>
                     <has-error :form="form" field="off_day"></has-error>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="status">Status</label>
+                    <label for="status">{{$t('Status')}}</label>
                     <v-toggle v-model="form.status" :options="checkOptions" :disabled="false" :class="{ 'is-invalid': form.errors.has('status') }" id="status"/>
                     <has-error :form="form" field="status"></has-error>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="isCurrent">Current Session</label>
+                    <label for="isCurrent">{{$t('CurrentSession')}}</label>
                     <v-toggle v-model="form.isCurrent" :options="checkOptions2" :disabled="false" :class="{ 'is-invalid': form.errors.has('isCurrent') }" id="isCurrent"/>
                     <has-error :form="form" field="isCurrent"></has-error>
                 </div>
@@ -67,16 +67,16 @@
         <div class="row" v-for="(c, i) in form.classes" :key="i">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="c_name">Class Name</label>
+                    <label for="c_name">{{$t('ClassName')}}</label>
                     <input type="text" v-model="c.text" readonly :class="{ 'is-invalid': form.errors.has('c_name') }" placeholder="Class Name" class="form-control">
                     <has-error :form="form" field="c_name"></has-error>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="admission_fee">Admission Fee</label>
+                    <label for="admission_fee">{{$t('AdmissionFee')}}</label>
                     <div class="input-group mb-3">
-                        <input type="number" class="form-control" v-model="c.admission_fee" :class="{ 'is-invalid': form.errors.has('admission_fee') }" placeholder="Admission Fee" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input type="number" class="form-control" v-model="c.admission_fee" :class="{ 'is-invalid': form.errors.has('admission_fee') }" :placeholder="$t('AdmissionFee')" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2">BDT</span>
                         </div>

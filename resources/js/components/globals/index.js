@@ -10,6 +10,7 @@ import FormGroupSelect from "./FormGroupSelect";
 import FormGroupToggle from "./FormGroupToggle";
 import FormGroupTextarea from "./FormGroupTextarea";
 import FormGroupImage from "./FormGroupImage";
+import FormGroupSelectMultiple from "./FormGroupSelectMultiple";
 
 window.Form = Form;
 // Components that are registered globally.
@@ -21,6 +22,7 @@ window.Form = Form;
   FormGroupSelect,
   FormGroupToggle,
   FormGroupImage,
+  FormGroupSelectMultiple,
   Button,
   VImage,
   ImageInput,

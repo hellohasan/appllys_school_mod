@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicDepartment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class DepartmentController extends Controller
 {
@@ -38,6 +39,7 @@ class DepartmentController extends Controller
         ]);
         $department = AcademicDepartment::create($request->all());
         $department->sections()->attach($request->input('academic_year_ids'));
+        Cache::forget('departmentList');
     }
     /**
      * Update the specified resource in storage.
@@ -56,6 +58,7 @@ class DepartmentController extends Controller
         ]);
         $department->update($request->all());
         $department->sections()->sync($request->input('academic_year_ids'));
+        Cache::forget('departmentList');
     }
 
 }

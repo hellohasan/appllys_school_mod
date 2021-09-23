@@ -1,6 +1,6 @@
 <template>
     <Fragment>
-        <li class="nav-header">Register Section</li>
+        <li v-role="['Super Admin','Admin','Register']" class="nav-header">Register Section</li>
         <li v-role="['Super Admin','Admin','Register']" class="nav-item has-treeview">
             <a href="#!" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>

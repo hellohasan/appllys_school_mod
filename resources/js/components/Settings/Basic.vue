@@ -31,6 +31,21 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" placeholder="Name" class="form-control">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name_bn">Name Bangla</label>
+                        <input type="text" v-model="form.name_bn" :class="{ 'is-invalid': form.errors.has('name_bn') }" id="name_bn" placeholder="Name Bangla" class="form-control">
+                        <has-error :form="form" field="name_bn"></has-error>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
                         <label for="est">{{ $t("app_est") }}</label>
                         <input
                             type="text"
@@ -43,7 +58,6 @@
                         <has-error :form="form" field="est"></has-error>
                     </div>
                 </div>
-
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="phone">{{ $t("Phone") }}</label>
@@ -119,6 +133,7 @@
 <script>
 import Cookies from "js-cookie";
 import Select2 from "../globals/Select2";
+
 export default {
     name: "Basic",
     components: {
@@ -128,6 +143,8 @@ export default {
         return {
             form: new Form({
                 title: "",
+                name: '',
+                name_bn: '',
                 est: "",
                 email: "",
                 phone: "",
@@ -136,10 +153,10 @@ export default {
                 level: ""
             }),
             levels: [
-                { id: 1, text: "Secondary" },
-                { id: 2, text: "Higher Secondary" },
-                { id: 3, text: "Higher & Graduation" },
-                { id: 4, text: "Graduation" }
+                {id: 1, text: "Secondary"},
+                {id: 2, text: "Higher Secondary"},
+                {id: 3, text: "Higher & Graduation"},
+                {id: 4, text: "Graduation"}
             ]
         };
     },
@@ -153,7 +170,7 @@ export default {
                     address: this.form.address,
                     copy_text: this.form.copy_text
                 };
-                Cookies.set("basic", basic, { expires: 365 });
+                Cookies.set("basic", basic, {expires: 365});
                 this.$store.commit("updateBasicData", basic);
                 Toast.fire({
                     icon: "success",
@@ -164,7 +181,7 @@ export default {
         loadBasicSetting() {
             axios
                 .get("api/basic-setting")
-                .then(({ data }) => this.form.fill(data));
+                .then(({data}) => this.form.fill(data));
         } /*,
         loadDatabase() {
             axios.get('api/roles').then(({data}) => {

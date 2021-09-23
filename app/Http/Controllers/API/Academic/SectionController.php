@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicSection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SectionController extends Controller
 {
@@ -36,6 +37,7 @@ class SectionController extends Controller
             'seat' => 'required|numeric'
         ]);
         AcademicSection::create($request->all());
+        Cache::forget('sectionList');
     }
 
     /**
@@ -55,5 +57,6 @@ class SectionController extends Controller
         ]);
 
         $section->update($request->all());
+        Cache::forget('sectionList');
     }
 }

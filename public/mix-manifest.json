@@ -1,8 +1,13 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/bill-receive.js": "/bill-receive.js",
+    "/bill-receive-index.js": "/bill-receive-index.js",
+    "/bill-receive-new.js": "/bill-receive-new.js",
+    "/bill-receive-view.js": "/bill-receive-view.js",
     "/dashboard.js": "/dashboard.js",
     "/profile.js": "/profile.js",
     "/test.js": "/test.js",
+    "/vendors~bill-receive-new.js": "/vendors~bill-receive-new.js",
     "/vendors~test.js": "/vendors~test.js"
 }

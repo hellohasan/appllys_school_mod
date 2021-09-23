@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class GroupController extends Controller
 {
@@ -34,6 +35,8 @@ class GroupController extends Controller
 
         $group = AcademicGroup::create($request->all());
         $group->sections()->attach($request->input("academic_section_ids"));
+        Cache::forget('groupList');
+        Cache::forget('allGroupList');
     }
 
     /**
@@ -55,5 +58,7 @@ class GroupController extends Controller
 
         $group->update($request->all());
         $group->sections()->sync($request->input("academic_section_ids"));
+        Cache::forget('groupList');
+        Cache::forget('allGroupList');
     }
 }

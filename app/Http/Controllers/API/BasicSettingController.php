@@ -19,6 +19,9 @@ class BasicSettingController extends Controller
 
     public function updateBasicSetting(Request $request)
     {
+
+        //dd($request);
+
         $request->validate([
             'title' => 'required|max:191',
             'level' => 'required|numeric',
@@ -28,8 +31,12 @@ class BasicSettingController extends Controller
             'copy_text' => 'required',
         ]);
 
-        $basic = BasicSetting::first();
-        $in = $request->all();
+        $basic = BasicSetting::find(1);
+
+        $in = $request->except(['name','name_bn']);
+        $basic->title = $request->input('title');
+        $basic->translate('en')->name = $request->input("name");
+        $basic->translate('bn')->name = $request->input("name_bn");
         $basic->update($in);
 
         AppHelper::changeEnv(['APP_NAME' => $basic->title]);

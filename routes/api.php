@@ -107,6 +107,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-class-with-session/{sessionId}',[CommonController::class,'loadClassWithSession']);
     Route::get('load-class-section-group-department',[CommonController::class,'loadClassSectionGroupDepartment']);
     Route::get('load-group-section',[CommonController::class,'loadGroupSection']);
+    Route::get('load-only-group-section',[CommonController::class,'loadOnlyGroupSection']);
 
     /*Route for subjects*/
     Route::post('store-academic-subject',[SubjectController::class,'storeSubject']);
@@ -159,5 +160,12 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-student-for-class-group',[CommonController::class,'loadStudentForClassGroup']);
     Route::get('load-student-for-class-department-year',[CommonController::class,'loadStudentForClassDepartmentYear']);
 
+    /*Load Student*/
+    Route::get('load-specific-student',[CommonController::class,'loadSpecificStudent']);
+
+    /*Bill Receive Route*/
+    Route::get('receive-specific-student-bill',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'receiveSpecificStudentBill']);
+    Route::post('submit-specific-student-bill',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'submitSpecificStudentBill']);
+    Route::get('specific-bill-receipt',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'specificBillReceipt']);
 });
 

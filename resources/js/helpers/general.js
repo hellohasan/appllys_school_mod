@@ -47,8 +47,12 @@ export function initialize(store, router) {
       router.push('/login');
 
     }else if (error.response.status === 422) {
-      NProgress.done()
-      //validation error
+      Swal.fire({
+        icon: 'warning',
+        title: i18n.t('error_alert_title'),
+        text: i18n.t('validation_fail_message'),
+        confirmButtonText: i18n.t('ok'),
+      })
     }else if (error.response.status === 403) {
       router.push('/unauthorized');
 

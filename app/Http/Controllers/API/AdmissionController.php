@@ -190,7 +190,7 @@ class AdmissionController extends Controller
                 Image::make($request->image)->resize(120,150)->save(public_path($path));
                 $user->photo = $path;
             }
-            $studentRole = Role::findByName('Student')->first();
+            $studentRole = Role::findByName('Student');
             $user->assignRole([$studentRole->id]);
 
             /* End
@@ -305,7 +305,7 @@ class AdmissionController extends Controller
                     $fat['phone'] = $request->input("father_phone");
                     $fat['password'] = bcrypt('12345678');
                     $guardian = User::create($fat);
-                    $guardianRole = Role::findByName('Guardian')->first();
+                    $guardianRole = Role::findByName('Guardian');
                     $guardian->assignRole([$guardianRole->id]);
 
                     $user->guardian()->create([
@@ -318,7 +318,7 @@ class AdmissionController extends Controller
                     $mot['phone'] = $request->input("mother_phone");
                     $mot['password'] = bcrypt('12345678');
                     $guardian = User::create($mot);
-                    $guardianRole = Role::findByName('Guardian')->first();
+                    $guardianRole = Role::findByName('Guardian');
                     $guardian->assignRole([$guardianRole->id]);
 
                     $user->guardian()->create([
@@ -350,7 +350,7 @@ class AdmissionController extends Controller
                     $gu['photo'] = $guu->image;
                     $gu['password'] = bcrypt('12345678');
                     $guardian = User::create($gu);
-                    $guardianRole = Role::findByName('Guardian')->first();
+                    $guardianRole = Role::findByName('Guardian');
                     $guardian->assignRole([$guardianRole->id]);
                     $user->guardian()->create([
                         'parent_id' => $guardian->id,

@@ -12,4 +12,10 @@ class BillStudent extends Model
     protected $table = 'bill_students';
 
     protected $guarded = [''];
+
+    public function package()
+    {
+        return $this->belongsTo(BillPackage::class,'bill_package_id');
+    }
+
 }

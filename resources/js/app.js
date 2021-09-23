@@ -31,9 +31,9 @@ const options = {
     name: "_blank",
     specs: ["fullscreen=yes", "titlebar=yes", "scrollbars=yes"],
     styles: [
-        "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
-        "https://unpkg.com/kidlat-css/css/kidlat.css"
-    ]
+        'http://127.0.0.1:8000/css/bootstrap.min.css',
+        'http://127.0.0.1:8000/css/print.css'
+    ],
 };
 
 Vue.use(VueHtmlToPaper, options);

@@ -17,6 +17,10 @@ class BasicSettingResource extends JsonResource
         return [
             'title' => $this->title,
             'level' => $this->level,
+            'name' => $this->translate('en')->name,
+            'name_bn' => $this->translate('bn')->name,
+            'address' => $this->address,
+            'phone' => $this->phone
         ];
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <Fragment>
-        <li class="nav-header">Admin Section</li>
+        <li v-role="['Super Admin','Admin']" class="nav-header">Admin Section</li>
         <li v-role="['Super Admin','Admin']" class="nav-item">
             <router-link to="/customers" class="nav-link">
                 <i class="nav-icon fas fa-users cyan"></i>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class YearController extends Controller
 {
@@ -36,6 +37,7 @@ class YearController extends Controller
         ]);
 
         AcademicYear::create($request->all());
+        Cache::forget('yearList');
     }
 
     /**
@@ -53,5 +55,6 @@ class YearController extends Controller
         ]);
 
         $year->update($request->all());
+        Cache::forget('yearList');
     }
 }

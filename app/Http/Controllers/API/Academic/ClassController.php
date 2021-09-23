@@ -7,6 +7,7 @@ use App\Models\AcademicClass;
 use App\Models\AcademicGrade;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
@@ -63,6 +64,8 @@ class ClassController extends Controller
             }
 
             DB::commit();
+            Cache::forget('classList');
+            Cache::forget('onlyClassList');
         }
         catch (Exception $e)
         {
@@ -127,6 +130,8 @@ class ClassController extends Controller
             }
 
             DB::commit();
+            Cache::forget('classList');
+            Cache::forget('onlyClassList');
         }
         catch (\Exception $e)
         {

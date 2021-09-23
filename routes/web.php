@@ -19,7 +19,8 @@ Route::get('/', function () {
 
 Route::view('/login','layouts.master');
 
-Route::view('test-view','test');
+Route::view('test-view','test.test');
+Route::view('bill-print','test.bill-print');
 
 
 Route::get('/clear-cache', function() {

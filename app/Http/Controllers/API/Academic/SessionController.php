@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Academic;
 use App\Models\AcademicSession;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SessionController extends Controller
 {
@@ -49,6 +50,7 @@ class SessionController extends Controller
             $session->academic_classes()->attach($class['id'], ['admission_fee'=> $class['admission_fee'] ]);
         }
 
+        Cache::forget('onlySessionList');
 
     }
 
@@ -85,6 +87,6 @@ class SessionController extends Controller
                 $session->academic_classes()->attach($class['id'], ['admission_fee'=> $class['admission_fee'] ]);
             }
         }
-
+        Cache::forget('onlySessionList');
     }
 }

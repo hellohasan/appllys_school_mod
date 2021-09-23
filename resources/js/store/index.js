@@ -5,6 +5,7 @@ const user = getLocalUser();
 const {locale, locales} = window.config
 const {basicData} = getBasicData();
 
+
 export default ({
   state: {
     basicData: basicData,
@@ -20,7 +21,11 @@ export default ({
   },
   getters: {
     basicData(state) {
-      return state.basicData
+      if(state.basicData === undefined){
+        return JSON.parse(localStorage.getItem("basic"));
+      }else{
+        return state.basicData;
+      }
     },
     isLoading(state) {
       return state.loading;
@@ -135,6 +140,7 @@ function getLocale(locales, fallback) {
 
 export function getBasicData() {
   const basicStr = localStorage.getItem("basic");
+
   if (basicStr === null) {
     let basic = {'title' : 'Develop by Softwarezon'}
     return basic

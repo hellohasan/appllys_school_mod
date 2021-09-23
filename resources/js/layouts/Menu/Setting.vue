@@ -1,6 +1,6 @@
 <template>
     <fragment>
-        <li class="nav-header">Settings Section</li>
+        <li v-role="['Super Admin','Admin']" class="nav-header">Settings Section</li>
         <li v-role="['Super Admin','Admin']" class="nav-item">
             <router-link to="/basic-setting" class="nav-link">
                 <i class="nav-icon fas fa-sliders-h cyan"></i>

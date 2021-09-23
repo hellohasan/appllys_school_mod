@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\Designation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class DesignationController extends Controller
 {
@@ -36,6 +37,7 @@ class DesignationController extends Controller
         ]);
 
         Designation::create($request->all());
+        Cache::forget('designation');
     }
 
 
@@ -53,5 +55,6 @@ class DesignationController extends Controller
             'title' => 'required|unique:designations,title,'.$id
         ]);
         $designation->update($request->all());
+        Cache::forget('designation');
     }
 }

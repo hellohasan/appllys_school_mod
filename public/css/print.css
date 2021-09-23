@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'SolaimanLipiNormal';
+    font-style: normal;
+    font-weight: normal;
+    src: local('SolaimanLipiNormal'), url('../fonts/solaimanlipi.woff') format('woff');
+}
+body{
+    font-family: 'SolaimanLipiNormal', sans-serif;
+    font-size: 15px;
+}
+

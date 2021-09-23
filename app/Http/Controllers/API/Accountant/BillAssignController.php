@@ -99,6 +99,7 @@ class BillAssignController extends Controller
             $bill['user_id'] = $student;
             $bill['bill_package_id'] = $package->id;
             $bill['total'] = $package->total;
+            $bill['due'] = $package->total;
             BillStudent::create($bill);
         }
     }

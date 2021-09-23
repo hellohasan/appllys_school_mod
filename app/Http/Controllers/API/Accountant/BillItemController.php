@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\CommonTrait;
 use App\Models\BillItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -41,7 +42,7 @@ class BillItemController extends Controller
         $in = $request->all();
         $in['activated'] = $request->input("activated") == 'on';
         BillItem::create($in);
-
+        Cache::forget('billItem');
     }
 
     /**
@@ -74,6 +75,7 @@ class BillItemController extends Controller
         $in = $request->all();
         $in['activated'] = $request->input("activated") == 'on';
         $item->update($in);
+        Cache::forget('billItem');
     }
 
     /**

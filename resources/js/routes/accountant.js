@@ -54,7 +54,7 @@ export const accountant = [
   /*Bill Receive Route List*/
   {
     path: "/bill-receive",
-    component: () => import(/*webpackChunkName: "bill-receive"*/ "../components/Accountant/BillReceive/BillReceive"),
+    component: () => import(/*webpackChunkName: "js/bill-receive"*/ "../components/Accountant/BillReceive/BillReceive"),
     meta: {
       requireAuth: true,
       roles: ["Super Admin", 'Admin', 'Accountant']
@@ -62,7 +62,7 @@ export const accountant = [
     children: [
       {
         path: "/",
-        component: () => import(/*webpackChunkName: "bill-receive-index"*/"../components/Accountant/BillReceive/Index"),
+        component: () => import(/*webpackChunkName: "js/bill-receive-index"*/"../components/Accountant/BillReceive/Index"),
         meta: {
           title: i18n.tc('BillReceive'),
           permissions: ['bill-receive-list']
@@ -70,7 +70,7 @@ export const accountant = [
       },
       {
         path: "new",
-        component: () => import(/*webpackChunkName: "bill-receive-new"*/"../components/Accountant/BillReceive/New"),
+        component: () => import(/*webpackChunkName: "js/bill-receive-new"*/"../components/Accountant/BillReceive/New"),
         meta: {
           title: i18n.tc('NewReceive'),
           permissions: ['bill-receive-new']
@@ -78,7 +78,7 @@ export const accountant = [
       },
       {
         path: ":custom/view",
-        component: () => import(/*webpackChunkName: "bill-receive-view"*/"../components/Accountant/BillReceive/View"),
+        component: () => import(/*webpackChunkName: "js/bill-receive-view"*/"../components/Accountant/BillReceive/View"),
         meta: {
           title: i18n.tc('ViewReceive'),
           permissions: ['bill-receive-view']

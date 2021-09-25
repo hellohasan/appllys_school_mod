@@ -167,5 +167,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('receive-specific-student-bill',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'receiveSpecificStudentBill']);
     Route::post('submit-specific-student-bill',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'submitSpecificStudentBill']);
     Route::get('specific-bill-receipt',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'specificBillReceipt']);
+    Route::get('load-bill-pay-lists',[\App\Http\Controllers\API\Accountant\BillReceiveController::class,'loadBillPayList']);
 });
 

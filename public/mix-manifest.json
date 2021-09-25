@@ -1,13 +1,18 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/bill-receive.js": "/bill-receive.js",
-    "/bill-receive-index.js": "/bill-receive-index.js",
-    "/bill-receive-new.js": "/bill-receive-new.js",
-    "/bill-receive-view.js": "/bill-receive-view.js",
-    "/dashboard.js": "/dashboard.js",
-    "/profile.js": "/profile.js",
-    "/test.js": "/test.js",
-    "/vendors~bill-receive-new.js": "/vendors~bill-receive-new.js",
-    "/vendors~test.js": "/vendors~test.js"
+    "/js/bill-receive.js": "/js/bill-receive.js",
+    "/js/bill-receive-index.js": "/js/bill-receive-index.js",
+    "/js/bill-receive-new.js": "/js/bill-receive-new.js",
+    "/js/bill-receive-view.js": "/js/bill-receive-view.js",
+    "/js/dashboard.js": "/js/dashboard.js",
+    "/js/email-setting.js": "/js/email-setting.js",
+    "/js/email-template.js": "/js/email-template.js",
+    "/js/image-setting.js": "/js/image-setting.js",
+    "/js/profile.js": "/js/profile.js",
+    "/js/sms-setting.js": "/js/sms-setting.js",
+    "/js/test-component.js": "/js/test-component.js",
+    "/js/test-datatable.js": "/js/test-datatable.js",
+    "/vendors~js/bill-receive-new.js": "/vendors~js/bill-receive-new.js",
+    "/vendors~js/test-component.js": "/vendors~js/test-component.js"
 }

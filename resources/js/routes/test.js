@@ -3,7 +3,7 @@ export const test = [
     path: "/test-component",
     name: "test-component",
     component: () =>
-      import(/*webpackChunkName: "test"*/ "../components/test/test/test/TestComponent"),
+      import(/*webpackChunkName: "js/test-component"*/ "../components/test/test/test/TestComponent"),
     meta: {
       requireAuth: true
     }
@@ -12,7 +12,7 @@ export const test = [
     path: "/test-datatable",
     name: "test-datatable",
     component: () =>
-      import(/*webpackChunkName: "test"*/ "../components/test/DataTable6"),
+      import(/*webpackChunkName: "js/test-datatable"*/ "../components/test/DataTable6"),
     meta: {
       requireAuth: true
     }

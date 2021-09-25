@@ -4,7 +4,7 @@ export const dashboard = [
     path: "/dashboard",
     name: "dashboard",
     component: () =>
-      import(/*webpackChunkName: "dashboard"*/ "../components/Dashboard"),
+      import(/*webpackChunkName: "js/dashboard"*/ "../components/Dashboard"),
     meta: {
       title: "Dashboard",
       requireAuth: true

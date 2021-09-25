@@ -1,9 +1,5 @@
 <template>
-    <custom-card
-        :title="$t('NewReceive')"
-        :url="'/bill-receive'"
-        :text="$t('ReceiveList')"
-    >
+    <custom-card :title="$t('NewReceive')" :url="'/bill-receive'" :text="$t('ReceiveList')">
         <form @submit.prevent="assignSubmit">
             <div class="row">
                 <div class="col-md-8">
@@ -656,6 +652,7 @@ export default {
                     this.bills = res.data.bills.bills;
                 })
                 .catch(error => {
+                    
                 });
         },
         classChange: function (e) {
@@ -664,6 +661,7 @@ export default {
                 this.departments = {};
                 this.sections = {};
                 this.years = {};
+                this.student = '';
                 axios.get("/api/load-class-group-department", {
                         params: {id: e}
                     })
@@ -678,6 +676,7 @@ export default {
         },
         changeGroup: function (e) {
             if (e) {
+                this.student = '';
                 axios.get("/api/load-only-group-section", {params: {id: e}})
                     .then(res => {
                         this.sections = {};
@@ -689,11 +688,13 @@ export default {
         },
         changeSection: function (e) {
             if (e) {
+                this.student = '';
                 this.loadSelectedStudent();
             }
         },
         changeDepartment: function (e) {
             if (e) {
+                this.student = '';
                 this.years = {};
                 axios.get("/api/load-department-years", {params: {id: e}})
                     .then(res => {
@@ -704,6 +705,7 @@ export default {
         },
         changeYear: function (e) {
             if (e) {
+                this.student = '';
                 this.loadSelectedStudent();
             }
         },

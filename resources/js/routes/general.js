@@ -2,7 +2,7 @@ export const general = [
   {
     path: "/profile",
     name: "profile",
-    component: () => import(/*webpackChunkName: "profile"*/ "../components/Profile"),
+    component: () => import(/*webpackChunkName: "js/profile"*/ "../components/Profile"),
     meta: {
       title: 'Profile',
       requireAuth: true,

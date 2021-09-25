@@ -19,6 +19,7 @@ class BillReceiveController extends Controller
         $user = User::with([
             'father','mother','guardian.guardianInformation','address'
         ])->role('Student')->find($request->input("id"));
+
         if ($user) {
             $academicData = AcademicData::orderByDesc('academic_session_id')->whereUserId($user->id)->first();
             $data['academic_data'] = $academicData->academic_data;
@@ -62,8 +63,6 @@ class BillReceiveController extends Controller
                 'last_paid_at' => $billQ->where('isPaid',1)->sortByDesc('updated_at')->first() ?$billQ->where('isPaid',1)->sortByDesc('updated_at')->first()->updated_at : '',
                 'bills' => $billQ,
             ];
-
-
             return response()->json($data,200);
 
         }else{
@@ -115,5 +114,16 @@ class BillReceiveController extends Controller
         }else{
             return response()->json(['error'=>'Bill Item not found'],403);
         }
+    }
+
+    public function loadBillPayList()
+    {
+        return BillStudent::with([
+            'user:id,name,custom',
+            'receiver:id,name',
+            'package:id,custom,total'
+        ])->orderByDesc('updated_at')
+            ->whereIspaid(1)
+            ->get();
     }
 }

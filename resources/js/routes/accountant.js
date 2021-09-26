@@ -8,6 +8,19 @@ export const accountant = [
     name: "salary-scale",
     meta: {requireAuth: true, title: "Salary Scale"}
   },
+  /*Salary Scale Route*/
+  {
+    path: "/manage-accounts",
+    component: () => import(/*webpackChunkName: "js/manage-account"*/"../components/Accountant/ManageAccount"),
+    name: "manage-accounts",
+    meta: {
+      requireAuth: true,
+      permissions:[
+        'manage-accounts'
+      ],
+      title: i18n.tc('ManageAccount')
+    }
+  },
 
   /*Bill item route list*/
   {

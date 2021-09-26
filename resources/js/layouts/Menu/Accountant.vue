@@ -57,6 +57,20 @@
                 <p>{{ $t('salary_scale') }}</p>
             </router-link>
         </li>
+
+        <li v-role="['Super Admin','Admin','Accountant']" class="nav-item">
+            <router-link to="/manage-accounts" class="nav-link">
+                <i class="nav-icon fas fa-receipt cyan"></i>
+                <p>{{ $t('ManageAccount') }}</p>
+            </router-link>
+        </li>
+
+        <!-- <li v-role="['Super Admin','Admin','Accountant']" class="nav-item">
+            <router-link to="/manage-accounts" class="nav-link">
+                <i class="nav-icon fas fa-bank cyan"></i>
+                <p>{{ $t('ManageAccount') }}</p>
+            </router-link>
+        </li> -->
     </Fragment>
 </template>
 

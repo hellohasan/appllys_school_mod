@@ -822,7 +822,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.table-user-information > tbody > tr[data-v-091ad0e3]:first-child {\n    border-top: 0;\n}\n.table-user-information > tbody > tr > td[data-v-091ad0e3] {\n    border-top: 0;\n}\n@media print {\n#printMe[data-v-091ad0e3],\n    #printMe *[data-v-091ad0e3] {\n        visibility: visible;\n}\n#printMe[data-v-091ad0e3] {\n        position: absolute;\n        left: 0;\n        top: 0;\n}\n}\n", ""]);
+exports.push([module.i, "\n.table-user-information > tbody > tr[data-v-091ad0e3]:first-child {\r\n    border-top: 0;\n}\n.table-user-information > tbody > tr > td[data-v-091ad0e3] {\r\n    border-top: 0;\n}\n@media print {\n#printMe[data-v-091ad0e3],\r\n    #printMe *[data-v-091ad0e3] {\r\n        visibility: visible;\n}\n#printMe[data-v-091ad0e3] {\r\n        position: absolute;\r\n        left: 0;\r\n        top: 0;\n}\n}\r\n", ""]);
 
 // exports
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Academic;
+namespace App\Http\Controllers\API\Academic;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassPeriod;

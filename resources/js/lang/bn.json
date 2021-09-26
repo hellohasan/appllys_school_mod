@@ -223,5 +223,6 @@
     "ReceiptOfBill": "বেতন আদায় রশিদ",
     "StudentName": "শিক্ষার্থীর নাম",
     "InWord": "কথায়",
-    "ReceiverSignature": "আদায়কারীর স্বাক্ষর"
+    "ReceiverSignature": "আদায়কারীর স্বাক্ষর",
+    "ManageAccount" : "অ্যাকাউন্ট পরিচালনা"
 }

@@ -224,5 +224,7 @@
     "ReceiptOfBill": "Receipt Of Bill",
     "StudentName": "Student Name",
     "InWord": "In Word",
-    "ReceiverSignature": "Collector Signature"
+    "ReceiverSignature": "Collector Signature",
+    "ManageAccount" : "Manage Account"
+
 }

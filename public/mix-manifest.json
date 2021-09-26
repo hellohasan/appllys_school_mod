@@ -9,6 +9,7 @@
     "/js/email-setting.js": "/js/email-setting.js",
     "/js/email-template.js": "/js/email-template.js",
     "/js/image-setting.js": "/js/image-setting.js",
+    "/js/manage-account.js": "/js/manage-account.js",
     "/js/profile.js": "/js/profile.js",
     "/js/sms-setting.js": "/js/sms-setting.js",
     "/js/test-component.js": "/js/test-component.js",

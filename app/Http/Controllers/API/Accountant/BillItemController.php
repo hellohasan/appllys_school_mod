@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\Accountant;
+namespace App\Http\Controllers\API\Accountant;
 
-use App\Exports\CustomExport;
-use App\Http\Controllers\Controller;
-use App\Http\Traits\CommonTrait;
 use App\Models\BillItem;
 use Illuminate\Http\Request;
+use App\Http\Traits\CommonTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
-use Maatwebsite\Excel\Facades\Excel;
 
 class BillItemController extends Controller
 {
@@ -24,7 +21,6 @@ class BillItemController extends Controller
         return BillItem::orderByDesc('id')->get();
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -34,8 +30,8 @@ class BillItemController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:190',
-            'item_for' => 'required',
+            'title'          => 'required|max:190',
+            'item_for'       => 'required',
             'default_amount' => 'required|numeric',
         ]);
 
@@ -67,8 +63,8 @@ class BillItemController extends Controller
     {
         $item = BillItem::find($id);
         $request->validate([
-            'title' => 'required|max:190',
-            'item_for' => 'required',
+            'title'          => 'required|max:190',
+            'item_for'       => 'required',
             'default_amount' => 'required|numeric',
         ]);
 
@@ -89,13 +85,19 @@ class BillItemController extends Controller
         //
     }
 
+    /**
+     * exportExcelPDF
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function exportExcelPDF(Request $request)
     {
         if ($request->has('type')) {
             $type = $request->input("type");
             $title = 'Billing Item List';
             $headings = [
-                'ID', 'Title', 'Bill For', 'Default Amount', 'Status'
+                'ID', 'Title', 'Bill For', 'Default Amount', 'Status',
             ];
             $rows = [];
             $billItems = BillItem::get();
@@ -105,13 +107,13 @@ class BillItemController extends Controller
                     $bill->title,
                     $bill->item_for,
                     $bill->default_amount,
-                    $bill->activated ? 'Activated' : 'Deactivated'
+                    $bill->activated ? 'Activated' : 'Deactivated',
                 ];
             }
             if ($type == 'excel') {
                 return response()->json($this->listExcelDownload($headings, $rows, $title));
-            }elseif ($type == 'pdf') {
-                $this->listPDFDownload($headings,$rows);
+            } elseif ($type == 'pdf') {
+                $this->listPDFDownload($headings, $rows);
             }
 
         }

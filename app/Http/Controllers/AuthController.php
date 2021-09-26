@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BasicSettingResource;
-use App\Models\BasicSetting;
 use App\User;
+use App\Models\BasicSetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\BasicSettingResource;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['login','register']]);
+        $this->middleware( 'jwt.auth', ['except' => ['login', 'register']] );
     }
 
     /**
@@ -21,36 +21,38 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login( Request $request )
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
-        ]);
+        $request->validate( [
+            'email'    => 'required|email',
+            'password' => 'required|min:6',
+        ] );
 
-        $credentials = request(['email', 'password']);
+        $credentials = request( ['email', 'password'] );
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Credential not match with record'], 422);
+        if ( !$token = auth( 'api' )->attempt( $credentials ) ) {
+            return response()->json( ['error' => 'Credential not match with record'], 422 );
         }
-        return $this->respondWithToken($token);
+
+        return $this->respondWithToken( $token );
     }
 
-    public function register(Request $request){
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:users,email',
+    public function register( Request $request )
+    {
+        $request->validate( [
+            'name'     => 'required',
+            'email'    => 'required|unique:users,email',
             'password' => 'required|confirmed|min:6',
-            'agree' => 'required|accepted'
-        ]);
+            'agree'    => 'required|accepted',
+        ] );
         $in = $request->all();
-        $in['password'] = bcrypt($request->password);
-        User::create($in);
+        $in['password'] = bcrypt( $request->password );
+        User::create( $in );
 
-        $credentials = request(['email', 'password']);
-        $token = auth('api')->attempt($credentials);
+        $credentials = request( ['email', 'password'] );
+        $token = auth( 'api' )->attempt( $credentials );
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken( $token );
     }
 
     /**
@@ -60,9 +62,9 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json([
-            'user' => new UserResource($this->guard()->user())
-        ]);
+        return response()->json( [
+            'user' => new UserResource( $this->guard()->user() ),
+        ] );
     }
 
     /**
@@ -72,9 +74,9 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth('api')->logout();
+        auth( 'api' )->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json( ['message' => 'Successfully logged out'] );
     }
 
     /**
@@ -84,7 +86,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api')->refresh());
+        return $this->respondWithToken( auth( 'api' )->refresh() );
     }
 
     /**
@@ -94,18 +96,19 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken( $token )
     {
-        return response()->json([
+        return response()->json( [
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'user' => new UserResource($this->guard()->user()),
-            'basic' => new BasicSettingResource(BasicSetting::first()),
-            'expires_in' => auth('api')->factory()->getTTL() * 60 * 2
-        ]);
+            'token_type'   => 'bearer',
+            'user'         => new UserResource( $this->guard()->user() ),
+            'basic'        => new BasicSettingResource( BasicSetting::first() ),
+            'expires_in'   => auth( 'api' )->factory()->getTTL() * 60 * 2,
+        ] );
     }
 
-    public function guard(){
-        return Auth::guard('api');
+    public function guard()
+    {
+        return Auth::guard( 'api' );
     }
 }

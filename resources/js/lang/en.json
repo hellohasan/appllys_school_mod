@@ -225,6 +225,12 @@
     "StudentName": "Student Name",
     "InWord": "In Word",
     "ReceiverSignature": "Collector Signature",
-    "ManageAccount" : "Manage Account"
+    "ManageAccount" : "Accounts",
+    "BankName": "Bank Name",
+    "BankAccount" : "Bank Account",
+    "BankBranch": "Bank Branch",
+    "Password": "Password",
+    "MemberSince": "Member Since",
+    "PayAt": "Payment At"
 
 }

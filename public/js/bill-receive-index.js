@@ -9,7 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _helpers_myTableDom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../helpers/myTableDom */ "./resources/js/helpers/myTableDom.js");
 //
 //
 //
@@ -32,50 +31,143 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
   data: function data() {
     return {
-      lists: {}
+      name: 'hasan'
     };
   },
   methods: {
     myTable: function myTable() {
-      this.$nextTick(function () {
-        $('#myTable').DataTable(_helpers_myTableDom__WEBPACK_IMPORTED_MODULE_0__["myTableDom"]);
-      });
-    },
-    loadBillPayList: function loadBillPayList() {
       var _this = this;
 
-      axios.get('/api/load-bill-pay-lists').then(function (res) {
-        _this.lists = res.data;
+      this.$nextTick(function () {
+        $('#myTable').DataTable({
+          processing: true,
+          serverSide: true,
+          responsive: true,
+          retrieve: true,
+          bDestroy: true,
+          ajax: {
+            url: "/api/load-bill-pay-lists",
+            type: 'GET',
+            headers: {
+              "Authorization": 'Bearer ' + _this.$store.getters.currentUser.token
+            }
+          },
+          columns: [{
+            data: 'DT_RowIndex',
+            name: 'DT_RowIndex'
+          }, {
+            data: 'created_at'
+          }, {
+            data: 'user_id'
+          }, {
+            data: 'logable_id'
+          }, {
+            data: 'account_id'
+          }, {
+            data: 'before_amount'
+          }, {
+            data: 'after_amount'
+          }, {
+            data: 'action'
+          }],
+          dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+          lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+          buttons: [{
+            extend: "print",
+            text: "<i class='fas fa-print'></i> Print",
+            titleAttr: "Print",
+            className: "btn btn-info btn-sm text-white",
+            exportOptions: {
+              columns: ":not(.not-export-col)"
+            }
+          }, {
+            extend: "pdfHtml5",
+            text: "<i class='fas fa-file-pdf'></i> PDF",
+            titleAttr: "Export as PDF",
+            className: "btn btn-success btn-sm",
+            exportOptions: {
+              columns: ":not(.not-export-col)"
+            },
+            customize: function customize(doc, config) {
+              doc.defaultStyle.font = 'SolaimanLipi';
+              doc.styles.tableHeader.alignment = 'left';
+              doc.defaultStyle.alignment = 'left';
+              doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
+              doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+              var tableNode;
 
-        _this.myTable();
+              for (var i = 0; i < doc.content.length; ++i) {
+                if (doc.content[i].table !== undefined) {
+                  tableNode = doc.content[i];
+                  break;
+                }
+              }
+
+              var rowIndex = 0;
+              var tableColumnCount = tableNode.table.body[rowIndex].length;
+
+              if (tableColumnCount > 6) {
+                doc.pageOrientation = 'landscape';
+              }
+            }
+          }, {
+            extend: "excelHtml5",
+            text: "<i class='fas fa-file-excel'></i> Excel",
+            titleAttr: "Export as Excel",
+            className: "btn btn-secondary btn-sm",
+            exportOptions: {
+              columns: ":not(.not-export-col)"
+            }
+          }, {
+            extend: "copyHtml5",
+            text: "<i class='fas fa-copy'></i> Copy",
+            titleAttr: "Copy to clipboard",
+            className: "btn btn-info btn-sm text-white",
+            exportOptions: {
+              columns: ":not(.not-export-col)"
+            }
+          }]
+        });
       });
     }
   },
-  created: function created() {
-    this.loadBillPayList();
+  mounted: function mounted() {
+    var _this2 = this;
+
+    this.myTable();
+    window.addEventListener('click', function (event) {
+      var target = event.target;
+
+      if (target && target.localName === 'button' && target.dataset.id) {
+        event.preventDefault();
+        event.stopPropagation();
+        var id = target.dataset.id;
+        var action = target.dataset.action;
+
+        if (action == 'delete') {
+          Swal.fire({
+            title: _this2.$t('confirm_title'),
+            text: _this2.$t('confirm_message'),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: _this2.$t('confirm'),
+            cancelButtonText: _this2.$t('cancel')
+          }).then(function (result) {
+            if (result.isConfirmed) {
+              alert('hasan');
+            }
+          });
+        }
+      }
+
+      return;
+    });
   }
 });
 
@@ -121,65 +213,23 @@ var render = function() {
               _c("tr", [
                 _c("th", [_vm._v(_vm._s(_vm.$t("SL")))]),
                 _vm._v(" "),
+                _c("th", [_vm._v(_vm._s(_vm.$t("PayAt")))]),
+                _vm._v(" "),
                 _c("th", [_vm._v(_vm._s(_vm.$t("Custom")))]),
                 _vm._v(" "),
                 _c("th", [_vm._v(_vm._s(_vm.$t("StudentName")))]),
                 _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("AssignedAt")))]),
+                _c("th", [_vm._v(_vm._s(_vm.$t("Academic_Class")))]),
                 _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Total")))]),
+                _c("th", [_vm._v(_vm._s(_vm.$t("Details")))]),
                 _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Fine")) + " (+)")]),
+                _c("th", [_vm._v(_vm._s(_vm.$t("amount")))]),
                 _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Waiver")) + " (-)")]),
-                _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("GrandTotal")))]),
-                _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Paid")))]),
-                _vm._v(" "),
-                _c("th", [
-                  _vm._v(
-                    _vm._s(_vm.$t("Due")) +
-                      "/" +
-                      _vm._s(_vm.$t("Status")) +
-                      "/" +
-                      _vm._s(_vm.$t("Date"))
-                  )
-                ]),
-                _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Action")))])
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.lists, function(list, index) {
-                return _c("tr", { key: index }, [
-                  _c("td", [_vm._v(_vm._s(++index))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(list.package.custom))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(list.user.name))]),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td"),
-                  _vm._v(" "),
-                  _c("td")
+                _c("th", { staticClass: "not-export-col" }, [
+                  _vm._v(_vm._s(_vm.$t("Action")))
                 ])
-              }),
-              0
-            )
+              ])
+            ])
           ]
         )
       ])
@@ -259,75 +309,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_5ffee855_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/helpers/myTableDom.js":
-/*!********************************************!*\
-  !*** ./resources/js/helpers/myTableDom.js ***!
-  \********************************************/
-/*! exports provided: myTableDom */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "myTableDom", function() { return myTableDom; });
-var myTableDom = {
-  dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-  lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-  pageLength: 10,
-  buttons: [{
-    extend: "print",
-    text: "<i class='fas fa-print'></i> Print",
-    titleAttr: "Print",
-    className: "btn btn-info btn-sm text-white",
-    exportOptions: {
-      columns: ":not(.not-export-col)"
-    }
-  }, {
-    extend: "pdfHtml5",
-    text: "<i class='fas fa-file-pdf'></i> PDF",
-    titleAttr: "Export as PDF",
-    className: "btn btn-success btn-sm",
-    customize: function customize(doc, config) {
-      doc.defaultStyle.font = 'SolaimanLipi';
-      doc.styles.tableHeader.alignment = 'left';
-      doc.defaultStyle.alignment = 'left';
-      doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
-      var tableNode;
-
-      for (var i = 0; i < doc.content.length; ++i) {
-        if (doc.content[i].table !== undefined) {
-          tableNode = doc.content[i];
-          break;
-        }
-      }
-
-      var rowIndex = 0;
-      var tableColumnCount = tableNode.table.body[rowIndex].length;
-
-      if (tableColumnCount > 5) {
-        doc.pageOrientation = 'landscape';
-      }
-    }
-  }, {
-    extend: "excelHtml5",
-    text: "<i class='fas fa-file-excel'></i> Excel",
-    titleAttr: "Export as Excel",
-    className: "btn btn-secondary btn-sm",
-    exportOptions: {
-      columns: ":not(.not-export-col)"
-    }
-  }, {
-    extend: "copyHtml5",
-    text: "<i class='fas fa-copy'></i> Copy",
-    titleAttr: "Copy to clipboard",
-    className: "btn btn-info btn-sm text-white",
-    exportOptions: {
-      columns: ":not(.not-export-col)"
-    }
-  }]
-};
 
 /***/ })
 

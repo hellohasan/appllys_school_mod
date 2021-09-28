@@ -101,6 +101,7 @@ export default {
             this.editMode = true;
             this.editId = scale.id;
             this.form.fill(scale);
+            console.log('');
         },
         createSection() {
             this.form.post('/api/academic-sections')

@@ -6,63 +6,149 @@
                 <thead>
                 <tr>
                     <th>{{ $t("SL") }}</th>
+                    <th>{{ $t("PayAt") }}</th>
                     <th>{{ $t("Custom") }}</th>
                     <th>{{ $t("StudentName") }}</th>
-                    <th>{{ $t("AssignedAt") }}</th>
-                    <th>{{ $t("Total") }}</th>
-                    <th>{{ $t("Fine") }} (+)</th>
-                    <th>{{ $t("Waiver") }} (-)</th>
-                    <th>{{ $t("GrandTotal") }}</th>
-                    <th>{{ $t("Paid") }}</th>
-                    <th>{{ $t("Due") }}/{{ $t("Status") }}/{{$t("Date") }}</th>
-                    <th>{{ $t("Action") }}</th>
+                    <th>{{ $t("Academic_Class") }}</th>
+                    <th>{{ $t("Details") }}</th>
+                    <th>{{ $t("amount") }}</th>
+                    <th class="not-export-col">{{ $t("Action") }}</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr v-for="(list,index) in lists" :key="index">
-                    <td>{{++index}}</td>
-                    <td>{{list.package.custom}}</td>
-                    <td>{{list.user.name}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
             </table>
         </div>
     </custom-card>
 </template>
 
 <script>
-import {myTableDom} from "../../../helpers/myTableDom";
 export default {
     name: "Index",
     data(){
         return{
-            lists : {}
+            name: 'hasan'
         }
     },
     methods:{
         myTable(){
             this.$nextTick(()=>{
-                $('#myTable').DataTable(myTableDom)
+                $('#myTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    retrieve: true,
+                    bDestroy: true,
+                    ajax: {
+                        url: "/api/load-bill-pay-lists",
+                        type: 'GET',
+                        headers: {"Authorization": 'Bearer '+this.$store.getters.currentUser.token}
+                    },
+                    columns: [
+                        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                        {data: 'created_at'},
+                        {data: 'user_id'},
+                        {data: 'logable_id'},
+                        {data: 'account_id'},
+                        {data: 'before_amount'},
+                        {data: 'after_amount'},
+                        {data: 'action'}
+                    ],
+                    dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    buttons: [
+                        {
+                            extend: "print",
+                            text: "<i class='fas fa-print'></i> Print",
+                            titleAttr: "Print",
+                            className: "btn btn-info btn-sm text-white",
+                            exportOptions: {
+                                columns: ":not(.not-export-col)"
+                            }
+                        },
+                        {
+                            extend: "pdfHtml5",
+                            text: "<i class='fas fa-file-pdf'></i> PDF",
+                            titleAttr: "Export as PDF",
+                            className: "btn btn-success btn-sm",
+                            exportOptions: {
+                                columns: ":not(.not-export-col)"
+                            },
+                            customize: function (doc, config) {
+                                doc.defaultStyle.font = 'SolaimanLipi';
+                                doc.styles.tableHeader.alignment = 'left';
+                                doc.defaultStyle.alignment = 'left';
+                                doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
+                                doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+
+                                let tableNode;
+                                for (let i = 0; i < doc.content.length; ++i) {
+                                    if (doc.content[i].table !== undefined) {
+                                        tableNode = doc.content[i];
+                                        break;
+                                    }
+                                }
+                                const rowIndex = 0;
+                                const tableColumnCount = tableNode.table.body[rowIndex].length;
+                                if (tableColumnCount > 6) {
+                                    doc.pageOrientation = 'landscape';
+                                }
+                            }
+                        },
+                        {
+                            extend: "excelHtml5",
+                            text: "<i class='fas fa-file-excel'></i> Excel",
+                            titleAttr: "Export as Excel",
+                            className: "btn btn-secondary btn-sm",
+                            exportOptions: {
+                                columns: ":not(.not-export-col)"
+                            }
+                        },
+                        {
+                            extend: "copyHtml5",
+                            text: "<i class='fas fa-copy'></i> Copy",
+                            titleAttr: "Copy to clipboard",
+                            className: "btn btn-info btn-sm text-white",
+                            exportOptions: {
+                                columns: ":not(.not-export-col)"
+                            }
+                        }
+                    ]
+
+                })
             })
         },
-        loadBillPayList(){
-            axios.get('/api/load-bill-pay-lists').then((res) =>{
-                this.lists = res.data
-                this.myTable()
-            })
-        }
     },
-    created(){
-        this.loadBillPayList()
-    }
+    mounted(){
+        this.myTable();
+        window.addEventListener('click', event => {
+            let target = event.target;
+            if (target && target.localName === 'button' && target.dataset.id) {
+                event.preventDefault();
+                event.stopPropagation();
+                let id = target.dataset.id;
+                let action = target.dataset.action;
+                if(action == 'delete'){
+                    Swal.fire({
+                        title: this.$t('confirm_title'),
+                        text: this.$t('confirm_message'),
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: this.$t('confirm'),
+                        cancelButtonText: this.$t('cancel'),
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            alert('hasan')
+                        }
+                    })
+                }
+
+            }
+            return;
+        });
+    },
 }
 </script>
 

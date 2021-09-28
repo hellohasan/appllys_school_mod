@@ -460,6 +460,39 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Account
+ *
+ * @property int $id
+ * @property string $name
+ * @property float $amount
+ * @property string|null $bank_account
+ * @property string|null $bank_branch
+ * @property int $isShow
+ * @property int $isActive
+ * @property int $created_by
+ * @property int $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Account newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Account newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Account query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereBankAccount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereBankBranch($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereIsShow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Account whereUpdatedBy($value)
+ */
+	class Account extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Admission
  *
  * @property int $id
@@ -642,6 +675,9 @@ namespace App\Models{
  * @property int $isPaid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\TransactionLog|null $log
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TransactionLog[] $logs
+ * @property-read int|null $logs_count
  * @property-read \App\Models\BillPackage|null $package
  * @property-read \App\User $receiver
  * @property-read \App\User|null $user
@@ -1014,6 +1050,47 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TeacherEducation whereUpdatedAt($value)
  */
 	class TeacherEducation extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\TransactionLog
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $logable_type
+ * @property int $logable_id
+ * @property string $reason
+ * @property int $account_id
+ * @property float $before_amount
+ * @property float $amount
+ * @property int $type
+ * @property float $after_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $logable
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog newQuery()
+ * @method static \Illuminate\Database\Query\Builder|TransactionLog onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereAfterAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereBeforeAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereLogableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereLogableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|TransactionLog withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|TransactionLog withoutTrashed()
+ */
+	class TransactionLog extends \Eloquent {}
 }
 
 namespace App\Models{

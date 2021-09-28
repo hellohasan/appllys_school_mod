@@ -2,42 +2,53 @@
 
 namespace App\Http\Controllers\API;
 
+use App\User;
+use DataTables;
+use App\Models\Student;
+use App\Models\Admission;
 use App\Helpers\AppHelper;
-use App\Http\Controllers\Controller;
-use App\Models\AcademicClass;
+use App\Models\ParentUser;
+use App\Models\UserParent;
+use App\Models\UserAddress;
 use App\Models\AcademicData;
+use App\Models\UserDocument;
+use Illuminate\Http\Request;
+use App\Models\AcademicClass;
+use App\Models\UserFamilyInfo;
 use App\Models\AcademicSession;
 use App\Models\AcademicSubject;
-use App\Models\Admission;
-use App\Models\ParentUser;
-use App\Models\Student;
-use App\Models\UserAddress;
-use App\Models\UserDocument;
-use App\Models\UserFamilyInfo;
 use App\Models\UserInformation;
-use App\Models\UserParent;
-use App\Models\UserPreviousInstitute;
-use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
-use Intervention\Image\Facades\Image;
 use Spatie\Permission\Models\Role;
-use DataTables;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use App\Models\UserPreviousInstitute;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Response;
 
-class AdmissionController extends Controller
-{
+class AdmissionController extends Controller {
 
-    public function customPad($start,$prefix,$length) {
-        return $prefix.(str_pad((int)$start, $length, '0', STR_PAD_LEFT));
+    /**
+     * @param $start
+     * @param $prefix
+     * @param $length
+     * @return mixed
+     */
+    public function customPad($start, $prefix, $length) {
+        return $prefix . (str_pad((int) $start, $length, '0', STR_PAD_LEFT));
     }
 
-    public function findSerial($classId,$type,$groupDepartment){
+    /**
+     * @param $classId
+     * @param $type
+     * @param $groupDepartment
+     * @return mixed
+     */
+    public function findSerial($classId, $type, $groupDepartment) {
         $cls = AcademicClass::select(['id'])
             ->with([
-            'academicGroups:id',
-            'academicDepartments:id'])
+                'academicGroups:id',
+                'academicDepartments:id'])
             ->findOrFail($classId);
         $lists = [];
         if ($type === 1) {
@@ -48,10 +59,18 @@ class AdmissionController extends Controller
         }
         $key = array_search($groupDepartment, array_column($lists, 'id'), true);
         $keyT = $key + 1;
+
         return $keyT;
     }
 
-    public function createAcademicId($sessionId,$classId,$type,$groupDepartment) {
+    /**
+     * @param $sessionId
+     * @param $classId
+     * @param $type
+     * @param $groupDepartment
+     * @return mixed
+     */
+    public function createAcademicId($sessionId, $classId, $type, $groupDepartment) {
         $sessionCode = AcademicSession::findOrFail($sessionId)->code;
 
         if ($type === 1) {
@@ -63,7 +82,8 @@ class AdmissionController extends Controller
             if ($serial) {
                 return $serial->custom + 1;
             }
-            return $sessionCode.$this->customPad($classId,null,2).$this->customPad($this->findSerial($classId,$type,$groupDepartment),null,2).$this->customPad(1,null,3);
+
+            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($this->findSerial($classId, $type, $groupDepartment), null, 2) . $this->customPad(1, null, 3);
         }
 
         if ($type === 2) {
@@ -74,7 +94,8 @@ class AdmissionController extends Controller
             if ($serial) {
                 return $serial->custom + 1;
             }
-            return $sessionCode.$this->customPad($classId,null,2).$this->customPad($groupDepartment,'0',2).$this->customPad(1,null,3);
+
+            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($groupDepartment, '0', 2) . $this->customPad(1, null, 3);
         }
 
         $serial = AcademicData::whereAcademicSessionId($sessionId)
@@ -83,92 +104,95 @@ class AdmissionController extends Controller
         if ($serial) {
             return $serial->custom + 1;
         }
-        return $sessionCode.$this->customPad($classId,null,2).$this->customPad(1,null,5);
+
+        return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad(1, null, 5);
     }
 
-    public function submitAdmissionForm(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function submitAdmissionForm(Request $request) {
         $request->validate([
-            'session_id' => 'required',
-            'academic_class_id' => 'required',
-            'type' => 'required',
-            'academic_section_id' => 'required_if:type,0',
-            'academic_group_id' => 'required_if:type,1',
+            'session_id'                => 'required',
+            'academic_class_id'         => 'required',
+            'type'                      => 'required',
+            'academic_section_id'       => 'required_if:type,0',
+            'academic_group_id'         => 'required_if:type,1',
             'academic_group_section_id' => 'required_if:type,1',
-            'academic_department_id' => 'required_if:type,2',
-            'academic_year_id' => 'required_if:type,2',
-            'optional_subject_id' => 'nullable|numeric',
-            'name' => 'required|max:191',
-            'name_bn' => 'required|max:191',
-            'nid' => 'required|max:50',
-            'dob' => 'required|date',
-            'language' => 'required|max:50',
-            'nationality' => 'required|max:50',
-            'gender' => 'required|max:50',
-            'religion_id' => 'required|max:50',
-            'blood' => 'required|max:50',
-            'phone' => 'nullable|max:50',
-            'email' => 'nullable|email|max:50',
+            'academic_department_id'    => 'required_if:type,2',
+            'academic_year_id'          => 'required_if:type,2',
+            'optional_subject_id'       => 'nullable|numeric',
+            'name'                      => 'required|max:191',
+            'name_bn'                   => 'required|max:191',
+            'nid'                       => 'required|max:50',
+            'dob'                       => 'required|date',
+            'language'                  => 'required|max:50',
+            'nationality'               => 'required|max:50',
+            'gender'                    => 'required|max:50',
+            'religion_id'               => 'required|max:50',
+            'blood'                     => 'required|max:50',
+            'phone'                     => 'nullable|max:50',
+            'email'                     => 'nullable|email|max:50',
 
-            'division_id' => 'required',
-            'district_id' => 'required',
-            'upazila_id' => 'required',
-            'union_name' => 'required|max:191',
-            'post_office' => 'required|max:191',
-            'village' => 'required|max:191',
-            'present_division_id' => 'required_if:address_type,0',
-            'present_district_id' => 'required_if:address_type,0',
-            'present_upazila_id' => 'required_if:address_type,0',
-            'present_union_name' => 'required_if:address_type,0|max:191',
-            'present_post_office' => 'required_if:address_type,0|max:191',
-            'present_village' => 'required_if:address_type,0|max:191',
+            'division_id'               => 'required',
+            'district_id'               => 'required',
+            'upazila_id'                => 'required',
+            'union_name'                => 'required|max:191',
+            'post_office'               => 'required|max:191',
+            'village'                   => 'required|max:191',
+            'present_division_id'       => 'required_if:address_type,0',
+            'present_district_id'       => 'required_if:address_type,0',
+            'present_upazila_id'        => 'required_if:address_type,0',
+            'present_union_name'        => 'required_if:address_type,0|max:191',
+            'present_post_office'       => 'required_if:address_type,0|max:191',
+            'present_village'           => 'required_if:address_type,0|max:191',
 
-            'guardian_type' => 'required',
-            'guardian_id' => 'required_if:guardian_type,1',
-            'father_name' => 'required|max:191',
-            'father_name_bn' => 'required|max:191',
-            'father_nid' => 'required|max:191',
-            'father_occupation' => 'required|max:191',
-            'father_phone' => 'required|max:191',
-            'father_email' => 'nullable|email|max:191',
-            'mother_name' => 'required|max:191',
-            'mother_name_bn' => 'required|max:191',
-            'mother_nid' => 'required|max:191',
-            'mother_occupation' => 'required|max:191',
-            'mother_phone' => 'required|max:191',
-            'mother_email' => 'nullable|email|max:191',
-            'guardian_choice' => 'required_if:guardian_type,0',
+            'guardian_type'             => 'required',
+            'guardian_id'               => 'required_if:guardian_type,1',
+            'father_name'               => 'required|max:191',
+            'father_name_bn'            => 'required|max:191',
+            'father_nid'                => 'required|max:191',
+            'father_occupation'         => 'required|max:191',
+            'father_phone'              => 'required|max:191',
+            'father_email'              => 'nullable|email|max:191',
+            'mother_name'               => 'required|max:191',
+            'mother_name_bn'            => 'required|max:191',
+            'mother_nid'                => 'required|max:191',
+            'mother_occupation'         => 'required|max:191',
+            'mother_phone'              => 'required|max:191',
+            'mother_email'              => 'nullable|email|max:191',
+            'guardian_choice'           => 'required_if:guardian_type,0',
 
-            'guardian_name' => 'required_if:guardian_choice,2|max:191',
-            'guardian_name_bn' => 'required_if:guardian_choice,2|max:191',
-            'guardian_nid' => 'required_if:guardian_choice,2|max:191',
-            'guardian_relation' => 'required_if:guardian_choice,2|max:191',
-            'guardian_occupation' => 'required_if:guardian_choice,2|max:191',
-            'guardian_phone' => 'required_if:guardian_choice,2|max:191',
-            'guardian_email' => 'nullable|email|max:191',
+            'guardian_name'             => 'required_if:guardian_choice,2|max:191',
+            'guardian_name_bn'          => 'required_if:guardian_choice,2|max:191',
+            'guardian_nid'              => 'required_if:guardian_choice,2|max:191',
+            'guardian_relation'         => 'required_if:guardian_choice,2|max:191',
+            'guardian_occupation'       => 'required_if:guardian_choice,2|max:191',
+            'guardian_phone'            => 'required_if:guardian_choice,2|max:191',
+            'guardian_email'            => 'nullable|email|max:191',
 
-            'family_total_member' => 'required|nullable|numeric|max:191',
-            'family_earnable' => 'required|nullable|numeric',
-            'yearly_earn' => 'required|nullable|numeric',
+            'family_total_member'       => 'required|nullable|numeric|max:191',
+            'family_earnable'           => 'required|nullable|numeric',
+            'yearly_earn'               => 'required|nullable|numeric',
 
-            'image' => 'required|base64max:52',
-            'guardian_image' => 'required_if:guardian_choice,2|base64max:52',
-            'father_image' => 'required|base64max:52',
-            'mother_image' => 'required|base64max:52',
-            'student_nid_image' => 'required|base64max:2000',
-            'guardian_nid_image' => 'required|base64max:2000',
-            'mother_nid_image' => 'required|base64max:2000',
-            'documents' => 'nullable|array',
-            'documents.type_id*' => 'required',
-            'documents.file*' => 'required|base64max:2000',
-            'previous_academic' => 'required',
-            'old_institute_name' => 'required_if:previous_academic,1|max:191',
-            'old_institute_address' => 'required_if:previous_academic,1|max:191',
-            'old_institute_class' => 'required_if:previous_academic,1|max:191',
-            'old_institute_roll' => 'required_if:previous_academic,1|max:191',
-            'old_institute_group' => 'nullable|max:191',
-            'admission_fee' => 'numeric',
-            'checkUp' => 'accepted',
+            'image'                     => 'required|base64max:52',
+            'guardian_image'            => 'required_if:guardian_choice,2|base64max:52',
+            'father_image'              => 'required|base64max:52',
+            'mother_image'              => 'required|base64max:52',
+            'student_nid_image'         => 'required|base64max:2000',
+            'guardian_nid_image'        => 'required|base64max:2000',
+            'mother_nid_image'          => 'required|base64max:2000',
+            'documents'                 => 'nullable|array',
+            'documents.type_id*'        => 'required',
+            'documents.file*'           => 'required|base64max:2000',
+            'previous_academic'         => 'required',
+            'old_institute_name'        => 'required_if:previous_academic,1|max:191',
+            'old_institute_address'     => 'required_if:previous_academic,1|max:191',
+            'old_institute_class'       => 'required_if:previous_academic,1|max:191',
+            'old_institute_roll'        => 'required_if:previous_academic,1|max:191',
+            'old_institute_group'       => 'nullable|max:191',
+            'admission_fee'             => 'numeric',
+            'checkUp'                   => 'accepted',
         ]);
 
         try {
@@ -184,10 +208,10 @@ class AdmissionController extends Controller
 
             File::makeDirectory(public_path("storage/images/users/$user->id"), $mode = 0777, true, true);
 
-            if($request->image){
-                $name = time().'_profile.' . AppHelper::getFileExtension($request->image);
-                $path = "storage/images/users/$user->id".'/'.$name;
-                Image::make($request->image)->resize(120,150)->save(public_path($path));
+            if ($request->image) {
+                $name = time() . '_profile.' . AppHelper::getFileExtension($request->image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
+                Image::make($request->image)->resize(120, 150)->save(public_path($path));
                 $user->photo = $path;
             }
             $studentRole = Role::findByName('Student');
@@ -203,14 +227,14 @@ class AdmissionController extends Controller
             $academic['type'] = $request->input("type");
 
             if ($request->input("type") === 0) {
-                $academic['custom'] = $this->createAcademicId($request->input("session_id"),$request->input("academic_class_id"),$request->input("type"),$request->input("academic_section_id"));
+                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_section_id"));
                 $academic['academic_section_id'] = $request->input("academic_section_id");
-            }elseif ($request->input("type") === 1){
-                $academic['custom'] = $this->createAcademicId($request->input("session_id"),$request->input("academic_class_id"),$request->input("type"),$request->input("academic_group_id"));
+            } elseif ($request->input("type") === 1) {
+                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_group_id"));
                 $academic['academic_group_id'] = $request->input("academic_group_id");
                 $academic['academic_section_id'] = $request->input("academic_group_section_id");
-            }else{
-                $academic['custom'] = $this->createAcademicId($request->input("session_id"),$request->input("academic_class_id"),$request->input("type"),$request->input("academic_department_id"));
+            } else {
+                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_department_id"));
                 $academic['academic_department_id'] = $request->input("academic_department_id");
                 $academic['academic_year_id'] = $request->input("academic_year_id");
             }
@@ -259,10 +283,10 @@ class AdmissionController extends Controller
             $pa['occupation'] = $request->input("father_occupation");
             $pa['phone'] = $request->input("father_phone");
             $pa['email'] = $request->input("father_email");
-            if($request->father_image){
-                $name = time().'_father.' . AppHelper::getFileExtension($request->father_image);
-                $path = "storage/images/users/$user->id".'/'.$name;
-                Image::make($request->father_image)->resize(120,150)
+            if ($request->father_image) {
+                $name = time() . '_father.' . AppHelper::getFileExtension($request->father_image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
+                Image::make($request->father_image)->resize(120, 150)
                     ->save(public_path($path));
                 $pa['image'] = $path;
             }
@@ -279,10 +303,10 @@ class AdmissionController extends Controller
             $ma['occupation'] = $request->input("mother_occupation");
             $ma['phone'] = $request->input("mother_phone");
             $ma['email'] = $request->input("mother_email");
-            if($request->mother_image){
-                $name = time().'_mother.' . AppHelper::getFileExtension($request->mother_image);
-                $path = "storage/images/users/$user->id".'/'.$name;
-                Image::make($request->mother_image)->resize(120,150)
+            if ($request->mother_image) {
+                $name = time() . '_mother.' . AppHelper::getFileExtension($request->mother_image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
+                Image::make($request->mother_image)->resize(120, 150)
                     ->save(public_path($path));
                 $ma['image'] = $path;
             }
@@ -296,9 +320,9 @@ class AdmissionController extends Controller
                 $g = ParentUser::whereParentId($request->input("guardian_id"))->first();
                 $user->guardian()->create([
                     'parent_id' => $request->input("guardian_id"),
-                    'info_id' => $g->info_id
+                    'info_id'   => $g->info_id,
                 ]);
-            }else{
+            } else {
                 if ($request->input("guardian_choice") == 0) {
                     $fat['name'] = $request->input("father_name");
                     $fat['email'] = $request->input("father_email");
@@ -310,9 +334,9 @@ class AdmissionController extends Controller
 
                     $user->guardian()->create([
                         'parent_id' => $guardian->id,
-                        'info_id' => $father->id
+                        'info_id'   => $father->id,
                     ]);
-                }elseif ($request->input("guardian_choice") == 1){
+                } elseif ($request->input("guardian_choice") == 1) {
                     $mot['name'] = $request->input("mother_name");
                     $mot['email'] = $request->input("mother_email");
                     $mot['phone'] = $request->input("mother_phone");
@@ -323,9 +347,9 @@ class AdmissionController extends Controller
 
                     $user->guardian()->create([
                         'parent_id' => $guardian->id,
-                        'info_id' => $mother->id
+                        'info_id'   => $mother->id,
                     ]);
-                }else{
+                } else {
                     $gua['user_id'] = $user->id;
                     $gua['relation'] = $request->input("guardian_relation");
                     $gua['name'] = $request->input("guardian_name");
@@ -335,10 +359,10 @@ class AdmissionController extends Controller
                     $gua['phone'] = $request->input("guardian_phone");
                     $gua['email'] = $request->input("guardian_email");
 
-                    if($request->guardian_image){
-                        $name = time().'_guardian.' . AppHelper::getFileExtension($request->guardian_image);
-                        $path = "storage/images/users/$user->id".'/'.$name;
-                        Image::make($request->guardian_image)->resize(120,150)
+                    if ($request->guardian_image) {
+                        $name = time() . '_guardian.' . AppHelper::getFileExtension($request->guardian_image);
+                        $path = "storage/images/users/$user->id" . '/' . $name;
+                        Image::make($request->guardian_image)->resize(120, 150)
                             ->save(public_path($path));
                         $gua['image'] = $path;
                     }
@@ -354,7 +378,7 @@ class AdmissionController extends Controller
                     $guardian->assignRole([$guardianRole->id]);
                     $user->guardian()->create([
                         'parent_id' => $guardian->id,
-                        'info_id' => $guu->id
+                        'info_id'   => $guu->id,
                     ]);
                 }
 
@@ -366,12 +390,11 @@ class AdmissionController extends Controller
             $family['yearly_earn'] = $request->input("yearly_earn");
             UserFamilyInfo::create($family);
 
-
             $doc['user_id'] = $user->id;
 
-            if($request->student_nid_image){
-                $name = time().'_student_nid.' . AppHelper::getFileExtension($request->student_nid_image);
-                $path = "storage/images/users/$user->id".'/'.$name;
+            if ($request->student_nid_image) {
+                $name = time() . '_student_nid.' . AppHelper::getFileExtension($request->student_nid_image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
                 Image::make($request->student_nid_image)
                     ->save(public_path($path));
                 $doc['path'] = $path;
@@ -379,9 +402,9 @@ class AdmissionController extends Controller
                 UserDocument::create($doc);
             }
 
-            if($request->father_nid_image){
-                $name = time().'_father_nid.' . AppHelper::getFileExtension($request->father_nid_image);
-                $path = "storage/images/users/$user->id".'/'.$name;
+            if ($request->father_nid_image) {
+                $name = time() . '_father_nid.' . AppHelper::getFileExtension($request->father_nid_image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
                 Image::make($request->father_nid_image)
                     ->save(public_path($path));
                 $doc['path'] = $path;
@@ -389,9 +412,9 @@ class AdmissionController extends Controller
                 UserDocument::create($doc);
             }
 
-            if($request->mother_nid_image){
-                $name = time().'_mother_nid.' . AppHelper::getFileExtension($request->mother_nid_image);
-                $path = "storage/images/users/$user->id".'/'.$name;
+            if ($request->mother_nid_image) {
+                $name = time() . '_mother_nid.' . AppHelper::getFileExtension($request->mother_nid_image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
                 Image::make($request->mother_nid_image)
                     ->save(public_path($path));
                 $doc['path'] = $path;
@@ -399,9 +422,9 @@ class AdmissionController extends Controller
                 UserDocument::create($doc);
             }
 
-            if($request->guardian_nid_image){
-                $name = time().'_guardian_nid.' . AppHelper::getFileExtension($request->guardian_nid_image);
-                $path = "storage/images/users/$user->id".'/'.$name;
+            if ($request->guardian_nid_image) {
+                $name = time() . '_guardian_nid.' . AppHelper::getFileExtension($request->guardian_nid_image);
+                $path = "storage/images/users/$user->id" . '/' . $name;
                 Image::make($request->guardian_nid_image)
                     ->save(public_path($path));
                 $doc['path'] = $path;
@@ -409,10 +432,10 @@ class AdmissionController extends Controller
                 UserDocument::create($doc);
             }
 
-            foreach ($request->input("documents") as $docu){
-                if($docu['file'] && $docu['type']){
-                    $name = time().'_'.$docu['type'] .'.' . AppHelper::getFileExtension($docu['file']);
-                    $path = "storage/images/users/$user->id".'/'.$name;
+            foreach ($request->input("documents") as $docu) {
+                if ($docu['file'] && $docu['type']) {
+                    $name = time() . '_' . $docu['type'] . '.' . AppHelper::getFileExtension($docu['file']);
+                    $path = "storage/images/users/$user->id" . '/' . $name;
                     Image::make($docu['file'])
                         ->save(public_path($path));
                     $doc['path'] = $path;
@@ -455,8 +478,7 @@ class AdmissionController extends Controller
                     ->pluck('id')
                     ->toArray();
 
-
-            }elseif ($class->type == 1){
+            } elseif ($class->type == 1) {
                 $compolsory = AcademicSubject::whereAcademicClassId($class->id)
                     ->whereAcademicGroupId($request->input("academic_group_id"))
                     ->where('religion_type', '!=', 1)
@@ -468,7 +490,7 @@ class AdmissionController extends Controller
                     ->whereReligionId($request->input("religion_id"))
                     ->pluck('id')
                     ->toArray();
-            }else{
+            } else {
                 $compolsory = AcademicSubject::whereAcademicClassId($class->id)
                     ->where('religion_type', '!=', 1)
                     ->pluck('id')
@@ -479,15 +501,15 @@ class AdmissionController extends Controller
                     ->pluck('id')
                     ->toArray();
             }
-            $subjects = array_merge($compolsory,$religion);
+            $subjects = array_merge($compolsory, $religion);
 
-            foreach ($subjects as $subject){
+            foreach ($subjects as $subject) {
                 $sub['user_id'] = $user->id;
                 $sub['academic_data_id'] = $academic->id;
                 $sub['academic_subject_id'] = $subject;
                 if ($subject == $request->input("optional_subject_id")) {
                     $sub['isOptional'] = true;
-                }else{
+                } else {
                     $sub['isOptional'] = false;
                 }
                 $academic->subjects()->create($sub);
@@ -495,21 +517,23 @@ class AdmissionController extends Controller
 
             DB::commit();
 
-            return Response::json($user->custom,200);
+            return Response::json($user->custom, 200);
         } catch (\Exception $e) {
             DB::rollback();
 
-
-            return response($e,500);
+            return response($e, 500);
             // something went wrong
         }
     }
 
-    public function getAdmissionList(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function getAdmissionList(Request $request) {
         $request->validate([
-            'session_id' => 'required'
+            'session_id' => 'required',
         ]);
+
         return Admission::whereAcademicSessionId($request->input("session_id"))
             ->with([
                 'user:id,name,custom,photo',
@@ -519,10 +543,13 @@ class AdmissionController extends Controller
             ->get();
     }
 
-    public function loadAdmissionDetails(Request $request)
-    {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function loadAdmissionDetails(Request $request) {
         $request->validate([
-            'custom' => 'required'
+            'custom' => 'required',
         ]);
 
         $academic = AcademicData::whereCustom($request->input("custom"))->first();
@@ -531,14 +558,19 @@ class AdmissionController extends Controller
 
     }
 
-    public function testStudentDataTable(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function testStudentDataTable(Request $request) {
         //return Student::latest()->get();
         $data = Student::latest()->get();
+
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function($row){
-                return '';
+            ->addColumn('action', function ($row) {
+                $id = $row->id;
+
+                return "<button data-id='$id' data-action='delete' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i> Delete</button>";
             })
             ->rawColumns(['action'])
             ->make(true);

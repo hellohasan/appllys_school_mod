@@ -17,6 +17,8 @@ class CreateAccountsTable extends Migration
             $table->id();
             $table->string('name');
             $table->float('amount');
+            $table->string('bank_account')->nullable();
+            $table->string('bank_branch')->nullable();
             $table->boolean('isShow')->default(true);
             $table->boolean('isActive')->default(true);
             $table->foreignId('created_by')->constrained('users');

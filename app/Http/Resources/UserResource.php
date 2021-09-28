@@ -4,23 +4,22 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
-{
+class UserResource extends JsonResource {
     /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request $request
      * @return array
      */
-    public function toArray($request)
-    {
+    public function toArray($request) {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'photo' => asset($this->photo),
-            'bio' => $this->bio,
-            'roles' => array_map(
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'email'       => $this->email,
+            'photo'       => asset($this->photo),
+            'bio'         => $this->bio,
+            'created_at'  => $this->created_at,
+            'roles'       => array_map(
                 function ($role) {
                     return $role['name'];
                 },

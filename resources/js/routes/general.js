@@ -9,6 +9,15 @@ export const general = [
     }
   },
   {
+    path: "/password",
+    name: "password",
+    component: () => import(/*webpackChunkName: "js/password"*/ "../components/Password"),
+    meta: {
+      title: 'Password',
+      requireAuth: true,
+    }
+  },
+  {
     path: "/designations",
     component: require("../components/Academic/Designation").default,
     name: "designations",

@@ -564,7 +564,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       receiveItems: "",
       isPrint: false,
       basic: {},
-      printAble: ''
+      printAble: ""
     };
   },
   watch: {
@@ -640,7 +640,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     printReceipt: function printReceipt(billId) {
       var _this2 = this;
 
-      axios.get('/api/specific-bill-receipt', {
+      axios.get("/api/specific-bill-receipt", {
         params: {
           id: billId
         }
@@ -714,7 +714,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.departments = {};
         this.sections = {};
         this.years = {};
-        this.student = '';
+        this.student = "";
         axios.get("/api/load-class-group-department", {
           params: {
             id: e
@@ -733,7 +733,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this6 = this;
 
       if (e) {
-        this.student = '';
+        this.student = "";
         axios.get("/api/load-only-group-section", {
           params: {
             id: e
@@ -748,7 +748,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     changeSection: function changeSection(e) {
       if (e) {
-        this.student = '';
+        this.student = "";
         this.loadSelectedStudent();
       }
     },
@@ -756,7 +756,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this7 = this;
 
       if (e) {
-        this.student = '';
+        this.student = "";
         this.years = {};
         axios.get("/api/load-department-years", {
           params: {
@@ -770,7 +770,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     changeYear: function changeYear(e) {
       if (e) {
-        this.student = '';
+        this.student = "";
         this.loadSelectedStudent();
       }
     },
@@ -822,7 +822,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.table-user-information > tbody > tr[data-v-091ad0e3]:first-child {\r\n    border-top: 0;\n}\n.table-user-information > tbody > tr > td[data-v-091ad0e3] {\r\n    border-top: 0;\n}\n@media print {\n#printMe[data-v-091ad0e3],\r\n    #printMe *[data-v-091ad0e3] {\r\n        visibility: visible;\n}\n#printMe[data-v-091ad0e3] {\r\n        position: absolute;\r\n        left: 0;\r\n        top: 0;\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.table-user-information > tbody > tr[data-v-091ad0e3]:first-child {\n    border-top: 0;\n}\n.table-user-information > tbody > tr > td[data-v-091ad0e3] {\n    border-top: 0;\n}\n@media print {\n#printMe[data-v-091ad0e3],\n    #printMe *[data-v-091ad0e3] {\n        visibility: visible;\n}\n#printMe[data-v-091ad0e3] {\n        position: absolute;\n        left: 0;\n        top: 0;\n}\n}\n", ""]);
 
 // exports
 
@@ -1501,7 +1501,7 @@ var render = function() {
                                     _c("tr", { staticClass: "bg-indigo" }, [
                                       _c("td", [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("TotalBill")) +
                                             ": " +
                                             _vm._s(
@@ -1509,13 +1509,13 @@ var render = function() {
                                                 _vm.student.bills.total_bill
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("PaidBill")) +
                                             ": " +
                                             _vm._s(
@@ -1523,7 +1523,7 @@ var render = function() {
                                                 _vm.student.bills.complete_bill
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ])
                                     ]),
@@ -1534,7 +1534,7 @@ var render = function() {
                                         { staticClass: "bg-secondary" },
                                         [
                                           _vm._v(
-                                            "\n                                                " +
+                                            "\n                                                    " +
                                               _vm._s(_vm.$t("TotalDemand")) +
                                               ": " +
                                               _vm._s(
@@ -1542,14 +1542,14 @@ var render = function() {
                                                   _vm.student.bills.total_demand
                                                 )
                                               ) +
-                                              "\n                                            "
+                                              "\n                                                "
                                           )
                                         ]
                                       ),
                                       _vm._v(" "),
                                       _c("td", { staticClass: "bg-success" }, [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("TotalPaid")) +
                                             ": " +
                                             _vm._s(
@@ -1557,7 +1557,7 @@ var render = function() {
                                                 _vm.student.bills.total_paid
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ])
                                     ]),
@@ -1565,7 +1565,7 @@ var render = function() {
                                     _c("tr", [
                                       _c("td", { staticClass: "bg-danger" }, [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("TotalFine")) +
                                             ": " +
                                             _vm._s(
@@ -1573,13 +1573,13 @@ var render = function() {
                                                 _vm.student.bills.total_fine
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ]),
                                       _vm._v(" "),
                                       _c("td", { staticClass: "bg-green" }, [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("TotalDiscount")) +
                                             ": " +
                                             _vm._s(
@@ -1587,7 +1587,7 @@ var render = function() {
                                                 _vm.student.bills.total_discount
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ])
                                     ]),
@@ -1595,7 +1595,7 @@ var render = function() {
                                     _c("tr", [
                                       _c("td", { staticClass: "bg-info" }, [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("LastPay")) +
                                             ": " +
                                             _vm._s(
@@ -1603,13 +1603,13 @@ var render = function() {
                                                 _vm.student.bills.last_paid_at
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ]),
                                       _vm._v(" "),
                                       _c("td", { staticClass: "bg-warning" }, [
                                         _vm._v(
-                                          "\n                                                " +
+                                          "\n                                                    " +
                                             _vm._s(_vm.$t("StillDue")) +
                                             ": " +
                                             _vm._s(
@@ -1617,7 +1617,7 @@ var render = function() {
                                                 _vm.student.bills.total_due
                                               )
                                             ) +
-                                            "\n                                            "
+                                            "\n                                                "
                                         )
                                       ])
                                     ])
@@ -1715,13 +1715,13 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("td", [
                                     _vm._v(
-                                      "\n                                " +
+                                      "\n                                    " +
                                         _vm._s(
                                           _vm._f("withCurrency")(
                                             bill.total + bill.fine - bill.waiver
                                           )
                                         ) +
-                                        "\n                            "
+                                        "\n                                "
                                     )
                                   ]),
                                   _vm._v(" "),
@@ -1748,18 +1748,18 @@ var render = function() {
                                               _vm._s(
                                                 _vm._f("date")(bill.updated_at)
                                               ) +
-                                                "\n                                "
+                                                "\n                                    "
                                             )
                                           ]
                                         : [
                                             _vm._v(
-                                              "\n                                    " +
+                                              "\n                                        " +
                                                 _vm._s(
                                                   _vm._f("withCurrency")(
                                                     bill.due
                                                   )
                                                 ) +
-                                                "\n                                "
+                                                "\n                                    "
                                             )
                                           ]
                                     ],
@@ -2192,7 +2192,7 @@ var render = function() {
                           staticClass: "btn btn-primary",
                           attrs: {
                             disabled: _vm.billForm.busy,
-                            type: "submit"
+                            type: "button"
                           },
                           on: {
                             click: function($event) {

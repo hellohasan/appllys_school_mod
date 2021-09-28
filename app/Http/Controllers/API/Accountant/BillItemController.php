@@ -8,16 +8,14 @@ use App\Http\Traits\CommonTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
-class BillItemController extends Controller
-{
+class BillItemController extends Controller {
     use CommonTrait;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         return BillItem::orderByDesc('id')->get();
     }
 
@@ -27,8 +25,7 @@ class BillItemController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'title'          => 'required|max:190',
             'item_for'       => 'required',
@@ -47,8 +44,7 @@ class BillItemController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         return BillItem::find($id);
     }
 
@@ -59,8 +55,7 @@ class BillItemController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $item = BillItem::find($id);
         $request->validate([
             'title'          => 'required|max:190',
@@ -80,8 +75,7 @@ class BillItemController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
 
@@ -91,8 +85,7 @@ class BillItemController extends Controller
      * @param  mixed $request
      * @return void
      */
-    public function exportExcelPDF(Request $request)
-    {
+    public function exportExcelPDF(Request $request) {
         if ($request->has('type')) {
             $type = $request->input("type");
             $title = 'Billing Item List';

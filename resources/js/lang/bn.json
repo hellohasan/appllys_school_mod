@@ -224,5 +224,11 @@
     "StudentName": "শিক্ষার্থীর নাম",
     "InWord": "কথায়",
     "ReceiverSignature": "আদায়কারীর স্বাক্ষর",
-    "ManageAccount" : "অ্যাকাউন্ট পরিচালনা"
+    "ManageAccount" : "অ্যাকাউন্ট",
+    "BankName": "ব্যাংকের নাম",
+    "BankAccount": "ব্যাংক হিসাব",
+    "BankBranch": "ব্যাংকের শাখা",
+    "Password": "পাসওয়ার্ড",
+    "MemberSince": "সদস্য অদ্যাবধি",
+    "PayAt": "প্রদানের তারিখ"
 }

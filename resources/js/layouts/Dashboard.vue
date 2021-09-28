@@ -34,9 +34,33 @@
                         </a>
                     </div>
                 </li>
+                <li class="nav-item dropdown user-menu">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img :src="authUser.photo" class="user-image img-circle elevation-2" alt="User Image">
+                    <span class="d-none d-md-inline">{{ authUser.name }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                        <!-- User image -->
+                        <li class="user-header bg-primary">
+                            <img :src="authUser.photo" class="img-circle elevation-2" alt="User Image">
+                            <p>{{ authUser.name }} - {{ authUser.roles[0] }}
+                            <small>{{ $t('MemberSince') }}: {{ authUser.created_at | date }}</small></p>
+                        </li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer d-flex justify-content-between">
+                            <router-link to="/profile" class="btn btn-primary btn-sm btn-flat text-white">
+                                <i class="fas fa-user"></i> {{$t('profile')}}
+                            </router-link>
 
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i class="fas fa-th-large"></i></a>
+                            <router-link to="/password" class="btn btn-success btn-sm btn-flat text-white">
+                                <i class="fas fa-key"></i> {{$t('Password')}}
+                            </router-link>
+
+                            <a href="#" class="btn btn-danger btn-sm btn-flat text-white" @click.prevent="logout">
+                                <i class="fas fa-sign-out-alt"></i> {{$t('logout')}}
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>
@@ -49,7 +73,6 @@
                 <img :src="site_logo" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Vue Admin</span>
             </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
@@ -128,10 +151,7 @@
 <script>
 import permission from '../directive/permission/index.js'
 import role from '../directive/role/index.js'
-import {
-    setDocumentDirectionPerLocale,
-    setDocumentLang
-} from "../plugins/document"
+import {setDocumentDirectionPerLocale,setDocumentLang} from "../plugins/document"
 import Setting from "./Menu/Setting";
 import Register from "./Menu/Register";
 import Admin from './Menu/Admin'
@@ -176,9 +196,6 @@ export default {
         locales() {
             return this.$store.getters.locales
         }
-    },
-    mounted() {
-        
     }
 }
 </script>

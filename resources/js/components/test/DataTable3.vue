@@ -36,12 +36,14 @@ export default {
                 event.preventDefault();
                 console.log(target.dataset.id)
                 console.log(target.dataset.action)
+                //console.log(target.dataset.id)
+                //console.log(target.dataset.action)
                 //const url = JSON.parse(target.dataset.to);
                 //router.push({ name: 'user', params: { userId: '123' } })
+                // this.$router.push('/dashboard');
                 this.$router.push('/dashboard');
             }
         });
-
     },
     methods: {
         myTable() {

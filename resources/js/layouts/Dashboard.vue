@@ -157,6 +157,7 @@ import Register from "./Menu/Register";
 import Admin from './Menu/Admin'
 import General from './Menu/General'
 import Accountant from "./Menu/Accountant";
+import axios from 'axios';
 export default {
     components: {
         Setting,
@@ -183,6 +184,13 @@ export default {
                 setDocumentLang(lang)
                 setDocumentDirectionPerLocale(lang)
                 this.$store.dispatch('setLocale', locale )
+                axios.get('/api/change-language',{params:{lang:lang}}).then((res)=>{
+                    Toast.fire({
+                        icon: 'success',
+                        title: this.$t('language_update')
+                    })
+                })
+                location.reload();
             }
         }
     },

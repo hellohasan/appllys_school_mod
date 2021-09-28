@@ -685,6 +685,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.billForm.total = parseFloat(bill.total) + parseFloat(bill.fine) - parseFloat(bill.waiver);
       this.billForm.due = bill.due;
       this.billForm.oldPay = bill.pay;
+      this.billForm.pay = 0;
       this.billForm.isAttempt = bill.isAttempt;
       this.openUserModal();
     },
@@ -1683,9 +1684,7 @@ var render = function() {
                                 return _c("tr", { key: index }, [
                                   _c("td", [_vm._v(_vm._s(++index))]),
                                   _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(bill.package.custom))
-                                  ]),
+                                  _c("td", [_vm._v(_vm._s(bill.custom))]),
                                   _vm._v(" "),
                                   _c("td", [
                                     _vm._v(
@@ -1742,12 +1741,15 @@ var render = function() {
                                                 staticClass:
                                                   "badge badge-success"
                                               },
-                                              [_vm._v("Paid")]
+                                              [_vm._v(_vm._s(_vm.$t("Paid")))]
                                             ),
                                             _vm._v(
-                                              _vm._s(
-                                                _vm._f("date")(bill.updated_at)
-                                              ) +
+                                              " " +
+                                                _vm._s(
+                                                  _vm._f("date")(
+                                                    bill.updated_at
+                                                  )
+                                                ) +
                                                 "\n                                    "
                                             )
                                           ]
@@ -1785,7 +1787,7 @@ var render = function() {
                                                   }
                                                 }
                                               },
-                                              [_vm._v("Print")]
+                                              [_vm._v(_vm._s(_vm.$t("Print")))]
                                             )
                                           ]
                                         : [
@@ -1793,7 +1795,7 @@ var render = function() {
                                               "button",
                                               {
                                                 staticClass:
-                                                  "btn btn-success btn-sm",
+                                                  "btn btn-info btn-sm text-white",
                                                 attrs: { type: "button" },
                                                 on: {
                                                   click: function($event) {
@@ -1801,7 +1803,11 @@ var render = function() {
                                                   }
                                                 }
                                               },
-                                              [_vm._v("Receive Now")]
+                                              [
+                                                _vm._v(
+                                                  _vm._s(_vm.$t("ReceiveNow"))
+                                                )
+                                              ]
                                             )
                                           ]
                                     ],
@@ -2269,7 +2275,7 @@ var render = function() {
                                 _vm._v(
                                   _vm._s(_vm.$t("Custom")) +
                                     ": " +
-                                    _vm._s(_vm.printAble.package.custom)
+                                    _vm._s(_vm.printAble.custom)
                                 )
                               ]),
                               _vm._v(" "),
@@ -2585,7 +2591,7 @@ var render = function() {
                                 _vm._v(
                                   _vm._s(_vm.$t("Custom")) +
                                     ": " +
-                                    _vm._s(_vm.printAble.package.custom)
+                                    _vm._s(_vm.printAble.custom)
                                 )
                               ]),
                               _vm._v(" "),

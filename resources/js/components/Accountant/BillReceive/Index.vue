@@ -10,7 +10,6 @@
                     <th>{{ $t("Custom") }}</th>
                     <th>{{ $t("StudentName") }}</th>
                     <th>{{ $t("Academic_Class") }}</th>
-                    <th>{{ $t("Details") }}</th>
                     <th>{{ $t("amount") }}</th>
                     <th class="not-export-col">{{ $t("Action") }}</th>
                 </tr>
@@ -21,6 +20,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: "Index",
     data(){
@@ -30,94 +30,95 @@ export default {
     },
     methods:{
         myTable(){
-            this.$nextTick(()=>{
-                $('#myTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    responsive: true,
-                    retrieve: true,
-                    bDestroy: true,
-                    ajax: {
-                        url: "/api/load-bill-pay-lists",
-                        type: 'GET',
-                        headers: {"Authorization": 'Bearer '+this.$store.getters.currentUser.token}
+            $('#myTable').DataTable().clear().destroy();
+            $('#myTable').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                retrieve: true,
+                destroy : true,
+                ajax: {
+                    url: "/api/load-bill-pay-lists",
+                    type: 'GET',
+                    headers: {"Authorization": 'Bearer '+this.$store.getters.currentUser.token}
+                },
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'created_at'},
+                    {data: 'custom'},
+                    {data: 'name'},
+                    {data: 'academic_class'},
+                    {data: 'amount'},
+                    {data: 'action'}
+                ],
+                dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                buttons: [
+                    {
+                        extend: "print",
+                        text: "<i class='fas fa-print'></i> Print",
+                        titleAttr: "Print",
+                        className: "btn btn-info btn-sm text-white",
+                        exportOptions: {
+                            columns: ":not(.not-export-col)"
+                        }
                     },
-                    columns: [
-                        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                        {data: 'created_at'},
-                        {data: 'user_id'},
-                        {data: 'logable_id'},
-                        {data: 'account_id'},
-                        {data: 'before_amount'},
-                        {data: 'after_amount'},
-                        {data: 'action'}
-                    ],
-                    dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    buttons: [
-                        {
-                            extend: "print",
-                            text: "<i class='fas fa-print'></i> Print",
-                            titleAttr: "Print",
-                            className: "btn btn-info btn-sm text-white",
-                            exportOptions: {
-                                columns: ":not(.not-export-col)"
-                            }
+                    {
+                        extend: "pdfHtml5",
+                        text: "<i class='fas fa-file-pdf'></i> PDF",
+                        titleAttr: "Export as PDF",
+                        className: "btn btn-success btn-sm",
+                        exportOptions: {
+                            columns: ":not(.not-export-col)"
                         },
-                        {
-                            extend: "pdfHtml5",
-                            text: "<i class='fas fa-file-pdf'></i> PDF",
-                            titleAttr: "Export as PDF",
-                            className: "btn btn-success btn-sm",
-                            exportOptions: {
-                                columns: ":not(.not-export-col)"
-                            },
-                            customize: function (doc, config) {
-                                doc.defaultStyle.font = 'SolaimanLipi';
-                                doc.styles.tableHeader.alignment = 'left';
-                                doc.defaultStyle.alignment = 'left';
-                                doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
-                                doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        customize: function (doc, config) {
+                            doc.defaultStyle.font = 'SolaimanLipi';
+                            doc.styles.tableHeader.alignment = 'left';
+                            doc.defaultStyle.alignment = 'left';
+                            doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
+                            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
 
-                                let tableNode;
-                                for (let i = 0; i < doc.content.length; ++i) {
-                                    if (doc.content[i].table !== undefined) {
-                                        tableNode = doc.content[i];
-                                        break;
-                                    }
-                                }
-                                const rowIndex = 0;
-                                const tableColumnCount = tableNode.table.body[rowIndex].length;
-                                if (tableColumnCount > 6) {
-                                    doc.pageOrientation = 'landscape';
+                            let tableNode;
+                            for (let i = 0; i < doc.content.length; ++i) {
+                                if (doc.content[i].table !== undefined) {
+                                    tableNode = doc.content[i];
+                                    break;
                                 }
                             }
-                        },
-                        {
-                            extend: "excelHtml5",
-                            text: "<i class='fas fa-file-excel'></i> Excel",
-                            titleAttr: "Export as Excel",
-                            className: "btn btn-secondary btn-sm",
-                            exportOptions: {
-                                columns: ":not(.not-export-col)"
-                            }
-                        },
-                        {
-                            extend: "copyHtml5",
-                            text: "<i class='fas fa-copy'></i> Copy",
-                            titleAttr: "Copy to clipboard",
-                            className: "btn btn-info btn-sm text-white",
-                            exportOptions: {
-                                columns: ":not(.not-export-col)"
+                            const rowIndex = 0;
+                            const tableColumnCount = tableNode.table.body[rowIndex].length;
+                            if (tableColumnCount > 6) {
+                                doc.pageOrientation = 'landscape';
                             }
                         }
-                    ]
+                    },
+                    {
+                        extend: "excelHtml5",
+                        text: "<i class='fas fa-file-excel'></i> Excel",
+                        titleAttr: "Export as Excel",
+                        className: "btn btn-secondary btn-sm",
+                        exportOptions: {
+                            columns: ":not(.not-export-col)"
+                        }
+                    },
+                    {
+                        extend: "copyHtml5",
+                        text: "<i class='fas fa-copy'></i> Copy",
+                        titleAttr: "Copy to clipboard",
+                        className: "btn btn-info btn-sm text-white",
+                        exportOptions: {
+                            columns: ":not(.not-export-col)"
+                        }
+                    }
+                ]
 
-                })
             })
         },
+        myTableDelete(){
+            this.myTable();
+        }
     },
     mounted(){
         this.myTable();
@@ -140,7 +141,13 @@ export default {
                         cancelButtonText: this.$t('cancel'),
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            alert('hasan')
+                            axios.delete('/api/delete-bill-pay-lists',{data:{id:id}}).then((res) =>{
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: this.$t('delete_message')
+                                });
+                                this.myTableDelete();
+                            })
                         }
                     })
                 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Accountant;
 
 use App\User;
+use Carbon\Carbon;
 use App\Models\Account;
 use App\Models\BillStudent;
 use App\Models\AcademicData;
@@ -52,7 +53,7 @@ class BillReceiveController extends Controller {
                 'guardian_image'   => asset($guardian->image),
             ];
 
-            $billQ = BillStudent::with(['package:id,custom,items,total'])
+            $billQ = BillStudent::with(['package:id,items,total'])
                 ->whereUserId($user->id)
                 ->orderByDesc('id')
                 ->get();
@@ -89,7 +90,7 @@ class BillReceiveController extends Controller {
             'fine'    => ['nullable', 'numeric'],
         ]);
 
-        $bill = BillStudent::with('package:id,custom,total,items')->find($request->input("bill_id"));
+        $bill = BillStudent::with('package:id,total,items')->find($request->input("bill_id"));
         if ($bill) {
 
             try {
@@ -154,14 +155,60 @@ class BillReceiveController extends Controller {
      */
     public function loadBillPayList() {
 
-        $log = TransactionLog::with('logable')->whereReason('bill_receive')->orderByDesc('id')->get();
+        $log = TransactionLog::select('id', 'logable_type', 'logable_id', 'reason', 'amount', 'created_at')
+            ->with([
+                'logable:id,user_id,custom,bill_package_id',
+                'logable.package:id,academic_class_id',
+                'logable.package.academic_class:id,name',
+                'logable.user:id,name',
+            ])->whereReason('bill_receive')
+            ->orderByDesc('id')
+            ->get();
 
         return DataTables::of($log)
             ->addIndexColumn()
+            ->addColumn('custom', function ($row) {
+                return $row->logable->custom;
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('dS-M-Y');
+            })
+            ->addColumn('academic_class', function ($row) {
+                return $row->logable->package->academic_class->name;
+            })
+            ->editColumn('amount', function ($row) {
+                return $row->amount . ' ' . trans('lang.BDT');
+            })
+            ->addColumn('name', function ($row) {
+                return $row->logable->user->name;
+            })
             ->addColumn('action', function ($row) {
-                return '<button data-id="$row->id" data-action="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</button>';
+                return '<button data-id="' . $row->id . '" data-action="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> ' . __('delete') . '</button>';
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function deleteBillPayList(Request $request) {
+        $request->validate([
+            "id" => "required",
+        ]);
+
+        $log = TransactionLog::findOrFail($request->input("id"));
+        $bill = $log->logable;
+        $bill->pay = round($bill->pay - $log->amount, 2);
+        $bill->due = round($bill->due + $log->amount, 2);
+        $bill->isPaid = false;
+        $bill->save();
+
+        $cash = Account::first();
+        $cash->amount = round($cash->amount - $log->amount, 2);
+        $cash->save();
+        $log->delete();
+
+        return response()->json(['message' => 'Deleted'], 200);
     }
 }

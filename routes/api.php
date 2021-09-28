@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\API\AdmissionController;
 use App\Http\Controllers\API\Academic\GradeController;
 use App\Http\Controllers\API\Academic\SubjectController;
@@ -33,6 +33,8 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'jwt'], function () {
+
+    Route::get('change-language', [LanguageController::class, 'changelanguage']);
 
     Route::apiResources(['user' => 'API\UserController']);
     Route::get('profile', 'API\UserController@profile');
@@ -165,6 +167,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('submit-specific-student-bill', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'submitSpecificStudentBill']);
     Route::get('specific-bill-receipt', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'specificBillReceipt']);
     Route::get('load-bill-pay-lists', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'loadBillPayList']);
+    Route::delete('delete-bill-pay-lists', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'deleteBillPayList']);
 
     /* ManageAccount Route List */
     Route::get('manage-accounts', [AccountController::class, 'index'])->middleware('permission:manage-accounts');

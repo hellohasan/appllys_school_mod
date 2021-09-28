@@ -79,7 +79,7 @@
 
         <div class="content">
             <div class="title m-b-md">
-                Laravel
+                Laravel {{ __('lang.BDT') }}
             </div>
 
             <div class="links">

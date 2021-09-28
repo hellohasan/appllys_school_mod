@@ -191,7 +191,7 @@
                             <tbody>
                                 <tr v-for="(bill, index) in bills" :key="index">
                                     <td>{{ ++index }}</td>
-                                    <td>{{ bill.package.custom }}</td>
+                                    <td>{{ bill.custom }}</td>
                                     <td>{{ bill.created_at | myDate }}</td>
                                     <td>{{ bill.total | withCurrency }}</td>
                                     <td>{{ bill.fine | withCurrency }}</td>
@@ -202,7 +202,7 @@
                                     <td>{{ bill.pay | withCurrency }}</td>
                                     <td>
                                         <template v-if="bill.isPaid">
-                                            <span class="badge badge-success">Paid</span>{{ bill.updated_at | date }}
+                                            <span class="badge badge-success">{{ $t('Paid') }}</span> {{ bill.updated_at | date }}
                                         </template>
                                         <template v-else>
                                             {{ bill.due | withCurrency }}
@@ -210,10 +210,10 @@
                                     </td>
                                     <td>
                                         <template v-if="bill.isPaid">
-                                            <button class="btn btn-success btn-sm" @click.prevent="printReceipt(bill.id)">Print</button>
+                                            <button class="btn btn-success btn-sm" @click.prevent="printReceipt(bill.id)">{{ $t('Print') }}</button>
                                         </template>
                                         <template v-else>
-                                            <button type="button" class="btn btn-success btn-sm" @click="receiveNow(bill)">Receive Now</button>
+                                            <button type="button" class="btn btn-info btn-sm text-white" @click="receiveNow(bill)">{{ $t('ReceiveNow') }}</button>
                                         </template>
                                     </td>
                                 </tr>
@@ -315,7 +315,7 @@
                     <div class="row mt-3">
                         <div class="col-12">
                             <div class="d-flex justify-content-between">
-                                <p>{{ $t('Custom') }}: {{printAble.package.custom}}</p>
+                                <p>{{ $t('Custom') }}: {{printAble.custom}}</p>
                                 <p>{{ $t('Date') }}: {{printAble.updated_at|myDate}}</p>
                             </div>
                         </div>
@@ -410,7 +410,7 @@
                     <div class="row mt-3">
                         <div class="col-12">
                             <div class="d-flex justify-content-between">
-                                <p>{{ $t('Custom') }}: {{printAble.package.custom}}</p>
+                                <p>{{ $t('Custom') }}: {{printAble.custom}}</p>
                                 <p>{{ $t('Date') }}: {{printAble.updated_at|myDate}}</p>
                             </div>
                         </div>
@@ -584,10 +584,7 @@
                 await this.$htmlToPaper(divName);
             },
             countDue() {
-                let due =
-                    parseFloat(this.billForm.total) -
-                    parseFloat(this.billForm.oldPay) -
-                    parseFloat(this.billForm.pay);
+                let due = parseFloat(this.billForm.total) - parseFloat(this.billForm.oldPay) - parseFloat(this.billForm.pay);
                 if (due === 0) {
                     this.billForm.due = "Paid";
                 } else {
@@ -598,8 +595,7 @@
                 let itemTotal = this.billForm.itemTotal;
                 let waiver = this.billForm.waiver;
                 let fine = this.billForm.fine;
-                this.billForm.total =
-                    parseFloat(itemTotal) + parseFloat(fine) - parseFloat(waiver);
+                this.billForm.total = parseFloat(itemTotal) + parseFloat(fine) - parseFloat(waiver);
             },
             printReceipt(billId) {
                 axios
@@ -639,12 +635,10 @@
                 this.billForm.itemTotal = bill.total; //bill package total
                 this.billForm.fine = bill.fine;
                 this.billForm.waiver = bill.waiver;
-                this.billForm.total =
-                    parseFloat(bill.total) +
-                    parseFloat(bill.fine) -
-                    parseFloat(bill.waiver);
+                this.billForm.total = parseFloat(bill.total) + parseFloat(bill.fine) - parseFloat(bill.waiver);
                 this.billForm.due = bill.due;
                 this.billForm.oldPay = bill.pay;
+                this.billForm.pay = 0;
                 this.billForm.isAttempt = bill.isAttempt;
                 this.openUserModal();
             },

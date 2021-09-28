@@ -16,7 +16,7 @@ class TransactionLog extends Model {
     /**
      * @var array
      */
-    protected $guarded = [''];
+    protected $guarded = [];
 
     /**
      * @return mixed

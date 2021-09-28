@@ -6,7 +6,6 @@
                 <thead>
                 <tr>
                     <th>{{$t('SL')}}</th>
-                    <th>{{$t('SerialNumbers')}}</th>
                     <th>{{$t('Academic_Session')}}</th>
                     <th>{{$t('Academic_Class')}}</th>
                     <th>{{$t('ClassDetails')}}</th>
@@ -18,7 +17,6 @@
                 <tbody>
                 <tr v-for="(item,index) in lists" :key="index">
                     <td>{{++index}}</td>
-                    <td>{{item.custom}}</td>
                     <td>{{item.academic_session.duration}}</td>
                     <td>{{item.academic_class.name}}</td>
                     <td>

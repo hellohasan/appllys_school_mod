@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\API\Accountant;
 
-use App\Http\Controllers\Controller;
-use App\Models\AcademicData;
-use App\Models\AcademicSession;
 use App\Models\BillPackage;
 use App\Models\BillStudent;
+use App\Models\AcademicData;
 use Illuminate\Http\Request;
+use App\Models\AcademicSession;
+use App\Http\Controllers\Controller;
 
-class BillAssignController extends Controller
-{
+class BillAssignController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         //$this->middleware('permission:bill-assign-view',['only'=>['billAssignView']]);
     }
 
-    public function billAssignList()
-    {
+    public function billAssignList() {
         return BillPackage::orderByDesc('id')
             ->with([
                 'academic_session:id,duration',
@@ -33,37 +30,42 @@ class BillAssignController extends Controller
             ->get();
     }
 
-    public function customPad($start,$prefix,$length) {
-        return $prefix.(str_pad((int)$start, $length, '0', STR_PAD_LEFT));
+    /**
+     * @param $start
+     * @param $prefix
+     * @param $length
+     * @return mixed
+     */
+    public function customPad($start, $prefix, $length) {
+        return $prefix . (str_pad((int) $start, $length, '0', STR_PAD_LEFT));
     }
 
-    public function billAssignSubmit(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function billAssignSubmit(Request $request) {
 
         $request->validate([
-            'academic_class_id' => 'required',
-            'academic_class_type' => 'required',
-            'academic_group_id' => 'required_if:academic_class_type,1',
+            'academic_class_id'      => 'required',
+            'academic_class_type'    => 'required',
+            'academic_group_id'      => 'required_if:academic_class_type,1',
             'academic_department_id' => 'required_if:academic_class_type,2',
-            'academic_year_id' => 'required_if:academic_class_type,2',
-            'bill_type' => 'required',
-            'student_ids' => 'required_if:bill_type,Specific',
-            'items' => 'array|required',
-            'items.*.amount' => 'required|numeric'
+            'academic_year_id'       => 'required_if:academic_class_type,2',
+            'bill_type'              => 'required',
+            'student_ids'            => 'required_if:bill_type,Specific',
+            'items'                  => 'array|required',
+            'items.*.amount'         => 'required|numeric',
         ]);
 
         $in = $request->except(['student_ids']);
-        $lastPackage = BillPackage::count();
-        $in['custom'] = date('Ymd').($this->customPad($lastPackage+1,null,'5'));
         $session = AcademicSession::whereIscurrent(1)->first();
         $in['academic_session_id'] = $session->id;
 
         $package = BillPackage::create($in);
 
-
         if ($request->input("bill_type") == 'Specific') {
-            $this->billAssignToStudent($request->input("student_ids"),$package);
-        }else {
+            $this->billAssignToStudent($request->input("student_ids"), $package);
+        } else {
             $students = [];
 
             if ($request->academic_class_type == 0) {
@@ -72,14 +74,13 @@ class BillAssignController extends Controller
                     ->pluck('user_id')
                     ->toArray();
 
-
-            }elseif ($request->academic_class_type == 1) {
+            } elseif ($request->academic_class_type == 1) {
                 $students = AcademicData::whereAcademicSessionId($session->id)
                     ->whereAcademicClassId($request->get("academic_class_id"))
                     ->whereAcademicGroupId($request->get("academic_group_id"))
                     ->pluck('user_id')
                     ->toArray();
-            }elseif ($request->academic_class_type == 2){
+            } elseif ($request->academic_class_type == 2) {
                 $students = AcademicData::whereAcademicSessionId($session->id)
                     ->whereAcademicClassId($request->get("academic_class_id"))
                     ->whereAcademicDepartmentId($request->get("academic_department_id"))
@@ -88,15 +89,19 @@ class BillAssignController extends Controller
                     ->toArray();
             }
 
-            $this->billAssignToStudent($students,$package);
+            $this->billAssignToStudent($students, $package);
         }
 
     }
 
-    public function billAssignToStudent($students, $package)
-    {
-        foreach ($students as $student){
+    /**
+     * @param $students
+     * @param $package
+     */
+    public function billAssignToStudent($students, $package) {
+        foreach ($students as $student) {
             $bill['user_id'] = $student;
+            $bill['custom'] = '1' . str_pad(BillStudent::count(), 7, '0', STR_PAD_LEFT);
             $bill['bill_package_id'] = $package->id;
             $bill['total'] = $package->total;
             $bill['due'] = $package->total;
@@ -104,8 +109,10 @@ class BillAssignController extends Controller
         }
     }
 
-    public function billAssignView($custom)
-    {
+    /**
+     * @param $custom
+     */
+    public function billAssignView($custom) {
         $bill = BillPackage::whereCustom($custom)->exists();
         if ($bill) {
 
@@ -122,20 +129,23 @@ class BillAssignController extends Controller
                 ->withCount('billStudents')
                 ->first();
 
-        }else {
-            return response(['message' => 'Bill Package not find'],503);
+        } else {
+            return response(['message' => 'Bill Package not find'], 503);
         }
     }
 
-    public function billAssignDelete(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function billAssignDelete(Request $request) {
         $package = BillPackage::whereCustom($request->input("custom"))->first();
         if ($package) {
             $package->billStudents()->delete();
             $package->delete();
-            return response()->json(['message' => 'BillPackage Deleted'],200);
-        }else{
-            return response()->json(['message' => 'BillPackage Not Found'],503);
+
+            return response()->json(['message' => 'BillPackage Deleted'], 200);
+        } else {
+            return response()->json(['message' => 'BillPackage Not Found'], 503);
         }
     }
 }

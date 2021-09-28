@@ -56,6 +56,13 @@ export function initialize(store, router) {
     }else if (error.response.status === 403) {
       router.push('/unauthorized');
 
+    }else if (error.response.status === 404) {
+        Swal.fire({
+            icon: 'error',
+            title: i18n.t('404'),
+            text: i18n.t('error_alert_text'),
+            confirmButtonText: i18n.t('ok'),
+        })
     }else if (error.response.status === 500) {
       Swal.fire({
         icon: 'error',

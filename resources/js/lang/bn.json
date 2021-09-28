@@ -9,6 +9,7 @@
     "success_message_create": "সফলভাবে তৈরি হয়েছে!",
     "success_message_update": "সফলভাবে হালনাগাদ হয়েছে!",
     "success_message_delete": "সফলভাবে মুছে ফেলা হয়েছে!",
+    "language_update": "সাফল্যের সাথে ভাষা পরিবর্তন হয়েছে!",
     "error_alert_title": "উফ!...",
     "error_alert_text": "কিছু ভুল হয়েছে! অনুগ্রহপূর্বক আবার চেষ্টা করুন।",
     "validation_fail_message": "ডেটা যাচাইকরণে ব্যর্থ হয়েছে।",
@@ -230,5 +231,6 @@
     "BankBranch": "ব্যাংকের শাখা",
     "Password": "পাসওয়ার্ড",
     "MemberSince": "সদস্য অদ্যাবধি",
-    "PayAt": "প্রদানের তারিখ"
+    "PayAt": "প্রদানের তারিখ",
+    "Print": "প্রিন্ট"
 }

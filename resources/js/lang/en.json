@@ -9,6 +9,7 @@
     "success_message_create": "Successfully created!",
     "success_message_update": "Successfully updated!",
     "success_message_delete": "Successfully deleted!",
+    "language_update": "Language Changes Successfully.!",
     "delete_title": "Deleted!",
     "delete_message": "Deleted successfully completed!",
     "error_alert_title": "Oops...",
@@ -231,6 +232,7 @@
     "BankBranch": "Bank Branch",
     "Password": "Password",
     "MemberSince": "Member Since",
-    "PayAt": "Payment At"
+    "PayAt": "Payment At",
+    "Print": "Print"
 
 }

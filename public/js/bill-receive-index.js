@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -30,7 +32,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
   data: function data() {
@@ -40,103 +42,101 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     myTable: function myTable() {
-      var _this = this;
-
-      this.$nextTick(function () {
-        $('#myTable').DataTable({
-          processing: true,
-          serverSide: true,
-          responsive: true,
-          retrieve: true,
-          bDestroy: true,
-          ajax: {
-            url: "/api/load-bill-pay-lists",
-            type: 'GET',
-            headers: {
-              "Authorization": 'Bearer ' + _this.$store.getters.currentUser.token
-            }
+      $('#myTable').DataTable().clear().destroy();
+      $('#myTable').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        retrieve: true,
+        destroy: true,
+        ajax: {
+          url: "/api/load-bill-pay-lists",
+          type: 'GET',
+          headers: {
+            "Authorization": 'Bearer ' + this.$store.getters.currentUser.token
+          }
+        },
+        columns: [{
+          data: 'DT_RowIndex',
+          name: 'DT_RowIndex'
+        }, {
+          data: 'created_at'
+        }, {
+          data: 'custom'
+        }, {
+          data: 'name'
+        }, {
+          data: 'academic_class'
+        }, {
+          data: 'amount'
+        }, {
+          data: 'action'
+        }],
+        dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        buttons: [{
+          extend: "print",
+          text: "<i class='fas fa-print'></i> Print",
+          titleAttr: "Print",
+          className: "btn btn-info btn-sm text-white",
+          exportOptions: {
+            columns: ":not(.not-export-col)"
+          }
+        }, {
+          extend: "pdfHtml5",
+          text: "<i class='fas fa-file-pdf'></i> PDF",
+          titleAttr: "Export as PDF",
+          className: "btn btn-success btn-sm",
+          exportOptions: {
+            columns: ":not(.not-export-col)"
           },
-          columns: [{
-            data: 'DT_RowIndex',
-            name: 'DT_RowIndex'
-          }, {
-            data: 'created_at'
-          }, {
-            data: 'user_id'
-          }, {
-            data: 'logable_id'
-          }, {
-            data: 'account_id'
-          }, {
-            data: 'before_amount'
-          }, {
-            data: 'after_amount'
-          }, {
-            data: 'action'
-          }],
-          dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-          lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-          buttons: [{
-            extend: "print",
-            text: "<i class='fas fa-print'></i> Print",
-            titleAttr: "Print",
-            className: "btn btn-info btn-sm text-white",
-            exportOptions: {
-              columns: ":not(.not-export-col)"
-            }
-          }, {
-            extend: "pdfHtml5",
-            text: "<i class='fas fa-file-pdf'></i> PDF",
-            titleAttr: "Export as PDF",
-            className: "btn btn-success btn-sm",
-            exportOptions: {
-              columns: ":not(.not-export-col)"
-            },
-            customize: function customize(doc, config) {
-              doc.defaultStyle.font = 'SolaimanLipi';
-              doc.styles.tableHeader.alignment = 'left';
-              doc.defaultStyle.alignment = 'left';
-              doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
-              doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-              var tableNode;
+          customize: function customize(doc, config) {
+            doc.defaultStyle.font = 'SolaimanLipi';
+            doc.styles.tableHeader.alignment = 'left';
+            doc.defaultStyle.alignment = 'left';
+            doc.styles.tableHeader.margin = doc.styles.tableBodyOdd.margin = doc.styles.tableBodyEven.margin = [5, 5, 5, 5];
+            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+            var tableNode;
 
-              for (var i = 0; i < doc.content.length; ++i) {
-                if (doc.content[i].table !== undefined) {
-                  tableNode = doc.content[i];
-                  break;
-                }
-              }
-
-              var rowIndex = 0;
-              var tableColumnCount = tableNode.table.body[rowIndex].length;
-
-              if (tableColumnCount > 6) {
-                doc.pageOrientation = 'landscape';
+            for (var i = 0; i < doc.content.length; ++i) {
+              if (doc.content[i].table !== undefined) {
+                tableNode = doc.content[i];
+                break;
               }
             }
-          }, {
-            extend: "excelHtml5",
-            text: "<i class='fas fa-file-excel'></i> Excel",
-            titleAttr: "Export as Excel",
-            className: "btn btn-secondary btn-sm",
-            exportOptions: {
-              columns: ":not(.not-export-col)"
+
+            var rowIndex = 0;
+            var tableColumnCount = tableNode.table.body[rowIndex].length;
+
+            if (tableColumnCount > 6) {
+              doc.pageOrientation = 'landscape';
             }
-          }, {
-            extend: "copyHtml5",
-            text: "<i class='fas fa-copy'></i> Copy",
-            titleAttr: "Copy to clipboard",
-            className: "btn btn-info btn-sm text-white",
-            exportOptions: {
-              columns: ":not(.not-export-col)"
-            }
-          }]
-        });
+          }
+        }, {
+          extend: "excelHtml5",
+          text: "<i class='fas fa-file-excel'></i> Excel",
+          titleAttr: "Export as Excel",
+          className: "btn btn-secondary btn-sm",
+          exportOptions: {
+            columns: ":not(.not-export-col)"
+          }
+        }, {
+          extend: "copyHtml5",
+          text: "<i class='fas fa-copy'></i> Copy",
+          titleAttr: "Copy to clipboard",
+          className: "btn btn-info btn-sm text-white",
+          exportOptions: {
+            columns: ":not(.not-export-col)"
+          }
+        }]
       });
+    },
+    myTableDelete: function myTableDelete() {
+      this.myTable();
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _this = this;
 
     this.myTable();
     window.addEventListener('click', function (event) {
@@ -150,17 +150,28 @@ __webpack_require__.r(__webpack_exports__);
 
         if (action == 'delete') {
           Swal.fire({
-            title: _this2.$t('confirm_title'),
-            text: _this2.$t('confirm_message'),
+            title: _this.$t('confirm_title'),
+            text: _this.$t('confirm_message'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: _this2.$t('confirm'),
-            cancelButtonText: _this2.$t('cancel')
+            confirmButtonText: _this.$t('confirm'),
+            cancelButtonText: _this.$t('cancel')
           }).then(function (result) {
             if (result.isConfirmed) {
-              alert('hasan');
+              axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/delete-bill-pay-lists', {
+                data: {
+                  id: id
+                }
+              }).then(function (res) {
+                Toast.fire({
+                  icon: 'success',
+                  title: _this.$t('delete_message')
+                });
+
+                _this.myTableDelete();
+              });
             }
           });
         }
@@ -220,8 +231,6 @@ var render = function() {
                 _c("th", [_vm._v(_vm._s(_vm.$t("StudentName")))]),
                 _vm._v(" "),
                 _c("th", [_vm._v(_vm._s(_vm.$t("Academic_Class")))]),
-                _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Details")))]),
                 _vm._v(" "),
                 _c("th", [_vm._v(_vm._s(_vm.$t("amount")))]),
                 _vm._v(" "),

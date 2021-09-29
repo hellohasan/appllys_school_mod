@@ -28,12 +28,12 @@ const store = new Vuex.Store(StoreData);
 
 import VueHtmlToPaper from "vue-html-to-paper";
 const options = {
-    name: "_blank",
-    specs: ["fullscreen=yes", "titlebar=yes", "scrollbars=yes"],
-    styles: [
-        'http://127.0.0.1:8000/css/bootstrap.min.css',
-        'http://127.0.0.1:8000/css/print.css'
-    ],
+  name: "_blank",
+  specs: ["fullscreen=yes", "titlebar=yes", "scrollbars=yes"],
+  styles: [
+    'http://127.0.0.1:8000/css/bootstrap.min.css',
+    'http://127.0.0.1:8000/css/print.css'
+  ],
 };
 
 Vue.use(VueHtmlToPaper, options);
@@ -41,8 +41,15 @@ Vue.use(VueHtmlToPaper, options);
 /* Import the route list */
 import { routes } from "./routes/index";
 const router = new VueRouter({
-    routes,
-    mode: "history"
+  routes,
+  mode: "history",
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 });
 
 /* Custom fire event defined */
@@ -58,11 +65,11 @@ Vue.use(Plugin)
 
 /* main vue is running here */
 const app = new Vue({
-    el: "#app",
-    i18n,
-    router,
-    store,
-    components: {
-        MainApp
-    }
+  el: "#app",
+  i18n,
+  router,
+  store,
+  components: {
+    MainApp
+  }
 });

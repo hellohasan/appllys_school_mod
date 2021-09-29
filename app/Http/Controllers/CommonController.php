@@ -2,56 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AcademicClass;
-use App\Models\AcademicClassSession;
+use App\User;
+use Carbon\Carbon;
+use App\Models\Upazila;
+use App\Models\BillItem;
+use App\Models\District;
+use App\Models\Division;
+use App\Models\Religion;
+use App\Models\BloodGroup;
+use App\Models\Designation;
+use App\Models\SalaryScale;
 use App\Models\AcademicData;
-use App\Models\AcademicDepartment;
+use App\Models\AcademicYear;
+use Illuminate\Http\Request;
+use App\Models\AcademicClass;
 use App\Models\AcademicGroup;
 use App\Models\AcademicSection;
 use App\Models\AcademicSession;
 use App\Models\AcademicSubject;
-use App\Models\AcademicYear;
-use App\Models\BillItem;
-use App\Models\BillStudent;
-use App\Models\BloodGroup;
-use App\Models\Designation;
-use App\Models\District;
-use App\Models\Division;
-use App\Models\Religion;
-use App\Models\SalaryScale;
-use App\Models\Upazila;
-use App\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use App\Models\AcademicDepartment;
 use Illuminate\Support\Facades\DB;
+use App\Models\AcademicClassSession;
+use Illuminate\Support\Facades\Cache;
 
-class CommonController extends Controller
-{
-    public function loadReligionList()
-    {
-        return Cache::rememberForever('religions',function () {
+class CommonController extends Controller {
+    public function loadReligionList() {
+        return Cache::rememberForever('religions', function () {
             return Religion::select(['id', 'name as text'])->get();
         });
     }
 
-    public function loadBloodList()
-    {
-        return Cache::rememberForever('blood_group',function (){
+    public function loadBloodList() {
+        return Cache::rememberForever('blood_group', function () {
             return BloodGroup::pluck('name')->toArray();
         });
     }
 
-    public function loadClassList()
-    {
-        return Cache::remember('classList',Carbon::now()->addDays(7),function (){
+    public function loadClassList() {
+        return Cache::remember('classList', Carbon::now()->addDays(7), function () {
             return AcademicClass::select(['id', 'name as text'])->whereStatus(1)->get();
         });
     }
 
-    public function loadClassGroupDepartment(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadClassGroupDepartment(Request $request) {
         $classId = $request->input("id");
+
         return AcademicClass::select(['id', 'type'])
             ->with([
                 'academicDepartments:id,name as text',
@@ -61,9 +59,12 @@ class CommonController extends Controller
             ->findOrFail($classId);
     }
 
-    public function loadDepartmentYears(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadDepartmentYears(Request $request) {
         $departmentId = $request->input("id");
+
         return AcademicDepartment::select(['id'])
             ->with([
                 'sections:id,name as text',
@@ -71,14 +72,17 @@ class CommonController extends Controller
             ->findOrFail($departmentId);
     }
 
-    public function searchClassSubject(Request $request)
-    {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function searchClassSubject(Request $request) {
         $request->validate([
-            'academic_class_id' => 'required',
-            'academic_class_type' => 'required',
-            'academic_group_id' => 'required_if:academic_class_type,1',
+            'academic_class_id'      => 'required',
+            'academic_class_type'    => 'required',
+            'academic_group_id'      => 'required_if:academic_class_type,1',
             'academic_department_id' => 'required_if:academic_class_type,2',
-            'academic_section_id' => 'required_if:academic_class_type,2',
+            'academic_section_id'    => 'required_if:academic_class_type,2',
         ]);
 
         if ($request->input("academic_class_type") == 2) {
@@ -97,31 +101,35 @@ class CommonController extends Controller
                 ->where('academic_class_id', $request->input("academic_class_id"))
                 ->get();
         }
+
         return $subjects;
     }
 
-    public function loadOnlyClassList()
-    {
-        return Cache::remember('onlyClassList',Carbon::parse()->addDays(7),function (){
-           return AcademicClass::select(['name as text', 'id'])->get();
+    public function loadOnlyClassList() {
+        return Cache::remember('onlyClassList', Carbon::parse()->addDays(7), function () {
+            return AcademicClass::select(['name as text', 'id'])->get();
         });
     }
 
-    public function loadOnlySessionList()
-    {
-        return Cache::remember('onlySessionList',Carbon::parse()->addDays(7),function (){
+    public function loadOnlySessionList() {
+        return Cache::remember('onlySessionList', Carbon::parse()->addDays(7), function () {
             return AcademicSession::select(['id', 'duration as text'])->orderByDesc('id')->get();
         });
     }
 
-    public function loadClassWithSession($sessionId)
-    {
+    /**
+     * @param $sessionId
+     */
+    public function loadClassWithSession($sessionId) {
         return AcademicSession::select(['id'])
             ->with(['academic_classes:id,name as text,type'])->findOrFail($sessionId);
     }
 
-    public function loadClassSectionGroupDepartment(Request $request)
-    {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function loadClassSectionGroupDepartment(Request $request) {
 
         $classId = $request->input("id");
         $data['class'] = AcademicClass::select(['id', 'type'])
@@ -141,17 +149,23 @@ class CommonController extends Controller
 
     }
 
-    public function loadOnlyGroupSection(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadOnlyGroupSection(Request $request) {
         $groupId = $request->input("id");
+
         return AcademicGroup::select(['id'])
             ->with(['sections:id,name as text'])
             ->findOrFail($groupId);
 
     }
 
-    public function loadGroupSection(Request $request)
-    {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function loadGroupSection(Request $request) {
         $groupId = $request->input("id");
         $classId = $request->input("classId");
 
@@ -164,44 +178,46 @@ class CommonController extends Controller
         $data['groups'] = AcademicGroup::select(['id'])
             ->with(['sections:id,name as text'])
             ->findOrFail($groupId);
+
         return $data;
     }
 
-    public function loadDivisions()
-    {
-        return Cache::rememberForever('divisions',function () {
-           return Division::select(['id', 'name as text'])->get();
+    public function loadDivisions() {
+        return Cache::rememberForever('divisions', function () {
+            return Division::select(['id', 'name as text'])->get();
         });
     }
 
-    public function loadDistricts(Request $request)
-    {
-        return Cache::rememberForever('district',function () {
-           return District::select(['id', 'name as text'])->where('division_id', $request->input("id"))->get();
-        });
+    /**
+     * @param Request $request
+     */
+    public function loadDistricts(Request $request) {
+        return District::select(['id', 'name as text'])->where('division_id', $request->input("id"))->get();
     }
 
-    public function loadUpazilas(Request $request)
-    {
-        return Cache::rememberForever('upazilas',function () {
-          return Upazila::select(['id', 'name as text'])->where('district_id', $request->input("id"))->get();
-        });
+    /**
+     * @param Request $request
+     */
+    public function loadUpazilas(Request $request) {
+        return Upazila::select(['id', 'name as text'])->where('district_id', $request->input("id"))->get();
     }
 
-    public function loadGuardians()
-    {
+    public function loadGuardians() {
         //return User::all();
         //return User::role(['Guardian'])->select(['id','name as text'])->get();
         //return User::role(['Guardian'])->select(['id','name as text'])->get();
         return User::select([DB::raw('CONCAT(name," (",phone,")") AS text'), 'id'])->get();
     }
 
-    public function loadAdmissionDetails(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadAdmissionDetails(Request $request) {
         $request->validate([
             'custom' => 'required',
         ]);
         $custom = $request->input("custom");
+
         return User::whereCustom($custom)
             ->with([
                 'information',
@@ -230,76 +246,74 @@ class CommonController extends Controller
 
     }
 
-    public function loadAcademicGroupList()
-    {
-        return Cache::remember('groupList',Carbon::parse()->addDays(7),function () {
+    public function loadAcademicGroupList() {
+        return Cache::remember('groupList', Carbon::parse()->addDays(7), function () {
             return AcademicGroup::whereNotIn('id', [14])->whereStatus(1)->select(['id', 'name as text'])->get();
         });
     }
-    public function loadAcademicGroupAllList()
-    {
-        return Cache::remember('allGroupList',Carbon::parse()->addDays(7),function () {
+
+    public function loadAcademicGroupAllList() {
+        return Cache::remember('allGroupList', Carbon::parse()->addDays(7), function () {
             return AcademicGroup::whereStatus(1)->select(['id', 'name as text'])->get();
         });
     }
 
-    public function loadAcademicDepartmentList()
-    {
-        return Cache::remember('departmentList',Carbon::parse()->addDays(7),function () {
+    public function loadAcademicDepartmentList() {
+        return Cache::remember('departmentList', Carbon::parse()->addDays(7), function () {
             return AcademicDepartment::whereStatus(1)->select(['id', 'name as text'])->get();
         });
     }
 
-    public function loadAcademicYearList()
-    {
-        return Cache::remember('yearList',Carbon::parse()->addDays(7),function () {
+    public function loadAcademicYearList() {
+        return Cache::remember('yearList', Carbon::parse()->addDays(7), function () {
             return AcademicYear::whereStatus(1)->select(['id', 'name as text'])->get();
         });
     }
 
-    public function loadAcademicSectionList()
-    {
-        return Cache::remember('sectionList',now()->addDays(7),function () {
+    public function loadAcademicSectionList() {
+        return Cache::remember('sectionList', now()->addDays(7), function () {
             return AcademicSection::whereStatus(1)->select(['id', 'name as text'])->get();
         });
     }
 
-    public function loadSalaryScaleList()
-    {
+    public function loadSalaryScaleList() {
         return SalaryScale::whereStatus(1)->select(['id', DB::raw('CONCAT(title," (",amount,")") AS text')])->get();
     }
 
-    public function loadDesignationList()
-    {
-        return Cache::rememberForever('designation',function () {
+    public function loadDesignationList() {
+        return Cache::rememberForever('designation', function () {
             return Designation::whereStatus(1)->select(['id', 'title as text'])->get();
         });
 
     }
 
-    public function loadBillForStudent()
-    {
-        return Cache::rememberForever('billItem',function () {
-            return BillItem::select(['id','title as text','default_amount as amount'])->where('item_for','Students')->whereActivated(1)->get();
+    public function loadBillForStudent() {
+        return Cache::rememberForever('billItem', function () {
+            return BillItem::select(['id', 'title as text', 'default_amount as amount'])->where('item_for', 'Students')->whereActivated(1)->get();
         });
     }
 
-    public function loadStudentForClass(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadStudentForClass(Request $request) {
         if ($request->has('class_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
             $students = AcademicData::whereAcademicSessionId($session->id)
                 ->whereAcademicClassId($request->get("class_id"))
                 ->pluck('user_id')
                 ->toArray();
-            return User::whereIn('id',$students)
-                ->select(['id',DB::raw('CONCAT("(",custom,") ",name) AS text')])
+
+            return User::whereIn('id', $students)
+                ->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])
                 ->get();
         }
     }
 
-    public function loadStudentForClassGroup(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadStudentForClassGroup(Request $request) {
         if ($request->has('class_id') && $request->has('group_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
             $students = AcademicData::whereAcademicSessionId($session->id)
@@ -307,14 +321,17 @@ class CommonController extends Controller
                 ->whereAcademicGroupId($request->get("group_id"))
                 ->pluck('user_id')
                 ->toArray();
-            return User::whereIn('id',$students)
-                ->select(['id',DB::raw('CONCAT("(",custom,") ",name) AS text')])
+
+            return User::whereIn('id', $students)
+                ->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])
                 ->get();
         }
     }
 
-    public function loadStudentForClassDepartmentYear(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadStudentForClassDepartmentYear(Request $request) {
         if ($request->has('class_id') && $request->has('department_id') && $request->has('year_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
             $students = AcademicData::whereAcademicSessionId($session->id)
@@ -323,18 +340,21 @@ class CommonController extends Controller
                 ->whereAcademicYearId($request->get("year_id"))
                 ->pluck('user_id')
                 ->toArray();
-            return User::whereIn('id',$students)
-                ->select(['id',DB::raw('CONCAT("(",custom,") ",name) AS text')])
+
+            return User::whereIn('id', $students)
+                ->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])
                 ->get();
         }
     }
 
-    public function loadSpecificStudent(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function loadSpecificStudent(Request $request) {
         if ($request->has('academic_class_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
             $data = AcademicData::query();
-            $data = $data->where('academic_session_id',$session->id)
+            $data = $data->where('academic_session_id', $session->id)
                 ->where('academic_class_id', $request->input("academic_class_id"))
                 ->where('type', $request->input("academic_class_type"));
 
@@ -352,10 +372,13 @@ class CommonController extends Controller
             }
 
             $data = $data->pluck('user_id')->toArray();
-            return User::whereIn('id',$data)->select(['id',DB::raw('CONCAT("(",custom,") ",name) AS text')])->get();
+
+            return User::whereIn('id', $data)->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])->get();
         }
     }
 
-
+    public function loadOfficeBillItes() {
+        return BillItem::whereActivated(1)->whereItemFor('Office')->select(['id', 'title as text', 'default_amount'])->get();
+    }
 
 }

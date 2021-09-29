@@ -232,5 +232,9 @@
     "Password": "পাসওয়ার্ড",
     "MemberSince": "সদস্য অদ্যাবধি",
     "PayAt": "প্রদানের তারিখ",
-    "Print": "প্রিন্ট"
+    "Print": "প্রিন্ট",
+    "AcademicExpense": "একাডেমিক খরচ",
+    "NewExpense": "নতুন ব্যয়",
+    "ExpenseList": "ব্যয়ের তালিকা",
+    "ShowExpense": "ব্যয়ের বিবরণ"
 }

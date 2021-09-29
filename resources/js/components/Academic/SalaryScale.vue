@@ -26,28 +26,28 @@
 
                     <table class="table table-hover table-bordered" v-else>
                         <thead>
-                        <tr>
-                            <th>{{ $t('SL') }}</th>
-                            <th>{{ $t('Title') }}</th>
-                            <th>{{ $t('amount') }}</th>
-                            <th>{{ $t('total_user') }}</th>
-                            <th>{{ $t('Status') }}</th>
-                            <th>{{ $t('Action') }}</th>
-                        </tr>
+                            <tr>
+                                <th>{{ $t('SL') }}</th>
+                                <th>{{ $t('Title') }}</th>
+                                <th>{{ $t('amount') }}</th>
+                                <th>{{ $t('total_user') }}</th>
+                                <th>{{ $t('Status') }}</th>
+                                <th>{{ $t('Action') }}</th>
+                            </tr>
                         </thead>
-                       <tbody>
-                        <tr v-for="(scale, index ) in scales" :key="scale.id">
-                            <td>{{ ++index }}</td>
-                            <td>{{ scale.title }}</td>
-                            <td>{{ scale.amount }}</td>
-                            <td>0 {{$t('person')}}</td>
-                            <td>
-                                <span class="badge" :class="scale.status ? 'badge-success' : 'badge-warning'">{{scale.status ? $t('Activated') : $t('Deactivated')}}</span>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" @click="editScale(scale)"><i class="far fa-edit"></i> {{$t('Edit')}}</button>
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr v-for="(scale, index ) in scales" :key="scale.id">
+                                <td>{{ ++index }}</td>
+                                <td>{{ scale.title }}</td>
+                                <td>{{ scale.amount }}</td>
+                                <td>0 {{$t('person')}}</td>
+                                <td>
+                                    <span class="badge" :class="scale.status ? 'badge-success' : 'badge-warning'">{{scale.status ? $t('Activated') : $t('Deactivated')}}</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="editScale(scale)"><i class="far fa-edit"></i> {{$t('Edit')}}</button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -88,68 +88,65 @@
 </template>
 
 <script>
-export default {
-    name: "SalaryScale",
-    data(){
-        return{
-            form: new Form({
-                title: '',
-                amount: '',
-                status:''
-            }),
-            scales:{},
-            editMode: false,
-            editId: null
-        }
-    },
-    methods: {
-        openMyModal() {
-            this.form.reset();
-            this.form.clear();
-            this.editMode = false;
-            this.editId = null;
-            $('#myModal').modal('show');
+    export default {
+        name: "SalaryScale",
+        data() {
+            return {
+                form: new Form({
+                    title: "",
+                    amount: "",
+                    status: "",
+                }),
+                scales: {},
+                editMode: false,
+                editId: null,
+            };
         },
-        editScale(scale) {
-            this.openMyModal();
-            this.editMode = true;
-            this.editId = scale.id;
-            this.form.fill(scale);
-        },
-        createScale() {
-            this.form.post('/api/salary-scale')
-                .then(() => {
+        methods: {
+            openMyModal() {
+                this.form.reset();
+                this.form.clear();
+                this.editMode = false;
+                this.editId = null;
+                $("#myModal").modal("show");
+            },
+            editScale(scale) {
+                this.openMyModal();
+                this.editMode = true;
+                this.editId = scale.id;
+                this.form.fill(scale);
+            },
+            createScale() {
+                this.form.post("/api/salary-scale").then(() => {
                     this.loadSalaryScaleList();
-                    $('#myModal').modal('hide');
+                    $("#myModal").modal("hide");
                     Toast.fire({
-                        icon: 'success',
-                        title: this.$t('success_message_create')
-                    })
-                })
-        },
-        updateScale() {
-            this.form.put('/api/salary-scale/' + this.editId)
-                .then(() => {
+                        icon: "success",
+                        title: this.$t("success_message_create"),
+                    });
+                });
+            },
+            updateScale() {
+                this.form.put("/api/salary-scale/" + this.editId).then(() => {
                     this.loadSalaryScaleList();
-                    $('#myModal').modal('hide');
+                    $("#myModal").modal("hide");
                     Toast.fire({
-                        icon: 'success',
-                        title: this.$t('success_message_update')
-                    })
-                })
+                        icon: "success",
+                        title: this.$t("success_message_update"),
+                    });
+                });
+            },
+            loadSalaryScaleList() {
+                axios.get("/api/salary-scale").then((res) => {
+                    this.scales = res.data;
+                });
+            },
         },
-        loadSalaryScaleList() {
-            axios.get('/api/salary-scale').then((res) => {
-                this.scales = res.data
-            })
-        }
-    },
-    created() {
-        this.loadSalaryScaleList();
-    }
-}
+        created() {
+            this.loadSalaryScaleList();
+        },
+    };
 </script>
 
 <style scoped>
-
 </style>

@@ -23,7 +23,7 @@
             </ul>
         </li>
 
-        <li v-role="['Super Admin','Admin','Accountant']"  v-permission="['bill-receive-new','bill-receive-list']" class="nav-item has-treeview">
+        <li v-role="['Super Admin','Admin','Accountant']" v-permission="['bill-receive-new','bill-receive-list']" class="nav-item has-treeview">
             <a href="#!" class="nav-link">
                 <i class="nav-icon fas fa-file-invoice"></i>
                 <p>{{ $t('BillReceive') }}<i class="fas fa-angle-left right"></i></p>
@@ -35,10 +35,31 @@
                         <p>{{ $t('NewReceive') }}</p>
                     </router-link>
                 </li>
-                <li v-permission="['bill-receive-list']"  class="nav-item">
+                <li v-permission="['bill-receive-list']" class="nav-item">
                     <router-link to="/bill-receive" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>{{ $t('ReceiveList') }}</p>
+                    </router-link>
+                </li>
+            </ul>
+        </li>
+
+        <li v-role="['Super Admin','Admin','Accountant']" v-permission="['expenses','expenses-create']" class="nav-item has-treeview">
+            <a href="#!" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>{{ $t('AcademicExpense') }}<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+                <li v-permission="['expenses-create']" class="nav-item">
+                    <router-link to="/expenses/create" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('NewExpense') }}</p>
+                    </router-link>
+                </li>
+                <li v-permission="['expenses']" class="nav-item">
+                    <router-link to="/expenses" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('ExpenseList') }}</p>
                     </router-link>
                 </li>
             </ul>
@@ -75,15 +96,15 @@
 </template>
 
 <script>
-import role from "../../directive/role/index";
-import permission from "../../directive/permission/permission";
-import {Fragment} from "vue-fragment";
+    import role from "../../directive/role/index";
+    import permission from "../../directive/permission/permission";
+    import { Fragment } from "vue-fragment";
 
-export default {
-    name: "Accountant",
-    components: {Fragment},
-    directives: {role,permission}
-};
+    export default {
+        name: "Accountant",
+        components: { Fragment },
+        directives: { role, permission },
+    };
 </script>
 
 <style scoped></style>

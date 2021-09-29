@@ -140,6 +140,7 @@ export default {
             this.form.clear();
             this.editMode = false;
             this.editId = null;
+            this.form.roleIds = [];
             $('#crudModal').modal('show');
         },
         editPermissions(permissions) {

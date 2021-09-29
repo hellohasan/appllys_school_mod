@@ -10,6 +10,7 @@ use App\Http\Controllers\API\Accountant\BillItemController;
 use App\Http\Controllers\API\Academic\ClassPeriodController;
 use App\Http\Controllers\API\Accountant\BillAssignController;
 use App\Http\Controllers\API\Academic\TeacherManageController;
+use App\Http\Controllers\API\Accountant\BillReceiveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -163,16 +164,19 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-specific-student', [CommonController::class, 'loadSpecificStudent']);
 
     /*Bill Receive Route*/
-    Route::get('receive-specific-student-bill', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'receiveSpecificStudentBill']);
-    Route::post('submit-specific-student-bill', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'submitSpecificStudentBill']);
-    Route::get('specific-bill-receipt', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'specificBillReceipt']);
-    Route::get('load-bill-pay-lists', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'loadBillPayList']);
-    Route::delete('delete-bill-pay-lists', [\App\Http\Controllers\API\Accountant\BillReceiveController::class, 'deleteBillPayList']);
+    Route::get('receive-specific-student-bill', [BillReceiveController::class, 'receiveSpecificStudentBill']);
+    Route::post('submit-specific-student-bill', [BillReceiveController::class, 'submitSpecificStudentBill']);
+    Route::get('specific-bill-receipt', [BillReceiveController::class, 'specificBillReceipt']);
+    Route::get('load-bill-pay-lists', [BillReceiveController::class, 'loadBillPayList']);
+    Route::delete('delete-bill-pay-lists', [BillReceiveController::class, 'deleteBillPayList']);
 
     /* ManageAccount Route List */
     Route::get('manage-accounts', [AccountController::class, 'index'])->middleware('permission:manage-accounts');
     Route::post('manage-accounts-store', [AccountController::class, 'store'])->middleware('permission:manage-accounts-store');
     Route::get('manage-accounts-edit/{id}', [AccountController::class, 'edit'])->middleware('permission:manage-accounts-edit');
     Route::put('manage-accounts-update/{id}', [AccountController::class, 'update'])->middleware('permission:manage-accounts-update');
+
+    /* Academic Expense Route list */
+    Route::get('load-office-bill-items', [CommonController::class, 'loadOfficeBillItes']);
 
 });

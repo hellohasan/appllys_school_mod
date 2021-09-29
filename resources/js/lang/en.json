@@ -233,6 +233,10 @@
     "Password": "Password",
     "MemberSince": "Member Since",
     "PayAt": "Payment At",
-    "Print": "Print"
+    "Print": "Print",
+    "AcademicExpense": "AcademicExpense",
+    "NewExpense": "NewExpense",
+    "ExpenseList" : "ExpenseList",
+    "ShowExpense": "Show Expense"
 
 }

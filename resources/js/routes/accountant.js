@@ -6,7 +6,7 @@ export const accountant = [
     path: "/salary-scale",
     component: require("../components/Academic/SalaryScale").default,
     name: "salary-scale",
-    meta: {requireAuth: true, title: "Salary Scale"}
+    meta: { requireAuth: true, title: "Salary Scale" }
   },
   /*Salary Scale Route*/
   {
@@ -15,7 +15,7 @@ export const accountant = [
     name: "manage-accounts",
     meta: {
       requireAuth: true,
-      permissions:[
+      permissions: [
         'manage-accounts'
       ],
       title: i18n.tc('ManageAccount')
@@ -95,6 +95,42 @@ export const accountant = [
         meta: {
           title: i18n.tc('ViewReceive'),
           permissions: ['bill-receive-view']
+        }
+      }
+    ]
+  },
+
+  /*Academic Expense Route List*/
+  {
+    path: "/expenses",
+    component: () => import(/*webpackChunkName: "js/expenses"*/ "../components/Accountant/Expenses/Expenses"),
+    meta: {
+      requireAuth: true,
+      roles: ["Super Admin", 'Admin', 'Accountant']
+    },
+    children: [
+      {
+        path: "/",
+        component: () => import(/*webpackChunkName: "js/expenses-index"*/"../components/Accountant/Expenses/Index"),
+        meta: {
+          title: i18n.tc('ExpenseList'),
+          permissions: ['expenses']
+        }
+      },
+      {
+        path: "create",
+        component: () => import(/*webpackChunkName: "js/expenses-create"*/"../components/Accountant/Expenses/Create"),
+        meta: {
+          title: i18n.tc('NewExpense'),
+          permissions: ['expenses-create']
+        }
+      },
+      {
+        path: ":custom/show",
+        component: () => import(/*webpackChunkName: "js/expenses-show"*/"../components/Accountant/Expenses/Show"),
+        meta: {
+          title: i18n.tc('ShowExpense'),
+          permissions: ['expenses-show']
         }
       }
     ]

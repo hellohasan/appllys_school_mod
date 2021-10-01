@@ -4,7 +4,7 @@
         <div class="alert alert-danger" role="alert" v-show="Object.keys(this.form.errors.errors).length">
             <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Warring.!</h4>
             <ul class="list-group">
-                <li class="list-group-item" v-for="err in this.form.errors.errors">{{err[0]}}</li>
+                <li class="list-group-item" v-for="(err,er) in this.form.errors.errors" :key="er">{{err[0]}}</li>
             </ul>
         </div>
         <div class="form-row">

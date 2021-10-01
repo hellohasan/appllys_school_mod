@@ -26,6 +26,7 @@ use App\Models\AcademicClassSession;
 use Illuminate\Support\Facades\Cache;
 
 class CommonController extends Controller {
+
     public function loadReligionList() {
         return Cache::rememberForever('religions', function () {
             return Religion::select(['id', 'name as text'])->get();

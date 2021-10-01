@@ -101,7 +101,7 @@ class BillAssignController extends Controller {
     public function billAssignToStudent($students, $package) {
         foreach ($students as $student) {
             $bill['user_id'] = $student;
-            $bill['custom'] = '1' . str_pad(BillStudent::count(), 7, '0', STR_PAD_LEFT);
+            $bill['custom'] = '1' . str_pad(BillStudent::orderByDesc('id')->first()->id + 1, 7, '0', STR_PAD_LEFT);
             $bill['bill_package_id'] = $package->id;
             $bill['total'] = $package->total;
             $bill['due'] = $package->total;

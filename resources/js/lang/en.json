@@ -60,6 +60,7 @@
     "Role": "Role",
     "Edit": "Edit",
     "Update": "Update",
+    "Save": "Save",
     "Delete": "Delete",
     "Create": "Create",
     "Add": "Add",
@@ -237,6 +238,10 @@
     "AcademicExpense": "AcademicExpense",
     "NewExpense": "NewExpense",
     "ExpenseList" : "ExpenseList",
-    "ShowExpense": "Show Expense"
+    "ShowExpense": "Show Expense",
+    "ExpenseMemo" : "Expense Memo",
+    "BDT" : "BDT",
+    "HeadSign": "Academic Head Signature",
+    "AccountantSign": "Accountant Signature"
 
 }

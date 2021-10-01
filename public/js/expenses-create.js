@@ -9,8 +9,53 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _globals_CustomSelect_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../globals/CustomSelect.vue */ "./resources/js/components/globals/CustomSelect.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -33,18 +78,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Create",
+  components: {
+    CustomSelect: _globals_CustomSelect_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       form: new Form({
-        items: "",
+        items: [{
+          bill_item_id: "",
+          amount: ""
+        }],
         total: ""
       }),
-      items: {}
+      items: {},
+      basic: {}
     };
   },
   methods: {
+    expenseSubmit: function expenseSubmit() {
+      var _this = this;
+
+      this.form.post("/api/expenses").then(function (res) {
+        Toast.fire({
+          'icon': 'success',
+          'message': _this.$t('success_message_create')
+        });
+
+        _this.$router.push("/expenses/".concat(res.data.custom, "/show"));
+      });
+    },
+    addNew: function addNew() {
+      this.form.items.push({
+        bill_item_id: "",
+        amount: ""
+      });
+    },
     deleteItem: function deleteItem(index) {
       if (this.form.items.length > 1) {
         this.form.items.splice(index, 1);
@@ -54,23 +125,25 @@ __webpack_require__.r(__webpack_exports__);
       var total = 0;
 
       _.forEach(this.form.items, function (value, key) {
-        total = parseInt(total) + parseInt(value.default_amount);
+        var amount = value.amount == "" ? 0 : value.amount;
+        total = parseInt(total) + parseInt(amount);
       });
 
       this.form.total = total;
       return total;
     },
     loadBillItems: function loadBillItems() {
-      var _this = this;
+      var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/load-office-bill-items").then(function (_ref) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/api/load-office-bill-items").then(function (_ref) {
         var data = _ref.data;
-        _this.items = data;
+        _this2.items = data;
       });
     }
   },
   created: function created() {
     this.loadBillItems();
+    this.basic = this.$store.getters.basicData;
   }
 });
 
@@ -107,17 +180,197 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              return _vm.assignSubmit($event)
+              return _vm.expenseSubmit($event)
             }
           }
         },
         [
           _c("div", { staticClass: "form-row" }, [
             _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "text-center" }, [
+                _c("h3", [_vm._v(_vm._s(_vm.basic.name))]),
+                _vm._v(" "),
+                _c("h5", [_vm._v(_vm._s(_vm.basic.address))]),
+                _vm._v(" "),
+                _c("h6", [
+                  _vm._v(
+                    _vm._s(_vm.$t("Phone")) + ": " + _vm._s(_vm.basic.phone)
+                  )
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "border rounded p-2" }, [
+                  _vm._v(_vm._s(_vm.$t("ExpenseMemo")))
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: Object.keys(this.form.errors.errors).length,
+                      expression: "Object.keys(this.form.errors.errors).length"
+                    }
+                  ],
+                  staticClass: "alert alert-danger",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("h4", { staticClass: "alert-heading" }, [
+                    _c("i", { staticClass: "fas fa-exclamation-triangle" }),
+                    _vm._v(" Warring.!")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    { staticClass: "list-group" },
+                    _vm._l(this.form.errors.errors, function(err, er) {
+                      return _c(
+                        "li",
+                        { key: er, staticClass: "list-group-item" },
+                        [_vm._v(_vm._s(err[0]))]
+                      )
+                    }),
+                    0
+                  )
+                ]
+              ),
+              _vm._v(" "),
               _c(
                 "div",
                 { staticClass: "d-flex justify-content-between border-bottom" },
-                [_c("h4", [_vm._v(_vm._s(_vm.$t("BillItem")))])]
+                [
+                  _c("h4", [_vm._v(_vm._s(_vm.$t("BillItem")))]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success btn-sm",
+                      attrs: { type: "button" },
+                      on: { click: _vm.addNew }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-plus" }),
+                      _vm._v(" " + _vm._s(_vm.$t("Add New")))
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "table",
+                { staticClass: "table table-bordered table-striped" },
+                [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("Details")))]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { width: "35%" } }, [
+                        _vm._v(_vm._s(_vm.$t("amount")))
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { width: "10%" } }, [
+                        _vm._v(_vm._s(_vm.$t("Action")))
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.form.items, function(item, index) {
+                      return _c("tr", { key: index }, [
+                        _c("td", [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("custom-select", {
+                                attrs: {
+                                  options: _vm.items,
+                                  placeholder: _vm.$t("Select_One"),
+                                  name: "bill_item_id"
+                                },
+                                model: {
+                                  value: item.bill_item_id,
+                                  callback: function($$v) {
+                                    _vm.$set(item, "bill_item_id", $$v)
+                                  },
+                                  expression: "item.bill_item_id"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", { staticClass: "input-group" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: item.amount,
+                                  expression: "item.amount"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "number",
+                                step: "0.001",
+                                placeholder: _vm.$t("amount"),
+                                name: "amount",
+                                id: "amount"
+                              },
+                              domProps: { value: item.amount },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(item, "amount", $event.target.value)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "input-group-append" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "btn btn-outline-danger",
+                                  attrs: { type: "button" }
+                                },
+                                [_vm._v(_vm._s(_vm.$t("BDT")))]
+                              )
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-outline-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteItem(index)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "fas fa-trash-alt" }),
+                              _vm._v(" " + _vm._s(_vm.$t("Delete")))
+                            ]
+                          )
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ]
               )
             ])
           ]),
@@ -135,7 +388,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("v-button", { attrs: { loading: _vm.form.busy } }, [
-            _vm._v(_vm._s(_vm.$t("AssignNow")))
+            _vm._v(_vm._s(_vm.$t("Save")))
           ])
         ],
         1

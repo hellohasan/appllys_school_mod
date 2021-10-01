@@ -178,5 +178,6 @@ Route::group(['middleware' => 'jwt'], function () {
 
     /* Academic Expense Route list */
     Route::get('load-office-bill-items', [CommonController::class, 'loadOfficeBillItes']);
+    Route::apiResource('expenses', 'API\Accountant\ExpenseController');
 
 });

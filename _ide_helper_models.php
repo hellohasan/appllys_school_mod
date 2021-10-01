@@ -617,7 +617,6 @@ namespace App\Models{
  * App\Models\BillPackage
  *
  * @property int $id
- * @property string $custom
  * @property int|null $academic_session_id
  * @property int $academic_class_id
  * @property int $academic_class_type
@@ -648,7 +647,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereAcademicYearId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereBillType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereCustom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereItems($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillPackage whereTotal($value)
@@ -663,6 +661,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int|null $user_id
+ * @property string|null $custom
  * @property int|null $bill_package_id
  * @property float $total
  * @property float $fine
@@ -686,6 +685,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|BillStudent query()
  * @method static \Illuminate\Database\Eloquent\Builder|BillStudent whereBillPackageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillStudent whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillStudent whereCustom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillStudent whereDue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillStudent whereFine($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillStudent whereId($value)
@@ -869,6 +869,62 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|EmailSetting whereUpdatedAt($value)
  */
 	class EmailSetting extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Expense
+ *
+ * @property int $id
+ * @property string $custom
+ * @property float $total
+ * @property int $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExpenseItems[] $items
+ * @property-read int|null $items_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TransactionLog[] $logs
+ * @property-read int|null $logs_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Expense onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereCustom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Expense whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Expense withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Expense withoutTrashed()
+ */
+	class Expense extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\ExpenseItems
+ *
+ * @property int $id
+ * @property int $expense_id
+ * @property int $bill_item_id
+ * @property float $amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\BillItem $item
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems whereBillItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems whereExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExpenseItems whereUpdatedAt($value)
+ */
+	class ExpenseItems extends \Eloquent {}
 }
 
 namespace App\Models{

@@ -4,7 +4,7 @@
         <div class="alert alert-danger" role="alert" v-show="Object.keys(this.form.errors.errors).length">
             <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Warring.!</h4>
             <ul class="list-group">
-                <li class="list-group-item" v-for="err in this.form.errors.errors">{{err[0]}}</li>
+                <li class="list-group-item" v-for="(err, er) in this.form.errors.errors" :key="er">{{err[0]}}</li>
             </ul>
         </div>
 
@@ -240,13 +240,15 @@
                         <has-error :form="form" field="guardian_image"></has-error>
                         <span class="text-red">Image size 50kb | Scale: 120X150 px</span>
                     </div>
-                </div><hr>
+                </div>
+                <hr>
                 <div class="form-row">
                     <custom-image col="col-md-3" size="2048" v-model="form.student_nid_image" :form="form" name="student_nid_image" label="Student NID/Birth Certificate" msg="Maximum Image size 2MB"></custom-image>
                     <custom-image col="col-md-3" size="2048" v-model="form.father_nid_image" :form="form" name="father_nid_image" label="Father NID" msg="Maximum Image size 2MB"></custom-image>
                     <custom-image col="col-md-3" size="2048" v-model="form.mother_nid_image" :form="form" name="mother_nid_image" label="Mother NID" msg="Maximum Image size 2MB"></custom-image>
                     <custom-image col="col-md-3" size="2048" v-model="form.guardian_nid_image" :form="form" name="guardian_nid_image" label="Guardian NID" msg="Maximum Image size 2MB"></custom-image>
-                </div><hr>
+                </div>
+                <hr>
                 <div class="form-row">
                     <div class="d-flex justify-content-between border-bottom col-md-12">
                         <h5>Attach requirement documents here</h5>
@@ -255,8 +257,8 @@
                         </button>
                     </div>
                 </div>
-                <template v-for="(doc,index) in form.documents">
-                    <div class="form-row group-markup">
+                <template>
+                    <div class="form-row group-markup" v-for="(doc,index) in form.documents" :key="index">
                         <div class="form-group col-md-6">
                             <label for="type_id">Document Type</label>
                             <custom-select :options="documents_types" v-model="doc.type" :placeholder="$t('Select_One')" name="guardian_choice"></custom-select>
@@ -317,8 +319,8 @@
                                 <td>{{formShow.academic_year_name}}</td>
                             </tr>
                         </template>
-                        <template v-show="formShow.optional_subject_name">
-                            <tr>
+                        <template>
+                            <tr v-show="formShow.optional_subject_name">
                                 <td>Optional Subject</td>
                                 <td colspan="3">{{formShow.optional_subject_name}}</td>
                             </tr>
@@ -357,44 +359,43 @@
                             <td>{{form.email}}</td>
                         </tr>
 
-
                         <template v-if="form.guardian_type === '0'">
-                        <tr>
-                            <td>Father Name</td>
-                            <td>{{form.father_name}}</td>
-                            <td>Father Name (BN)</td>
-                            <td>{{form.father_name_bn}}</td>
-                        </tr>
-                        <tr>
-                            <td>Father NID</td>
-                            <td>{{form.father_nid}}</td>
-                            <td>Father Occupation</td>
-                            <td>{{form.father_occupation}}</td>
-                        </tr>
-                        <tr>
-                            <td>Father Phone</td>
-                            <td>{{form.father_phone}}</td>
-                            <td>Father Email</td>
-                            <td>{{form.father_email}}</td>
-                        </tr>
-                        <tr>
-                            <td>Mother Name</td>
-                            <td>{{ form.mother_name }}</td>
-                            <td>Mother Name (BN)</td>
-                            <td>{{ form.mother_name_bn }}</td>
-                        </tr>
-                        <tr>
-                            <td>Mother NID</td>
-                            <td>{{ form.mother_nid }}</td>
-                            <td>Mother Occupation</td>
-                            <td>{{ form.mother_occupation }}</td>
-                        </tr>
-                        <tr>
-                            <td>Mother Phone</td>
-                            <td>{{ form.mother_phone }}</td>
-                            <td>Mother Email</td>
-                            <td>{{ form.mother_email }}</td>
-                        </tr>
+                            <tr>
+                                <td>Father Name</td>
+                                <td>{{form.father_name}}</td>
+                                <td>Father Name (BN)</td>
+                                <td>{{form.father_name_bn}}</td>
+                            </tr>
+                            <tr>
+                                <td>Father NID</td>
+                                <td>{{form.father_nid}}</td>
+                                <td>Father Occupation</td>
+                                <td>{{form.father_occupation}}</td>
+                            </tr>
+                            <tr>
+                                <td>Father Phone</td>
+                                <td>{{form.father_phone}}</td>
+                                <td>Father Email</td>
+                                <td>{{form.father_email}}</td>
+                            </tr>
+                            <tr>
+                                <td>Mother Name</td>
+                                <td>{{ form.mother_name }}</td>
+                                <td>Mother Name (BN)</td>
+                                <td>{{ form.mother_name_bn }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mother NID</td>
+                                <td>{{ form.mother_nid }}</td>
+                                <td>Mother Occupation</td>
+                                <td>{{ form.mother_occupation }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mother Phone</td>
+                                <td>{{ form.mother_phone }}</td>
+                                <td>Mother Email</td>
+                                <td>{{ form.mother_email }}</td>
+                            </tr>
                         </template>
 
                         <template v-if="form.guardian_type === '1'">
@@ -425,7 +426,9 @@
                             <td>{{form.village}}</td>
                         </tr>
 
-                        <tr><td colspan="4" class="text-center">Present Address</td></tr>
+                        <tr>
+                            <td colspan="4" class="text-center">Present Address</td>
+                        </tr>
                         <template v-if="form.address_type">
                             <tr>
                                 <td colspan="4" class="text-center">Permanent & Present Address is same</td>
@@ -483,346 +486,445 @@
 </template>
 
 <script>
-import {FormWizard, TabContent} from 'vue-step-wizard'
-import 'vue-step-wizard/dist/vue-step-wizard.css'
-import Select2 from "../../globals/Select2";
-import CustomSelect from "../../globals/CustomSelect";
-import CustomSelectEmpty from "../../globals/CustomSelectEmpty";
-import CustomImage from "../../globals/CustomImage";
+    import { FormWizard, TabContent } from "vue-step-wizard";
+    import "vue-step-wizard/dist/vue-step-wizard.css";
+    import Select2 from "../../globals/Select2";
+    import CustomSelect from "../../globals/CustomSelect";
+    import CustomSelectEmpty from "../../globals/CustomSelectEmpty";
+    import CustomImage from "../../globals/CustomImage";
 
-export default {
-    name: "Add",
-    components: {
-        FormWizard, TabContent, Select2, CustomSelect, CustomSelectEmpty,CustomImage
-    },
-    data() {
-        return {
-            form: new Form({
-                session_id: '',
-                academic_class_id: '',
-                type:'',
-                academic_section_id: '',
-                academic_group_id: '',
-                academic_group_section_id: '',
-                academic_department_id: '',
-                academic_year_id: '',
-                optional_subject_id: '',
-                name:'',
-                name_bn:'',
-                nid:'',
-                dob:'',
-                language:'',
-                nationality:'',
-                gender:'',
-                religion_id:'',
-                blood:'',
-                phone:'',
-                email:'',
-                division_id: '',
-                district_id: '',
-                upazila_id: '',
-                union_name: '',
-                post_office: '',
-                village: '',
-                address_type: '',
-                present_division_name: '',
-                present_district_name: '',
-                present_upazila_name: '',
-                present_union_name: '',
-                present_post_office: '',
-                present_village: '',
-                guardian_type: '',
+    export default {
+        name: "Add",
+        components: {
+            FormWizard,
+            TabContent,
+            Select2,
+            CustomSelect,
+            CustomSelectEmpty,
+            CustomImage,
+        },
+        data() {
+            return {
+                form: new Form({
+                    session_id: "",
+                    academic_class_id: "",
+                    type: "",
+                    academic_section_id: "",
+                    academic_group_id: "",
+                    academic_group_section_id: "",
+                    academic_department_id: "",
+                    academic_year_id: "",
+                    optional_subject_id: "",
+                    name: "",
+                    name_bn: "",
+                    nid: "",
+                    dob: "",
+                    language: "",
+                    nationality: "",
+                    gender: "",
+                    religion_id: "",
+                    blood: "",
+                    phone: "",
+                    email: "",
+                    division_id: "",
+                    district_id: "",
+                    upazila_id: "",
+                    union_name: "",
+                    post_office: "",
+                    village: "",
+                    address_type: "",
+                    present_division_name: "",
+                    present_district_name: "",
+                    present_upazila_name: "",
+                    present_union_name: "",
+                    present_post_office: "",
+                    present_village: "",
+                    guardian_type: "",
 
-                guardian_id: '',
-                father_name: '',
-                father_name_bn: '',
-                father_nid: '',
-                father_occupation: '',
-                father_phone: '',
-                father_email: '',
-                mother_name: '',
-                mother_nid: '',
-                mother_occupation: '',
-                mother_phone: '',
-                mother_email: '',
-                guardian_choice: '',
-                guardian_name:'',
-                guardian_name_bn:'',
-                guardian_nid:'',
-                guardian_relation:'',
-                guardian_occupation:'',
-                guardian_phone:'',
-                guardian_email:'',
-                family_total_member:'',
-                family_earnable:'',
-                yearly_earn:'',
-                image: '',
-                guardian_image: '',
-                father_image: '',
-                mother_image: '',
-                student_nid_image:'',
-                father_nid_image:'',
-                mother_nid_image:'',
-                guardian_nid_image:'',
-                documents: [],
-                previous_academic:'',
-                old_institute_name:'',
-                old_institute_address:'',
-                old_institute_class:'',
-                old_institute_roll:'',
-                old_institute_group:'',
-                admission_fee:'',
-                checkUp:'',
-            }),
+                    guardian_id: "",
+                    father_name: "",
+                    father_name_bn: "",
+                    father_nid: "",
+                    father_occupation: "",
+                    father_phone: "",
+                    father_email: "",
+                    mother_name: "",
+                    mother_nid: "",
+                    mother_occupation: "",
+                    mother_phone: "",
+                    mother_email: "",
+                    guardian_choice: "",
+                    guardian_name: "",
+                    guardian_name_bn: "",
+                    guardian_nid: "",
+                    guardian_relation: "",
+                    guardian_occupation: "",
+                    guardian_phone: "",
+                    guardian_email: "",
+                    family_total_member: "",
+                    family_earnable: "",
+                    yearly_earn: "",
+                    image: "",
+                    guardian_image: "",
+                    father_image: "",
+                    mother_image: "",
+                    student_nid_image: "",
+                    father_nid_image: "",
+                    mother_nid_image: "",
+                    guardian_nid_image: "",
+                    documents: [],
+                    previous_academic: "",
+                    old_institute_name: "",
+                    old_institute_address: "",
+                    old_institute_class: "",
+                    old_institute_roll: "",
+                    old_institute_group: "",
+                    admission_fee: "",
+                    checkUp: "",
+                }),
 
-            formShow: {
-                session_name: '',
-                academic_class_name: '',
-                academic_section_name: '',
-                academic_group_name: '',
-                academic_group_section_name: '',
-                academic_department_name: '',
-                academic_year_name: '',
-                optional_subject_name: '',
-                religion_name:'',
-                division_name: '',
-                district_nam: '',
-                upazila_name:'',
-                present_division_name: '',
-                present_district_name: '',
-                present_upazila_name: '',
+                formShow: {
+                    session_name: "",
+                    academic_class_name: "",
+                    academic_section_name: "",
+                    academic_group_name: "",
+                    academic_group_section_name: "",
+                    academic_department_name: "",
+                    academic_year_name: "",
+                    optional_subject_name: "",
+                    religion_name: "",
+                    division_name: "",
+                    district_nam: "",
+                    upazila_name: "",
+                    present_division_name: "",
+                    present_district_name: "",
+                    present_upazila_name: "",
+                },
+                sessions: [],
+                classes: {},
+                admission_fee: "",
+                type: "",
+                sections: {},
+                groups: {},
+                optionalSubjects: {},
+                groupsSections: {},
+                departments: {},
+                departmentsYears: {},
+                languages: ["Bengali"],
+                nationality: ["Bangladeshi"],
+                religions: {},
+                bloods: [],
+                genders: ["Male", "Female", "Others"],
+                divisions: {},
+                districts: {},
+                upazilas: {},
+                divisionsP: {},
+                districtsP: {},
+                upazilasP: {},
+                guardian_types: [
+                    { id: 1, text: this.$i18n.t("Yes") },
+                    { id: 0, text: this.$i18n.t("No") },
+                ],
+                guardians: {},
+                guardian_choices: [
+                    { id: 0, text: this.$i18n.t("Father") },
+                    { id: 1, text: this.$i18n.t("Mother") },
+                    { id: 2, text: this.$i18n.t("Other") },
+                ],
+                documents_types: [
+                    { id: "Testimonial", text: this.$i18n.t("Testimonial") },
+                    { id: "Mark Sheet", text: this.$i18n.t("Mark Sheet") },
+                    { id: "Certificate", text: this.$i18n.t("Certificate") },
+                    { id: "Others", text: this.$i18n.t("Others") },
+                ],
+            };
+        },
+        watch: {
+            "form.session_id": function (val) {
+                this.formShow.session_name = this.sessions.find(
+                    (list) => list.id == val
+                ).text;
             },
-            sessions: [],
-            classes: {},
-            admission_fee:'',
-            type: '',
-            sections: {},
-            groups: {},
-            optionalSubjects: {},
-            groupsSections: {},
-            departments: {},
-            departmentsYears: {},
-            languages: ['Bengali'],
-            nationality: ['Bangladeshi'],
-            religions: {},
-            bloods: [],
-            genders: ["Male", "Female", "Others"],
-            divisions: {},
-            districts: {},
-            upazilas: {},
-            divisionsP: {},
-            districtsP: {},
-            upazilasP: {},
-            guardian_types: [
-                {id: 1, text: this.$i18n.t('Yes')},
-                {id: 0, text: this.$i18n.t('No')}
-            ],
-            guardians:{},
-            guardian_choices: [
-                {id: 0, text: this.$i18n.t('Father')},
-                {id: 1, text: this.$i18n.t('Mother')},
-                {id: 2, text: this.$i18n.t('Other')},
-            ],
-            documents_types: [
-                {id: 'Testimonial', text: this.$i18n.t('Testimonial')},
-                {id: 'Mark Sheet', text: this.$i18n.t('Mark Sheet')},
-                {id: 'Certificate', text: this.$i18n.t('Certificate')},
-                {id: 'Others', text: this.$i18n.t('Others')},
-            ]
-        }
-    },
-    watch: {
-        'form.session_id': function (val) {
-            this.formShow.session_name = this.sessions.find(list => list.id == val).text
+            "form.academic_class_id": function (val) {
+                this.formShow.academic_class_name = this.classes.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.academic_section_id": function (val) {
+                this.formShow.academic_section_name = this.sessions.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.academic_group_id": function (val) {
+                this.formShow.academic_group_name = this.groups.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.academic_group_section_id": function (val) {
+                this.formShow.academic_group_section_name =
+                    this.groupsSections.find((list) => list.id == val).text;
+            },
+            "form.academic_department_id": function (val) {
+                this.formShow.academic_department_name = this.departments.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.academic_year_id": function (val) {
+                this.formShow.academic_year_name = this.departmentsYears.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.optional_subject_id": function (val) {
+                this.formShow.optional_subject_name = this.optionalSubjects.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.religion_is": function (val) {
+                this.formShow.religion_name = this.religions.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.division_id": function (val) {
+                this.formShow.division_name = this.divisions.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.district_id": function (val) {
+                this.formShow.district_name = this.districts.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.upazila_id": function (val) {
+                this.formShow.upazila_name = this.upazilas.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.present_division_id": function (val) {
+                this.formShow.present_division_name = this.divisions.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.present_district_id": function (val) {
+                this.formShow.present_district_name = this.districts.find(
+                    (list) => list.id == val
+                ).text;
+            },
+            "form.present_upazila_id": function (val) {
+                this.formShow.present_upazila_name = this.upazilas.find(
+                    (list) => list.id == val
+                ).text;
+            },
         },
-        'form.academic_class_id': function (val) {
-            this.formShow.academic_class_name = this.classes.find(list => list.id == val).text
-        },
-        'form.academic_section_id': function (val) {
-            this.formShow.academic_section_name = this.sessions.find(list => list.id == val).text
-        },
-        'form.academic_group_id': function (val) {
-            this.formShow.academic_group_name = this.groups.find(list => list.id == val).text
-        },
-        'form.academic_group_section_id': function (val) {
-            this.formShow.academic_group_section_name = this.groupsSections.find(list => list.id == val).text
-        },
-        'form.academic_department_id': function (val) {
-            this.formShow.academic_department_name = this.departments.find(list => list.id == val).text
-        },
-        'form.academic_year_id': function (val) {
-            this.formShow.academic_year_name = this.departmentsYears.find(list => list.id == val).text
-        },
-        'form.optional_subject_id': function (val) {
-            this.formShow.optional_subject_name = this.optionalSubjects.find(list => list.id == val).text
-        },
-        'form.religion_is': function (val) {
-            this.formShow.religion_name = this.religions.find(list => list.id == val).text
-        },
-        'form.division_id': function (val) {
-            this.formShow.division_name = this.divisions.find(list => list.id == val).text
-        },
-        'form.district_id': function (val) {
-            this.formShow.district_name = this.districts.find(list => list.id == val).text
-        },
-        'form.upazila_id': function (val) {
-            this.formShow.upazila_name = this.upazilas.find(list => list.id == val).text
-        },
-        'form.present_division_id': function (val) {
-            this.formShow.present_division_name = this.divisions.find(list => list.id == val).text
-        },
-        'form.present_district_id': function (val) {
-            this.formShow.present_district_name = this.districts.find(list => list.id == val).text
-        },
-        'form.present_upazila_id': function (val) {
-            this.formShow.present_upazila_name = this.upazilas.find(list => list.id == val).text
-        },
-    },
-    methods: {
-
-        print () {
-            // Pass the element id here
-            this.$htmlToPaper('printMe');
-        },
-        onComplete() {
-            alert('yes lets submit');
-            this.form.post('/api/submit-admission-form')
-                    .then((res) => {
-                        this.$router.push(`/admissions/view/${res.data}`)
+        methods: {
+            print() {
+                // Pass the element id here
+                this.$htmlToPaper("printMe");
+            },
+            onComplete() {
+                alert("yes lets submit");
+                this.form.post("/api/submit-admission-form").then((res) => {
+                    this.$router.push(`/admissions/view/${res.data}`);
+                });
+            },
+            sessionChange: function (e) {
+                axios.get("/api/load-class-with-session/" + e).then(({ data }) => {
+                    this.classes = data.academic_classes;
+                });
+            },
+            classChange: function (e) {
+                axios
+                    .get("/api/load-class-section-group-department", {
+                        params: {
+                            id: e,
+                            session_id: this.form.session_id,
+                        },
                     })
-        },
-        sessionChange: function (e) {
-            axios.get('/api/load-class-with-session/' + e).then(({data}) => {
-                this.classes = data.academic_classes
-            })
-        },
-        classChange: function (e) {
-            axios.get('/api/load-class-section-group-department', {
-                params: {
-                    id: e,
-                    session_id:this.form.session_id
-                }}).then(({data}) => {
+                    .then(({ data }) => {
+                        this.form.type = data.class.type;
+                        this.admission_fee = data.fee;
+                        this.optionalSubjects = {};
+                        this.sections = {};
 
-                this.form.type = data.class.type
-                this.admission_fee = data.fee
-                this.optionalSubjects = {}
-                this.sections = {}
-
-                if (data.class.type === 1) {
-                    this.groups = data.class.academic_groups
-                } else if (data.class.type === 2) {
-                    this.departments = data.class.academic_departments
-                } else {
-                    this.sections = data.class.sections
+                        if (data.class.type === 1) {
+                            this.groups = data.class.academic_groups;
+                        } else if (data.class.type === 2) {
+                            this.departments = data.class.academic_departments;
+                        } else {
+                            this.sections = data.class.sections;
+                        }
+                    });
+            },
+            addNewDocument() {
+                this.form.documents.push({
+                    type: "",
+                    file: "",
+                });
+            },
+            deleteNewDocument(i) {
+                this.form.documents.splice(i, 1);
+            },
+            groupChange: function (e) {
+                axios
+                    .get("/api/load-group-section", {
+                        params: { id: e, classId: this.form.academic_class_id },
+                    })
+                    .then((res) => {
+                        this.groupsSections = res.data.groups.sections;
+                        this.optionalSubjects = res.data.optionals;
+                    });
+            },
+            departmentChange: function (e) {
+                axios
+                    .get("/api/load-department-years", { params: { id: e } })
+                    .then((res) => {
+                        this.departmentsYears = res.data.sections;
+                    });
+            },
+            loadOnlySessionList() {
+                axios
+                    .get("/api/load-only-session-list")
+                    .then(({ data }) => (this.sessions = data));
+            },
+            loadReligionList() {
+                axios
+                    .get("/api/load-religion-list")
+                    .then((res) => (this.religions = res.data));
+            },
+            loadBloodList() {
+                axios
+                    .get("/api/load-blood-list")
+                    .then((res) => (this.bloods = res.data));
+            },
+            divisionChange: function (e) {
+                axios
+                    .get("/api/load-districts", { params: { id: e } })
+                    .then((res) => {
+                        this.districts = res.data;
+                    });
+            },
+            districtChange: function (e) {
+                axios
+                    .get("/api/load-upazilas", { params: { id: e } })
+                    .then((res) => {
+                        this.upazilas = res.data;
+                    });
+            },
+            divisionChangeP: function (e) {
+                axios
+                    .get("/api/load-districts", { params: { id: e } })
+                    .then((res) => {
+                        this.districtsP = res.data;
+                    });
+            },
+            districtChangeP: function (e) {
+                axios
+                    .get("/api/load-upazilas", { params: { id: e } })
+                    .then((res) => {
+                        this.upazilasP = res.data;
+                    });
+            },
+            loadDivision() {
+                axios.get("/api/load-divisions").then((res) => {
+                    this.divisions = res.data;
+                    this.divisionsP = res.data;
+                });
+            },
+            changeGuardianType(e) {
+                if (e) {
+                    axios.get("/api/load-guardians").then((res) => {
+                        this.guardians = res.data;
+                    });
                 }
-            })
+            },
         },
-        addNewDocument(){
-            this.form.documents.push({
-                type: '',
-                file: '',
-            })
+        created() {
+            this.loadOnlySessionList();
+            this.loadReligionList();
+            this.loadBloodList();
+            this.loadDivision();
         },
-        deleteNewDocument(i){
-            this.form.documents.splice(i, 1)
-        },
-        groupChange: function (e) {
-            axios.get('/api/load-group-section', {params: {id: e,classId:this.form.academic_class_id}}).then((res) => {
-                this.groupsSections = res.data.groups.sections
-                this.optionalSubjects = res.data.optionals
-            });
-        },
-        departmentChange: function (e) {
-            axios.get('/api/load-department-years', {params: {id: e}}).then((res) => {
-                this.departmentsYears = res.data.sections
-            });
-        },
-        loadOnlySessionList() {
-            axios.get('/api/load-only-session-list').then(({data}) => this.sessions = data)
-        },
-        loadReligionList() {
-            axios.get('/api/load-religion-list').then((res) => this.religions = res.data);
-        },
-        loadBloodList() {
-            axios.get('/api/load-blood-list').then((res) => this.bloods = res.data);
-        },
-        divisionChange: function (e) {
-            axios.get('/api/load-districts', {params: {id: e}}).then((res) => {
-                this.districts = res.data
-            })
-        },
-        districtChange: function (e) {
-            axios.get('/api/load-upazilas', {params: {id: e}}).then((res) => {
-                this.upazilas = res.data
-            })
-        },
-        divisionChangeP: function (e) {
-            axios.get('/api/load-districts', {params: {id: e}}).then((res) => {
-                this.districtsP = res.data
-            })
-        },
-        districtChangeP: function (e) {
-            axios.get('/api/load-upazilas', {params: {id: e}}).then((res) => {
-                this.upazilasP = res.data
-            })
-        },
-        loadDivision() {
-            axios.get('/api/load-divisions').then((res) => {
-                this.divisions = res.data
-                this.divisionsP = res.data
-            })
-        },
-        changeGuardianType(e){
-            if (e){
-                axios.get('/api/load-guardians').then((res) => {
-                    this.guardians = res.data
-                })
-            }
-        }
-    },
-    created() {
-        this.loadOnlySessionList()
-        this.loadReligionList()
-        this.loadBloodList()
-        this.loadDivision()
-    }
-}
+    };
 </script>
 
 <style scoped>
-.vue-step-wizard {
-    width: 100% !important;
-    padding: 10px !important;
-}
-h6 {
-    position: relative;
-}
-h6.one {
-    background: -moz-linear-gradient(#ffffff 0%, #ffffff 49%, #ced4da 50%, #ced4da 51%, #ffffff 52%, #ffffff 100%);
-    background: -ms-linear-gradient(#ffffff 0%, #ffffff 49%, #ced4da 50%, #ced4da 51%, #ffffff 52%, #ffffff 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(49%, #ffffff), color-stop(50%, #ced4da), color-stop(51%, #ced4da), color-stop(52%, #ffffff), color-stop(100%, #ffffff));
-    background: -webkit-linear-gradient(#ffffff 0%, #ffffff 49%, #ced4da 50%, #ced4da 51%, #ffffff 52%, #ffffff 100%);
-    background: -o-linear-gradient(#ffffff 0%, #ffffff 49%, #ced4da 50%, #ced4da 51%, #ffffff 52%, #ffffff 100%);
-    background: linear-gradient(#ffffff 0%, #ffffff 49%, #ced4da 50%, #ced4da 51%, #ffffff 52%, #ffffff 100%);
-    font-weight: bold;
-}
-h6.one span {
-    background: #fff;
-    padding: 0;
-    position: relative;
-    z-index: 5;
-}
-.group-markup {
-    border: 1px solid #ddd;
-    padding: 10px 0 0 0;
-    border-radius: 5px 5px 0 5px;
-    margin: 0;
-    position: relative;
-}
+    .vue-step-wizard {
+        width: 100% !important;
+        padding: 10px !important;
+    }
+    h6 {
+        position: relative;
+    }
+    h6.one {
+        background: -moz-linear-gradient(
+            #ffffff 0%,
+            #ffffff 49%,
+            #ced4da 50%,
+            #ced4da 51%,
+            #ffffff 52%,
+            #ffffff 100%
+        );
+        background: -ms-linear-gradient(
+            #ffffff 0%,
+            #ffffff 49%,
+            #ced4da 50%,
+            #ced4da 51%,
+            #ffffff 52%,
+            #ffffff 100%
+        );
+        background: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0%, #ffffff),
+            color-stop(49%, #ffffff),
+            color-stop(50%, #ced4da),
+            color-stop(51%, #ced4da),
+            color-stop(52%, #ffffff),
+            color-stop(100%, #ffffff)
+        );
+        background: -webkit-linear-gradient(
+            #ffffff 0%,
+            #ffffff 49%,
+            #ced4da 50%,
+            #ced4da 51%,
+            #ffffff 52%,
+            #ffffff 100%
+        );
+        background: -o-linear-gradient(
+            #ffffff 0%,
+            #ffffff 49%,
+            #ced4da 50%,
+            #ced4da 51%,
+            #ffffff 52%,
+            #ffffff 100%
+        );
+        background: linear-gradient(
+            #ffffff 0%,
+            #ffffff 49%,
+            #ced4da 50%,
+            #ced4da 51%,
+            #ffffff 52%,
+            #ffffff 100%
+        );
+        font-weight: bold;
+    }
+    h6.one span {
+        background: #fff;
+        padding: 0;
+        position: relative;
+        z-index: 5;
+    }
+    .group-markup {
+        border: 1px solid #ddd;
+        padding: 10px 0 0 0;
+        border-radius: 5px 5px 0 5px;
+        margin: 0;
+        position: relative;
+    }
 
-.delete_group {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
+    .delete_group {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 </style>

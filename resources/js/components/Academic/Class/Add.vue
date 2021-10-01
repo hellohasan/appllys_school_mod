@@ -4,7 +4,7 @@
         <div class="alert alert-danger" role="alert" v-show="Object.keys(this.form.errors.errors).length">
             <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Warring.!</h4>
             <ul class="list-group">
-                <li class="list-group-item" v-for="err in this.form.errors.errors">{{err[0]}}</li>
+                <li class="list-group-item" v-for="(err,er) in this.form.errors.errors" :key="er">{{err[0]}}</li>
             </ul>
         </div>
 
@@ -68,7 +68,7 @@
 
         <div class="form-group">
             <label for="status">Status</label>
-            <v-toggle v-model="form.status" :options="checkOptions" :disabled="false" :class="{ 'is-invalid': form.errors.has('status') }" id="status"/>
+            <v-toggle v-model="form.status" :options="checkOptions" :disabled="false" :class="{ 'is-invalid': form.errors.has('status') }" id="status" />
             <has-error :form="form" field="status"></has-error>
         </div>
         <v-button :loading="form.busy">{{ $t('Add New') }}</v-button>
@@ -76,103 +76,115 @@
 </template>
 
 <script>
-import VToggle from "../../globals/VToggle"
-import Select2 from "../../globals/Select2";
-import CustomSelect from "../../globals/CustomSelect";
-import VSelect from "../../globals/VSelect"
+    import VToggle from "../../globals/VToggle";
+    import Select2 from "../../globals/Select2";
+    import CustomSelect from "../../globals/CustomSelect";
+    import VSelect from "../../globals/VSelect";
 
-export default {
-    name: "Add",
-    components: {
-        VToggle,VSelect,CustomSelect,Select2
-    },
-    data() {
-        return {
-            form: new Form({
-                type: '',
-                name: '',
-                code: '',
-                academic_grading_id:'',
-                status: true,
-                academic_department_ids: [],
-                academic_group_ids: [],
-                academic_section_ids: [],
-                academic_year_ids: [],
-            }),
-            checkOptions: {
-                on: 'ACTIVATED',
-                off: 'DEACTIVATED',
-                onstyle: 'success',
-                offstyle: 'danger',
-                width: '100%'
+    export default {
+        name: "Add",
+        components: {
+            VToggle,
+            VSelect,
+            CustomSelect,
+            Select2,
+        },
+        data() {
+            return {
+                form: new Form({
+                    type: "",
+                    name: "",
+                    code: "",
+                    academic_grading_id: "",
+                    status: true,
+                    academic_department_ids: [],
+                    academic_group_ids: [],
+                    academic_section_ids: [],
+                    academic_year_ids: [],
+                }),
+                checkOptions: {
+                    on: "ACTIVATED",
+                    off: "DEACTIVATED",
+                    onstyle: "success",
+                    offstyle: "danger",
+                    width: "100%",
+                },
+                types: [
+                    { id: 0, text: "Only Section Available" },
+                    { id: 1, text: "Group Available" },
+                    { id: 2, text: "Department Available" },
+                ],
+                type: "",
+                sessions: {},
+                gradings: {},
+                departments: {},
+                groups: {},
+                years: {},
+                sections: {},
+            };
+        },
+        methods: {
+            changeType(e) {
+                this.type = e;
+                this.form.academic_group_ids = [];
+                this.form.academic_department_ids = [];
+                this.form.academic_section_ids = [];
             },
-            types: [
-                {id: 0, text: 'Only Section Available'},
-                {id: 1, text: 'Group Available'},
-                {id: 2, text: 'Department Available'},
-            ],
-            type: '',
-            sessions: {},
-            gradings:{},
-            departments:{},
-            groups:{},
-            years:{},
-            sections:{},
-        }
-    },
-    methods: {
-        changeType(e){
-            this.type = e
-            this.form.academic_group_ids = [];
-            this.form.academic_department_ids = []
-            this.form.academic_section_ids = [];
-        },
-        addAcademicClass(){
-            this.form.post('/api/academic-class-store')
-                .then((response) => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: this.$t('success_message')
+            addAcademicClass() {
+                this.form
+                    .post("/api/academic-class-store")
+                    .then((response) => {
+                        Toast.fire({
+                            icon: "success",
+                            title: this.$t("success_message"),
+                        });
+                        this.$router.push("/academic-class");
                     })
-                    this.$router.push('/academic-class')
-                })
-            .catch(error=> {
-                if (error.response.status == 422){
-                    this.$router.go(this.$router.currentRoute)
-                    Swal.fire({
-                        icon: 'error',
-                        title: this.$t('error_alert_title'),
-                        text: this.$t('error_alert_text')
-                    })
-                }
-            })
+                    .catch((error) => {
+                        if (error.response.status == 422) {
+                            this.$router.go(this.$router.currentRoute);
+                            Swal.fire({
+                                icon: "error",
+                                title: this.$t("error_alert_title"),
+                                text: this.$t("error_alert_text"),
+                            });
+                        }
+                    });
+            },
+            loadAcademicGrading() {
+                axios
+                    .get("/api/load-academic-grading-list")
+                    .then((res) => (this.gradings = res.data));
+            },
+            loadAcademicGroups() {
+                axios
+                    .get("/api/load-academic-group-list")
+                    .then((res) => (this.groups = res.data));
+            },
+            loadAcademicDepartments() {
+                axios
+                    .get("/api/load-academic-department-list")
+                    .then((res) => (this.departments = res.data));
+            },
+            loadAcademicSections() {
+                axios
+                    .get("/api/load-academic-section-list")
+                    .then((res) => (this.sections = res.data));
+            },
         },
-        loadAcademicGrading(){
-            axios.get('/api/load-academic-grading-list').then((res)=>this.gradings = res.data)
+        created() {
+            this.loadAcademicGrading();
+            this.loadAcademicGroups();
+            this.loadAcademicDepartments();
+            this.loadAcademicSections();
         },
-        loadAcademicGroups(){
-            axios.get('/api/load-academic-group-list').then((res)=>this.groups = res.data)
-        },
-        loadAcademicDepartments(){
-            axios.get('/api/load-academic-department-list').then((res) => this.departments = res.data)
-        },
-        loadAcademicSections(){
-            axios.get('/api/load-academic-section-list').then((res) => this.sections = res.data)
-        }
-    },
-    created(){
-        this.loadAcademicGrading()
-        this.loadAcademicGroups()
-        this.loadAcademicDepartments()
-        this.loadAcademicSections()
-    }
-}
+    };
 </script>
 
 <style scoped>
-.area {
-    border: 1px solid #ddd;
-    padding: 5px;
-    border-radius: 5px;
-}
+    .area {
+        border: 1px solid #ddd;
+        padding: 5px;
+        border-radius: 5px;
+    }
 </style>

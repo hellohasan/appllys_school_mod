@@ -9,8 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -32,7 +30,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
   data: function data() {
@@ -160,7 +157,7 @@ __webpack_require__.r(__webpack_exports__);
             cancelButtonText: _this.$t('cancel')
           }).then(function (result) {
             if (result.isConfirmed) {
-              axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/delete-bill-pay-lists', {
+              axios["delete"]('/api/delete-bill-pay-lists', {
                 data: {
                   id: id
                 }

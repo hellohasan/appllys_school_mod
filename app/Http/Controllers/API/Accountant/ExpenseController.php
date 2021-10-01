@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\Accountant;
 
+use DataTables;
+use Carbon\Carbon;
 use App\Models\Account;
 use App\Models\Expense;
 use Illuminate\Http\Request;
@@ -24,7 +26,24 @@ class ExpenseController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        $expenses = Expense::orderByDesc('id')->get();
+
+        return Datatables::of($expenses)
+            ->addIndexColumn()
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->toDateTimeString();
+            })
+            ->editColumn('total', function ($row) {
+                return $row->total . ' ' . __('BDT');
+            })
+            ->addColumn('action', function ($row) {
+                $btn = '<button data-id="' . $row->custom . '" data-action="show" class="btn btn-sm btn-success"><i class="fas fa-eye"></i> ' . __('show') . '</button> ';
+                $btn .= '<button data-id="' . $row->custom . '" data-action="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> ' . __('delete') . '</button>';
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -109,7 +128,37 @@ class ExpenseController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        //
+    public function destroy($custom) {
+        try {
+            DB::beginTransaction();
+
+            $expense = Expense::whereCustom($custom)->firstOrFail();
+            $expense->items()->delete();
+
+            $cash = Account::first();
+            $expense->logs()->create([
+                'user_id'       => auth()->id(),
+                'account_id'    => $cash->id,
+                'reason'        => 'expense_reverse',
+                'before_amount' => $cash->amount,
+                'amount'        => $expense->total,
+                'type'          => 1, //add to cash
+                'after_amount'  => round($cash->amount + $expense->total, 2),
+            ]);
+            $cash->amount = round($cash->amount + $expense->total, 2);
+            $cash->save();
+
+            $expense->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Success'], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
+
+            return response()->json(['error' => 'Something wrong there'], 503);
+        }
+
     }
 }

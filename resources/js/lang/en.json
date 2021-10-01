@@ -242,6 +242,7 @@
     "ExpenseMemo" : "Expense Memo",
     "BDT" : "BDT",
     "HeadSign": "Academic Head Signature",
-    "AccountantSign": "Accountant Signature"
+    "AccountantSign": "Accountant Signature",
+    "DateTime": "Date Time"
 
 }

@@ -18,7 +18,11 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return User::with(['roles'])->paginate(10);
+        return User::with([
+            'roles',
+            'salary:id,user_id,salary_scale_id',
+            'salary.salary_scale:id,title',
+        ])->paginate(10);
     }
 
     /**
@@ -41,6 +45,12 @@ class UserController extends Controller {
         $role = Role::findById($request->role);
         $user->assignRole($role);
 
+        if ($request->input('salary_scale_id')) {
+            $user->salary()->updateOrCreate(['user_id' => $user->id], [
+                'salary_scale_id' => $request->input("salary_scale_id"),
+            ]);
+        }
+
     }
 
     /**
@@ -52,6 +62,7 @@ class UserController extends Controller {
     public function show($id) {
         //
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -77,6 +88,15 @@ class UserController extends Controller {
         $role = Role::findById($request->role);
         $user->syncRoles($role);
         $user->update($in);
+
+        if ($request->input('salary_scale_id')) {
+            $user->salary()->updateOrCreate(['user_id' => $user->id], [
+                'salary_scale_id' => $request->input("salary_scale_id"),
+            ]);
+        }else{
+            $user->salary()->delete();
+        }
+
     }
 
     /**
@@ -94,6 +114,9 @@ class UserController extends Controller {
         return auth('api')->user();
     }
 
+    /**
+     * @param Request $request
+     */
     public function updateProfile(Request $request) {
         $user = auth('api')->user();
 
@@ -101,41 +124,45 @@ class UserController extends Controller {
             'name'  => 'required|max:191',
             'email' => 'required|max:191|unique:users,email,' . $user->id,
             'bio'   => 'required',
-            'photo' => 'sometimes|base64mimes:jpg,jpeg,png|base64max:1024'
+            'photo' => 'sometimes|base64mimes:jpg,jpeg,png|base64max:1024',
         ]);
 
         $in = $request->except(['photo']);
-        if($request->photo){
+        if ($request->photo) {
             $ext = explode('/', substr($request->photo, 0, strpos($request->photo, ';')))[1];
             $name = time() . '.' . $ext;
-            Image::make($request->photo)->resize(60,60)->save(public_path('img/profile/').$name);
-            $in['photo'] = 'img/profile/'.$name;
+            Image::make($request->photo)->resize(60, 60)->save(public_path('img/profile/') . $name);
+            $in['photo'] = 'img/profile/' . $name;
 
-            $defaultImage ="img/profile/profile.png";
-            if($user->photo !== $defaultImage){
+            $defaultImage = "img/profile/profile.png";
+            if ($user->photo !== $defaultImage) {
                 File::delete(public_path($user->photo));
             }
         }
         $user->update($in);
     }
 
-    public function updatePassword(Request $request){
+    /**
+     * @param Request $request
+     */
+    public function updatePassword(Request $request) {
         $user = auth('api')->user();
 
         $request->validate([
             'current_password' => 'required',
-            'password' => 'required|confirmed|min:6'
+            'password'         => 'required|confirmed|min:6',
         ]);
 
         $c_password = $user->password;
 
-        if(Hash::check($request->current_password, $c_password)){
+        if (Hash::check($request->current_password, $c_password)) {
             $password = Hash::make($request->password);
             $user->password = $password;
             $user->save();
-            return response()->json(['message' => 'Password Changes Successfully.'],200);
-        }else{
-            return response()->json(['message' => 'Current Password Not Match'],400);
+
+            return response()->json(['message' => 'Password Changes Successfully.'], 200);
+        } else {
+            return response()->json(['message' => 'Current Password Not Match'], 400);
         }
     }
 }

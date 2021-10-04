@@ -65,6 +65,27 @@
             </ul>
         </li>
 
+        <li v-role="['Super Admin','Admin','Accountant']" v-permission="['salary','salary-create']" class="nav-item has-treeview">
+            <a href="#!" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>{{ $t('AcademicSalary') }}<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+                <li v-permission="['salary-create']" class="nav-item">
+                    <router-link to="/salary/create" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('NewSalary') }}</p>
+                    </router-link>
+                </li>
+                <li v-permission="['salary']" class="nav-item">
+                    <router-link to="/salary" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('SalaryList') }}</p>
+                    </router-link>
+                </li>
+            </ul>
+        </li>
+
         <li v-role="['Super Admin','Admin','Accountant']" class="nav-item">
             <router-link to="/bill-items" class="nav-link">
                 <i class="nav-icon fas fa-receipt cyan"></i>

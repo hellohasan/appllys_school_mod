@@ -5,6 +5,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\API\AdmissionController;
 use App\Http\Controllers\API\Academic\GradeController;
 use App\Http\Controllers\API\Academic\SubjectController;
+use App\Http\Controllers\API\Accountant\SalaryController;
 use App\Http\Controllers\API\Accountant\AccountController;
 use App\Http\Controllers\API\Accountant\BillItemController;
 use App\Http\Controllers\API\Academic\ClassPeriodController;
@@ -170,6 +171,9 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-bill-pay-lists', [BillReceiveController::class, 'loadBillPayList']);
     Route::delete('delete-bill-pay-lists', [BillReceiveController::class, 'deleteBillPayList']);
 
+    /* load Account list */
+    Route::get('load-account-list', [CommonController::class, 'loadAccountList']);
+
     /* ManageAccount Route List */
     Route::get('manage-accounts', [AccountController::class, 'index'])->middleware('permission:manage-accounts');
     Route::post('manage-accounts-store', [AccountController::class, 'store'])->middleware('permission:manage-accounts-store');
@@ -178,6 +182,15 @@ Route::group(['middleware' => 'jwt'], function () {
 
     /* Academic Expense Route list */
     Route::get('load-office-bill-items', [CommonController::class, 'loadOfficeBillItes']);
-    Route::apiResource('expenses', 'API\Accountant\ExpenseController');
+    Route::apiResource('expenses', 'API\Accountant\ExpenseController', ['except' => ['edit', 'update']]);
 
+    /* Load Salary Scale list */
+    Route::get('load-salary-scales', [CommonController::class, 'loadSalaryScale']);
+
+    /* Slary Route list */
+    Route::post('salary-finder', [SalaryController::class, 'salaryFinder']);
+    Route::apiResource('salary', 'API\Accountant\SalaryController', ['except' => ['edit', 'update']]);
+
+    /* Load role list */
+    Route::get('load-role-list', [CommonController::class, 'loadRoleList']);
 });

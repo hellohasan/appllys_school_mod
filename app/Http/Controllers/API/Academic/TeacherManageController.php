@@ -2,40 +2,40 @@
 
 namespace App\Http\Controllers\API\Academic;
 
-use App\Helpers\AppHelper;
-use App\Http\Controllers\Controller;
-use App\Models\Teacher;
 use App\User;
+use App\Models\Teacher;
+use App\Helpers\AppHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Facades\Image;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
 
-class TeacherManageController extends Controller
-{
-    public function __construct()
-    {
+class TeacherManageController extends Controller {
+    public function __construct() {
         $this->middleware(['role:Super Admin|Admin|Register']);
     }
 
-    public function storeTeacher(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function storeTeacher(Request $request) {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'code' => 'required|unique:teachers,code',
-            'phone' => 'required|numeric|unique:users,phone',
-            'password' => 'required|confirmed|min:6',
-            'join_date' => 'required|date',
-            'designation_id' => 'required',
-            'salary_scale_id' => 'required',
-            'type' => 'required',
-            'type_id' => 'required',
-            'religion_id' => 'required',
-            'blood' => 'required',
-            'educations' => 'required|array',
+            'name'              => 'required',
+            'email'             => 'required|email|unique:users,email',
+            'code'              => 'required|unique:teachers,code',
+            'phone'             => 'required|numeric|unique:users,phone',
+            'password'          => 'required|confirmed|min:6',
+            'join_date'         => 'required|date',
+            'designation_id'    => 'required',
+            'salary_scale_id'   => 'required',
+            'type'              => 'required',
+            'type_id'           => 'required',
+            'religion_id'       => 'required',
+            'blood'             => 'required',
+            'educations'        => 'required|array',
             'educations.name.*' => 'required',
-            'photo' => 'sometimes|base64mimes:jpg,jpeg,png|base64max:200',
+            'photo'             => 'sometimes|base64mimes:jpg,jpeg,png|base64max:200',
         ]);
 
         try {
@@ -47,9 +47,8 @@ class TeacherManageController extends Controller
             $in['password'] = bcrypt($request->input('password'));
             if ($request->image) {
                 $name = time() . '_teacher.' . AppHelper::getFileExtension($request->image);
-                $path = "storage/images/teachers" . '/' . $name;
-                Image::make($request->image)->resize(120, 150)
-                    ->save(public_path($path));
+                $path = "storage/images/teachers/" . $name;
+                Image::make($request->image)->resize(120, 150)->save(public_path($path));
                 $in['photo'] = $path;
             }
             $user = User::create($in);
@@ -74,6 +73,11 @@ class TeacherManageController extends Controller
             $te['join_date'] = $request->input("join_date");
             $te['designation_id'] = $request->input('designation_id');
             $teacher = Teacher::create($te);
+
+            $user->salary()->updateOrCreate(['user_id' => $user->id], [
+                'salary_scale_id' => $request->input("salary_scale_id"),
+            ]);
+
             foreach ($request->input('educations') as $edu) {
                 $teacher->educations()->create([
                     'name' => $edu['name'],
@@ -82,17 +86,20 @@ class TeacherManageController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            // something went wrong
+
+            return response()->json(['error' => $e->getMessage()], 503);
         }
     }
 
-    public function customPad($start, $length)
-    {
+    /**
+     * @param $start
+     * @param $length
+     */
+    public function customPad($start, $length) {
         return (str_pad((int) $start, $length, '0', STR_PAD_LEFT));
     }
 
-    public function getTeacher()
-    {
+    public function getTeacher() {
         return User::role("Teacher")
             ->with([
                 'teacher',
@@ -104,8 +111,10 @@ class TeacherManageController extends Controller
             ->get();
     }
 
-    public function editTeacher($custom)
-    {
+    /**
+     * @param $custom
+     */
+    public function editTeacher($custom) {
         return User::whereCustom($custom)
             ->with([
                 'teacher',
@@ -114,27 +123,30 @@ class TeacherManageController extends Controller
             ->firstOrFail();
     }
 
-    public function updateTeacher(Request $request, $custom)
-    {
+    /**
+     * @param Request $request
+     * @param $custom
+     */
+    public function updateTeacher(Request $request, $custom) {
         $user = User::whereCustom($custom)->firstOrFail();
         $teacher = Teacher::whereUserId($user->id)->firstOrFail();
 
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'required|numeric|unique:users,phone,' . $user->id,
-            'code' => 'required|unique:teachers,code,' . $teacher->id,
-            'password' => 'sometimes|confirmed|min:6|alpha_num',
-            'join_date' => 'required|date',
-            'designation_id' => 'required',
-            'salary_scale_id' => 'required',
-            'type' => 'required',
-            'type_id' => 'required',
-            'religion_id' => 'required',
-            'blood' => 'required',
-            'educations' => 'required|array',
+            'name'              => 'required',
+            'email'             => 'required|email|unique:users,email,' . $user->id,
+            'phone'             => 'required|numeric|unique:users,phone,' . $user->id,
+            'code'              => 'required|unique:teachers,code,' . $teacher->id,
+            'password'          => 'sometimes|confirmed|min:6|alpha_num',
+            'join_date'         => 'required|date',
+            'designation_id'    => 'required',
+            'salary_scale_id'   => 'required',
+            'type'              => 'required',
+            'type_id'           => 'required',
+            'religion_id'       => 'required',
+            'blood'             => 'required',
+            'educations'        => 'required|array',
             'educations.name.*' => 'required',
-            'photo' => 'sometimes|base64mimes:jpg,jpeg,png|base64max:200',
+            'photo'             => 'sometimes|base64mimes:jpg,jpeg,png|base64max:200',
         ]);
 
         try {
@@ -178,6 +190,10 @@ class TeacherManageController extends Controller
             $te['designation_id'] = $request->input('designation_id');
             $teacher->update($te);
             $teacher->educations()->delete();
+
+            $user->salary()->updateOrCreate(['user_id' => $user->id], [
+                'salary_scale_id' => $request->input("salary_scale_id"),
+            ]);
 
             foreach ($request->input('educations') as $edu) {
                 $teacher->educations()->create([

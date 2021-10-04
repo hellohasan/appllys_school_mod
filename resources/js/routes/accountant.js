@@ -135,4 +135,40 @@ export const accountant = [
       }
     ]
   },
+
+  /*Academic Salary Route List*/
+  {
+    path: "/salary",
+    component: () => import(/*webpackChunkName: "js/salary"*/ "../components/Accountant/Salary/Salary"),
+    meta: {
+      requireAuth: true,
+      roles: ["Super Admin", 'Admin', 'Accountant']
+    },
+    children: [
+      {
+        path: "/",
+        component: () => import(/*webpackChunkName: "js/salary-index"*/"../components/Accountant/Salary/Index"),
+        meta: {
+          title: i18n.tc('SalaryList'),
+          permissions: ['salary']
+        }
+      },
+      {
+        path: "create",
+        component: () => import(/*webpackChunkName: "js/salary-create"*/"../components/Accountant/Salary/Create"),
+        meta: {
+          title: i18n.tc('NewSalary'),
+          permissions: ['salary-create']
+        }
+      },
+      {
+        path: ":custom/show",
+        component: () => import(/*webpackChunkName: "js/salary-show"*/"../components/Accountant/Salary/Show"),
+        meta: {
+          title: i18n.tc('ShowSalary'),
+          permissions: ['salary-show']
+        }
+      }
+    ]
+  },
 ]

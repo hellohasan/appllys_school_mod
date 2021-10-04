@@ -16,9 +16,15 @@
     "/js/manage-account.js": "/js/manage-account.js",
     "/js/password.js": "/js/password.js",
     "/js/profile.js": "/js/profile.js",
+    "/js/salary.js": "/js/salary.js",
+    "/js/salary-create.js": "/js/salary-create.js",
+    "/js/salary-index.js": "/js/salary-index.js",
+    "/js/salary-show.js": "/js/salary-show.js",
     "/js/sms-setting.js": "/js/sms-setting.js",
     "/js/test-component.js": "/js/test-component.js",
     "/js/test-datatable.js": "/js/test-datatable.js",
     "/vendors~js/bill-receive-new~js/expenses-show.js": "/vendors~js/bill-receive-new~js/expenses-show.js",
-    "/vendors~js/test-component.js": "/vendors~js/test-component.js"
+    "/vendors~js/salary-create.js": "/vendors~js/salary-create.js",
+    "/vendors~js/test-component.js": "/vendors~js/test-component.js",
+    "/vendors~js/bill-receive-new~js/expenses-show~js/salary-show.js": "/vendors~js/bill-receive-new~js/expenses-show~js/salary-show.js"
 }

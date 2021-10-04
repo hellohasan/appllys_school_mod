@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Carbon\Carbon;
+use App\Models\Account;
 use App\Models\Upazila;
 use App\Models\BillItem;
 use App\Models\District;
@@ -22,6 +23,7 @@ use App\Models\AcademicSession;
 use App\Models\AcademicSubject;
 use App\Models\AcademicDepartment;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use App\Models\AcademicClassSession;
 use Illuminate\Support\Facades\Cache;
 
@@ -380,6 +382,18 @@ class CommonController extends Controller {
 
     public function loadOfficeBillItes() {
         return BillItem::whereActivated(1)->whereItemFor('Office')->select(['id', 'title as text', 'default_amount'])->get();
+    }
+
+    public function loadSalaryScale() {
+        return SalaryScale::whereStatus(true)->select(['id', 'title as text'])->get();
+    }
+
+    public function loadRoleList() {
+        return Role::select(['id', 'name as text'])->get();
+    }
+
+    public function loadAccountList() {
+        return Account::where('isActive', true)->select(['id', 'name as text', 'isActive'])->get();
     }
 
 }

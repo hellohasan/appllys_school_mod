@@ -19,6 +19,7 @@
                             <th>{{ $t('Name') }}</th>
                             <th>{{ $t('Email') }}</th>
                             <th>{{ $t('Role') }}</th>
+                            <th>{{ $t('salary_scale') }}</th>
                             <th>{{ $t('Register At') }}</th>
                             <th>{{ $t('Action') }}</th>
                         </tr>
@@ -32,7 +33,8 @@
                                 <template v-if="user.roles.length">
                                     <span class="badge badge-success" v-for="role in user.roles" :key="role.id">{{role.name | capitalize }}</span>
                                 </template>
-                            </td>
+                            </td> 
+                            <td>{{ user.salary.title ? user.salary.title : user.salary.salary_scale.title }} </td>
                             <td>{{ user.created_at | myDate }}</td>
                             <td>
                                 <button class="btn btn-primary btn-sm" @click="editUser(user)"><i class="far fa-edit"></i></button>
@@ -80,7 +82,9 @@
                                 <has-error :form="form" field="bio"></has-error>
                             </div>
 
-                            <form-group-select :options="roleList" label="Select Role" id="role" v-model="form.role" :form="form"></form-group-select>
+                            <form-group-select :options="roleList" :label="$t('SelectRole')" id="role" v-model="form.role" :form="form"></form-group-select>
+
+                            <form-group-select :options="scales" :label="$t('Select_One')" id="salary_scale_id" v-model="form.salary_scale_id" :form="form"></form-group-select>
 
                             <div class="form-group">
                                 <input v-model="form.password" type="password" name="password" placeholder="Password"
@@ -109,12 +113,14 @@ export default {
         return {
             users: {},
             roleList: {},
+            scales: {},
             form: new Form({
                 name: '',
                 email: '',
                 password: '',
                 bio: '',
                 role: [],
+                salary_scale_id: ''
             }),
             editMode: false,
             editId: null
@@ -134,6 +140,7 @@ export default {
             this.editId = user.id;
             this.form.fill(user);
             this.form.role = user.roles.length ? user.roles[0].id : '';
+            this.form.salary_scale_id = user?.salary?.salary_scale_id;
         },
         createUser() {
             this.form.post('/api/user')
@@ -195,6 +202,9 @@ export default {
         loadRoles() {
             axios.get('api/roles-select').then(({data}) => (this.roleList = data))
         },
+        loadSalaryScale(){
+          axios.get('/api/load-salary-scales').then(({data}) => (this.scales = data))
+        },
         getPaginationResults(page = 1) {
             axios.get('/api/user?page=' + page)
                 .then(response => {
@@ -205,6 +215,7 @@ export default {
     created() {
         this.loadUsers();
         this.loadRoles();
+        this.loadSalaryScale();
         Fire.$on('loadUserList', () => {
             this.loadUsers();
         });

@@ -45,6 +45,7 @@
         "select2": "^4.0.13",
         "summernote": "^0.8.18",
         "sweetalert2": "^10.8.1",
+        "validatorjs": "^3.22.1",
         "vform": "^1.0.1",
         "vue-bootstrap-datetimepicker": "^5.0.1",
         "vue-bootstrap-toggle": "^1.1.4",

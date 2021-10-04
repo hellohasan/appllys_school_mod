@@ -996,6 +996,73 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Salary
+ *
+ * @property int $id
+ * @property string $title
+ * @property int|null $role_id
+ * @property float $total
+ * @property int $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \App\User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TransactionLog[] $logs
+ * @property-read int|null $logs_count
+ * @property-read \Spatie\Permission\Models\Role|null $role
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SalaryLog[] $salaries
+ * @property-read int|null $salaries_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereRoleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Salary whereUpdatedAt($value)
+ */
+	class Salary extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SalaryLog
+ *
+ * @property int $id
+ * @property string $custom
+ * @property int $salary_id
+ * @property int $user_id
+ * @property int $salary_scale_id
+ * @property int $account_id
+ * @property float $amount
+ * @property int $is_attempt
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Account $account
+ * @property-read \App\Models\SalaryScale $scale
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereCustom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereIsAttempt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereSalaryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereSalaryScaleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SalaryLog whereUserId($value)
+ */
+	class SalaryLog extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\SalaryScale
  *
  * @property int $id
@@ -1369,6 +1436,30 @@ namespace App\Models{
 	class UserPreviousInstitute extends \Eloquent {}
 }
 
+namespace App\Models{
+/**
+ * App\Models\UserSalaryScale
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $salary_scale_id
+ * @property int $isActive
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\SalaryScale $salary_scale
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale whereSalaryScaleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSalaryScale whereUserId($value)
+ */
+	class UserSalaryScale extends \Eloquent {}
+}
+
 namespace App{
 /**
  * App\User
@@ -1403,6 +1494,7 @@ namespace App{
  * @property-read \App\Models\UserPreviousInstitute|null $previousInstitute
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
+ * @property-read \App\Models\UserSalaryScale $salary
  * @property-read \App\Models\Teacher|null $teacher
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()

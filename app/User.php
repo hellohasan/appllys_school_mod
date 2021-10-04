@@ -2,23 +2,22 @@
 
 namespace App;
 
+use App\Models\Teacher;
 use App\Models\Admission;
 use App\Models\ParentUser;
-use App\Models\Teacher;
+use App\Models\UserParent;
 use App\Models\UserAddress;
 use App\Models\UserDocument;
 use App\Models\UserFamilyInfo;
 use App\Models\UserInformation;
-use App\Models\UserParent;
+use App\Models\UserSalaryScale;
 use App\Models\UserPreviousInstitute;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject
-{
+class User extends Authenticatable implements JWTSubject {
     use Notifiable;
     use HasRoles;
 
@@ -28,7 +27,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','bio','photo','type','parent_id','custom','phone'
+        'name', 'email', 'password', 'bio', 'photo', 'type', 'parent_id', 'custom', 'phone',
     ];
 
     /**
@@ -54,8 +53,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return mixed
      */
-    public function getJWTIdentifier()
-    {
+    public function getJWTIdentifier() {
         return $this->getKey();
     }
 
@@ -64,71 +62,101 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    public function getJWTCustomClaims()
-    {
+    public function getJWTCustomClaims() {
         return [];
     }
 
-    public function guardian()
-    {
-        return $this->hasOne(ParentUser::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function guardian() {
+        return $this->hasOne(ParentUser::class, 'user_id');
     }
 
-    public function information()
-    {
-        return $this->hasOne(UserInformation::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function information() {
+        return $this->hasOne(UserInformation::class, 'user_id');
     }
 
-    public function parents()
-    {
-        return $this->hasMany(UserParent::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function parents() {
+        return $this->hasMany(UserParent::class, 'user_id');
     }
 
-    public function father()
-    {
-        return $this->parents()->where('relation','father');
+    /**
+     * @return mixed
+     */
+    public function father() {
+        return $this->parents()->where('relation', 'father');
     }
 
-    public function mother()
-    {
-        return $this->parents()->where('relation','mother');
+    /**
+     * @return mixed
+     */
+    public function mother() {
+        return $this->parents()->where('relation', 'mother');
     }
 
-    public function address()
-    {
-        return $this->hasOne(UserAddress::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function address() {
+        return $this->hasOne(UserAddress::class, 'user_id');
     }
 
-    public function admission()
-    {
-        return $this->hasOne(Admission::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function admission() {
+        return $this->hasOne(Admission::class, 'user_id');
     }
 
-    public function childs()
-    {
-        return $this->hasMany(ParentUser::class,'parent_id');
+    /**
+     * @return mixed
+     */
+    public function childs() {
+        return $this->hasMany(ParentUser::class, 'parent_id');
     }
 
-    public function previousInstitute()
-    {
-        return $this->hasOne(UserPreviousInstitute::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function previousInstitute() {
+        return $this->hasOne(UserPreviousInstitute::class, 'user_id');
     }
 
-    public function documents()
-    {
-        return $this->hasMany(UserDocument::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function documents() {
+        return $this->hasMany(UserDocument::class, 'user_id');
     }
 
-    public function familyInfo()
-    {
-        return $this->hasOne(UserFamilyInfo::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function familyInfo() {
+        return $this->hasOne(UserFamilyInfo::class, 'user_id');
     }
 
-    public function teacher()
-    {
-        return $this->hasOne(Teacher::class,'user_id');
+    /**
+     * @return mixed
+     */
+    public function teacher() {
+        return $this->hasOne(Teacher::class, 'user_id');
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function salary() {
+        return $this->hasOne(UserSalaryScale::class)->withDefault([
+            'title' => 'N/A',
+        ]);
+    }
 
 }

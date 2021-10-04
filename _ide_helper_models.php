@@ -1071,6 +1071,8 @@ namespace App\Models{
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserSalaryScale[] $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|SalaryScale newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SalaryScale newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SalaryScale query()

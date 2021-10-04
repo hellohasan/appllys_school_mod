@@ -40,7 +40,7 @@
                                 <td>{{ ++index }}</td>
                                 <td>{{ scale.title }}</td>
                                 <td>{{ scale.amount }}</td>
-                                <td>0 {{$t('person')}}</td>
+                                <td>{{ scale.users_count }} {{$t('person')}}</td>
                                 <td>
                                     <span class="badge" :class="scale.status ? 'badge-success' : 'badge-warning'">{{scale.status ? $t('Activated') : $t('Deactivated')}}</span>
                                 </td>

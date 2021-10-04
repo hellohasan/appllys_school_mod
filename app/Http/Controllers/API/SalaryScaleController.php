@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Models\SalaryScale;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 
-class SalaryScaleController extends Controller
-{
-    public function __construct()
-    {
-        $this->middleware(['role:Super Admin|Admin','permission:salary-scale-create|salary-scale-edit|salary-scale-update']);
+class SalaryScaleController extends Controller {
+    public function __construct() {
+        $this->middleware(['role:Super Admin|Admin', 'permission:salary-scale-create|salary-scale-edit|salary-scale-update']);
     }
 
     /**
@@ -19,9 +17,8 @@ class SalaryScaleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return SalaryScale::orderByDesc('id')->get();
+    public function index() {
+        return SalaryScale::withCount('users')->orderByDesc('id')->get();
     }
 
     /**
@@ -30,11 +27,10 @@ class SalaryScaleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
-            'title' => 'required|unique:salary_scales',
-            'amount' => 'required|numeric'
+            'title'  => 'required|unique:salary_scales',
+            'amount' => 'required|numeric',
         ]);
 
         return SalaryScale::create($request->all());
@@ -47,12 +43,11 @@ class SalaryScaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $scale = SalaryScale::findOrFail($id);
         $request->validate([
-            'title' => 'required|unique:salary_scales,title,'.$id,
-            'amount' => 'required|numeric'
+            'title'  => 'required|unique:salary_scales,title,' . $id,
+            'amount' => 'required|numeric',
         ]);
 
         $scale->update($request->all());
@@ -66,8 +61,7 @@ class SalaryScaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
 }

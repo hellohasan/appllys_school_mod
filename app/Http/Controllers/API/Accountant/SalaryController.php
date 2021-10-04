@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\Accountant;
 
 use App\User;
+use DataTables;
+use Carbon\Carbon;
 use App\Models\Salary;
 use App\Models\Account;
 use App\Models\SalaryLog;
@@ -12,6 +14,14 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 
 class SalaryController extends Controller {
+
+    public function __construct() {
+        $this->middleware('permission:salary', ['only' => ['index']]);
+        $this->middleware('permission:salary-store', ['only' => ['store']]);
+        $this->middleware('permission:salary-edit', ['only' => ['edit']]);
+        $this->middleware('permission:salary-update', ['only' => ['update']]);
+        $this->middleware('permission:salary-delete', ['only' => ['destroy']]);
+    }
 
     /**
      * @param Request $request
@@ -54,7 +64,30 @@ class SalaryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        $salaries = Salary::with(['creator:id,name', 'role:id,name'])->orderByDesc('id')->get();
+
+        return Datatables::of($salaries)
+            ->addIndexColumn()
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->toDateTimeString();
+            })
+            ->editColumn('created_by', function ($row) {
+                return $row->creator->name;
+            })
+            ->editColumn('role_id', function ($row) {
+                return $row->role->name . ' ' . __('Salary');
+            })
+            ->editColumn('total', function ($row) {
+                return $row->total . ' ' . __('BDT');
+            })
+            ->addColumn('action', function ($row) {
+                $btn = '<button data-id="' . $row->id . '" data-action="show" class="btn btn-sm btn-success"><i class="fas fa-eye"></i> ' . __('show') . '</button> ';
+                $btn .= '<button data-id="' . $row->id . '" data-action="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> ' . __('delete') . '</button>';
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**
@@ -138,23 +171,33 @@ class SalaryController extends Controller {
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id) {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $salary = Salary::findOrFail($id);
+
+        foreach ($salary->salaries as $item) {
+            $account = Account::find($item->account_id);
+            $salary->logs()->create([
+                'user_id'       => auth()->id(),
+                'account_id'    => $account->id,
+                'reason'        => 'salary_reverse',
+                'before_amount' => $account->amount,
+                'amount'        => $item->amount,
+                'type'          => 1, //minus from account
+                'after_amount'  => round($account->amount + $item->amount, 2),
+            ]);
+            $account->amount = round($account->amount + $item->amount, 2);
+            $account->save();
+            $item->delete();
+        }
+
+        $salary->delete();
+
+        return response()->json('Done', 200);
+
     }
 }

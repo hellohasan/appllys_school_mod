@@ -19,6 +19,7 @@ export const routes = [
   ...accountant,
 
   /* 404 Page component */
+  { path: "/server-error",meta:{title: "Server Error"}, component: require("../components/ServerError").default},
   {path: "/unauthorized",meta:{title: "503"}, component: require("../components/503").default},
   {path: "*",meta:{title: "404"}, component: require("../components/404").default}
 ];

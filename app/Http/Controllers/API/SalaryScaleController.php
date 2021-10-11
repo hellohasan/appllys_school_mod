@@ -18,7 +18,7 @@ class SalaryScaleController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return SalaryScale::withCount('users')->orderByDesc('id')->get();
+        return SalaryScale::withCount('users')->withSum('salaries', 'amount')->orderByDesc('id')->get();
     }
 
     /**

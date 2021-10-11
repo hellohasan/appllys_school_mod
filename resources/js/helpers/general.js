@@ -57,6 +57,7 @@ export function initialize(store, router) {
       router.push('/unauthorized');
 
     }else if (error.response.status === 404) {
+      router.push('/server-error');
         Swal.fire({
             icon: 'error',
             title: i18n.t('404'),

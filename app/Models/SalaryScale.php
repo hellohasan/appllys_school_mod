@@ -21,4 +21,11 @@ class SalaryScale extends Model {
     public function users() {
         return $this->hasMany(UserSalaryScale::class, 'salary_scale_id');
     }
+
+    /**
+     * @return mixed
+     */
+    public function salaries() {
+        return $this->hasMany(SalaryLog::class, 'salary_scale_id');
+    }
 }

@@ -67,7 +67,7 @@
     "Add New": "নতুন যুক্ত করুন",
     "Email": "ইমেল",
     "Register At": "নিবন্ধনের তারিখ",
-    "Action": "সম্পাদনা",
+    "Action": "অ্যাকশান",
     "SL": "নং",
     "Previous": "আগের পৃষ্ঠা",
     "Next": "পরবর্তী পৃষ্ঠা",
@@ -259,5 +259,18 @@
     "Withdrawal": "উত্তোলন",
     "Salary": "বেতন",
     "Lifted": "উত্তোলন",
-    "Pending": "অপেক্ষমাণ"
+    "Pending": "অপেক্ষমাণ",
+    "total_pay": "সর্বমোট প্রদান",
+    "BalanceTransfer": "ব্যালেন্স স্থানান্তর",
+    "NewBalanceTransfer": "নতুন ব্যালেন্স স্থানান্তর",
+    "BalanceTransferList": "ব্যালেন্স স্থানান্তর তালিকা",
+    "ShowBalanceTransfer": "ব্যালেন্স স্থানান্তর বিবরণ",
+    "SenderAccount": "প্রেরক অ্যাকাউন্ট",
+    "SendingAmount": "পাঠানোর পরিমাণ",
+    "TransferCharge": "স্থানান্তর চার্জ",
+    "TotalSend": "মোট প্রেরণ",
+    "ReceiveAccount": "গ্রহণ অ্যাকাউন্ট",
+    "ReceivingAmount": "গ্রহণ পরিমাণ",
+    "ReceivingCharge": "গ্রহণ চার্জ",
+    "TotalReceive": "মোট প্রাপ্ত"
 }

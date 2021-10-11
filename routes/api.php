@@ -187,10 +187,13 @@ Route::group(['middleware' => 'jwt'], function () {
     /* Load Salary Scale list */
     Route::get('load-salary-scales', [CommonController::class, 'loadSalaryScale']);
 
-    /* Slary Route list */
+    /* Salary Route list */
     Route::post('salary-finder', [SalaryController::class, 'salaryFinder']);
     Route::apiResource('salary', 'API\Accountant\SalaryController', ['except' => ['edit', 'update']]);
 
     /* Load role list */
     Route::get('load-role-list', [CommonController::class, 'loadRoleList']);
+
+    /* Balance Transfer Route List  */
+    Route::apiResource('balance-transfer', 'API\Accountant\BalanceTransferController', ['except' => ['edit', 'update']]);
 });

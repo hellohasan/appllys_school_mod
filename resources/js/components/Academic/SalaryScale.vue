@@ -31,6 +31,7 @@
                                 <th>{{ $t('Title') }}</th>
                                 <th>{{ $t('amount') }}</th>
                                 <th>{{ $t('total_user') }}</th>
+                                <th>{{ $t('total_pay') }}</th>
                                 <th>{{ $t('Status') }}</th>
                                 <th>{{ $t('Action') }}</th>
                             </tr>
@@ -41,6 +42,7 @@
                                 <td>{{ scale.title }}</td>
                                 <td>{{ scale.amount }}</td>
                                 <td>{{ scale.users_count }} {{$t('person')}}</td>
+                                <td>{{ scale.salaries_sum_amount == null ? 0 : scale.salaries_sum_amount | withCurrency}}</td>
                                 <td>
                                     <span class="badge" :class="scale.status ? 'badge-success' : 'badge-warning'">{{scale.status ? $t('Activated') : $t('Deactivated')}}</span>
                                 </td>

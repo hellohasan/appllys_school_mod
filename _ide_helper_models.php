@@ -520,6 +520,51 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\BalanceTransfer
+ *
+ * @property int $id
+ * @property string|null $custom
+ * @property int $created_by
+ * @property int $from_account_id
+ * @property float $amount
+ * @property float $from_charge
+ * @property float $from_total
+ * @property int $to_account_id
+ * @property float $to_charge
+ * @property float $to_total
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TransactionLog[] $logs
+ * @property-read int|null $logs_count
+ * @property-read \App\Models\Account $receive_account
+ * @property-read \App\Models\Account $sender_account
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer newQuery()
+ * @method static \Illuminate\Database\Query\Builder|BalanceTransfer onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereCustom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereFromAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereFromCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereFromTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereToAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereToCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereToTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BalanceTransfer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|BalanceTransfer withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|BalanceTransfer withoutTrashed()
+ */
+	class BalanceTransfer extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\BasicSetting
  *
  * @property int $id
@@ -1071,6 +1116,8 @@ namespace App\Models{
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SalaryLog[] $salaries
+ * @property-read int|null $salaries_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserSalaryScale[] $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|SalaryScale newModelQuery()

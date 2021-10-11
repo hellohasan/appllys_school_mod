@@ -113,10 +113,10 @@ class BillAssignController extends Controller {
      * @param $custom
      */
     public function billAssignView($custom) {
-        $bill = BillPackage::whereCustom($custom)->exists();
+        $bill = BillPackage::whereId($custom)->exists();
         if ($bill) {
 
-            return BillPackage::whereCustom($custom)
+            return BillPackage::whereId($custom)
                 ->with([
                     'academic_session:id,duration',
                     'academic_class:id,name',
@@ -138,7 +138,7 @@ class BillAssignController extends Controller {
      * @param Request $request
      */
     public function billAssignDelete(Request $request) {
-        $package = BillPackage::whereCustom($request->input("custom"))->first();
+        $package = BillPackage::whereId($request->input("custom"))->first();
         if ($package) {
             $package->billStudents()->delete();
             $package->delete();

@@ -86,6 +86,27 @@
             </ul>
         </li>
 
+        <li v-role="['Super Admin','Admin','Accountant']" v-permission="['balance-transfer','balance-transfer-create']" class="nav-item has-treeview">
+            <a href="#!" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>{{ $t('BalanceTransfer') }}<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+                <li v-permission="['balance-transfer-create']" class="nav-item">
+                    <router-link to="/balance-transfer/create" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('NewTransfer') }}</p>
+                    </router-link>
+                </li>
+                <li v-permission="['balance-transfer']" class="nav-item">
+                    <router-link to="/balance-transfer" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>{{ $t('TransferList') }}</p>
+                    </router-link>
+                </li>
+            </ul>
+        </li>
+
         <li v-role="['Super Admin','Admin','Accountant']" class="nav-item">
             <router-link to="/bill-items" class="nav-link">
                 <i class="nav-icon fas fa-receipt cyan"></i>

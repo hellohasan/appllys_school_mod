@@ -260,5 +260,21 @@
     "Withdrawal" : "Withdrawal",
     "Salary": "Salary",
     "Lifted": "Lifted",
-    "Pending": "Pending"
+    "Pending": "Pending",
+    "total_pay": "Total Pay",
+    "BalanceTransfer": "Balance Transfer",
+    "NewBalanceTransfer": "New Transfer",
+    "BalanceTransferList": "Transfer List",
+    "ShowBalanceTransfer": "Show Transfer",
+    "SenderAccount": "SenderAccount",
+    "SendingAmount": "SendingAmount",
+    "TransferCharge": "TransferCharge",
+    "TotalWithdraw": "TotalWithdraw",
+    "ReceiveAccount": "ReceiveAccount",
+    "ReceivingAmount": "ReceivingAmount",
+    "ReceivingCharge": "ReceivingCharge",
+    "TotalReceive": "TotalReceive"
+
+
+
 }

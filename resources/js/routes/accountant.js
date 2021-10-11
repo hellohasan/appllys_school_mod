@@ -171,4 +171,40 @@ export const accountant = [
       }
     ]
   },
+
+  /*Balance Transfer Route List*/
+  {
+    path: "/balance-transfer",
+    component: () => import(/*webpackChunkName: "js/balance-transfer"*/ "../components/Accountant/BalanceTransfer/BalanceTransfer"),
+    meta: {
+      requireAuth: true,
+      roles: ["Super Admin", 'Admin', 'Accountant']
+    },
+    children: [
+      {
+        path: "/",
+        component: () => import(/*webpackChunkName: "js/balance-transfer-index"*/"../components/Accountant/BalanceTransfer/Index"),
+        meta: {
+          title: i18n.tc('BalanceTransferList'),
+          permissions: ['balance-transfer']
+        }
+      },
+      {
+        path: "create",
+        component: () => import(/*webpackChunkName: "js/balance-transfer-create"*/"../components/Accountant/BalanceTransfer/Create"),
+        meta: {
+          title: i18n.tc('NewBalanceTransfer'),
+          permissions: ['balance-transfer-create']
+        }
+      },
+      {
+        path: ":custom/show",
+        component: () => import(/*webpackChunkName: "js/balance-transfer-show"*/"../components/Accountant/BalanceTransfer/Show"),
+        meta: {
+          title: i18n.tc('ShowBalanceTransfer'),
+          permissions: ['balance-transfer-show']
+        }
+      }
+    ]
+  },
 ]

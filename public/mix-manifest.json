@@ -1,6 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/js/balance-transfer.js": "/js/balance-transfer.js",
+    "/js/balance-transfer-create.js": "/js/balance-transfer-create.js",
+    "/js/balance-transfer-index.js": "/js/balance-transfer-index.js",
+    "/js/balance-transfer-show.js": "/js/balance-transfer-show.js",
     "/js/bill-receive.js": "/js/bill-receive.js",
     "/js/bill-receive-index.js": "/js/bill-receive-index.js",
     "/js/bill-receive-new.js": "/js/bill-receive-new.js",
@@ -24,5 +28,6 @@
     "/js/test-component.js": "/js/test-component.js",
     "/js/test-datatable.js": "/js/test-datatable.js",
     "/vendors~js/bill-receive-new~js/expenses-show~js/salary-show.js": "/vendors~js/bill-receive-new~js/expenses-show~js/salary-show.js",
-    "/vendors~js/test-component.js": "/vendors~js/test-component.js"
+    "/vendors~js/test-component.js": "/vendors~js/test-component.js",
+    "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show.js": "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show.js"
 }

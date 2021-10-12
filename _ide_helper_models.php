@@ -1241,6 +1241,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\User $creator
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $logable
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionLog newQuery()

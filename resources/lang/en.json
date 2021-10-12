@@ -3,5 +3,7 @@
     "delete": "Delete",
     "show": "Show",
     "All": "All",
-    "Salary": "Salary"
+    "Salary": "Salary",
+    "Credit": "Credit",
+    "Debit": "Debit"
 }

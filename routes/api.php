@@ -12,6 +12,7 @@ use App\Http\Controllers\API\Academic\ClassPeriodController;
 use App\Http\Controllers\API\Accountant\BillAssignController;
 use App\Http\Controllers\API\Academic\TeacherManageController;
 use App\Http\Controllers\API\Accountant\BillReceiveController;
+use App\Http\Controllers\API\Accountant\TransactionLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -196,4 +197,7 @@ Route::group(['middleware' => 'jwt'], function () {
 
     /* Balance Transfer Route List  */
     Route::apiResource('balance-transfer', 'API\Accountant\BalanceTransferController', ['except' => ['edit', 'update']]);
+
+    /* Transaction Log Route list */
+    Route::get('transaction-logs', [TransactionLogController::class, 'index']);
 });

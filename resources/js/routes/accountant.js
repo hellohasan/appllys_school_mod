@@ -207,4 +207,12 @@ export const accountant = [
       }
     ]
   },
+
+  /*Transaction Log Route*/
+  {
+    path: "/transaction-logs",
+    component: () => import(/*webpackChunkName: "js/transaction-logs"*/ "../components/Accountant/TransactionLog/Index"),
+    name: "transaction-logs",
+    meta: { requireAuth: true, title: i18n.tc("TransactionLog") }
+  },
 ]

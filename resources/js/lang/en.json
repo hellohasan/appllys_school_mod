@@ -266,14 +266,22 @@
     "NewBalanceTransfer": "New Transfer",
     "BalanceTransferList": "Transfer List",
     "ShowBalanceTransfer": "Show Transfer",
-    "SenderAccount": "SenderAccount",
-    "SendingAmount": "SendingAmount",
-    "TransferCharge": "TransferCharge",
-    "TotalWithdraw": "TotalWithdraw",
-    "ReceiveAccount": "ReceiveAccount",
-    "ReceivingAmount": "ReceivingAmount",
-    "ReceivingCharge": "ReceivingCharge",
-    "TotalReceive": "TotalReceive"
+    "SenderAccount": "Sender Account",
+    "SendingAmount": "Sending Amount",
+    "TransferCharge": "Transfer Charge",
+    "TotalWithdraw": "Total Withdraw",
+    "ReceiveAccount": "Receive Account",
+    "ReceivingAmount": "Receiving Amount",
+    "ReceivingCharge": "Receiving Charge",
+    "TotalReceive": "Total Receive",
+    "TransactionLog": "TransactionLog",
+    "BeforeAmount": "Before Amount",
+    "AfterAmount": "After Amount",
+    "ReceiveAmount": "Receive Amount",
+    "SelectReason": "Select Reason",
+    "DateRange": "Date Range",
+    "Reset": "Reset",
+    "Filter": "Filter"
 
 
 

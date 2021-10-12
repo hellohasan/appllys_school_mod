@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class BalanceTransferController extends Controller {
+
+    public function __construct() {
+        $this->middleware('permission:balance-transfer', ['only' => ['index']]);
+        $this->middleware('permission:balance-transfer-store', ['only' => ['store']]);
+        $this->middleware('permission:balance-transfer-edit', ['only' => ['edit']]);
+        $this->middleware('permission:balance-transfer-update', ['only' => ['update']]);
+        $this->middleware('permission:balance-transfer-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

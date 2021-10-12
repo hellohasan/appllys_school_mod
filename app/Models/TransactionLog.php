@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,5 +24,12 @@ class TransactionLog extends Model {
      */
     public function logable() {
         return $this->morphTo();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function creator() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

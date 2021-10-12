@@ -272,5 +272,14 @@
     "ReceiveAccount": "গ্রহণ অ্যাকাউন্ট",
     "ReceivingAmount": "গ্রহণ পরিমাণ",
     "ReceivingCharge": "গ্রহণ চার্জ",
-    "TotalReceive": "মোট প্রাপ্ত"
+    "TotalReceive": "মোট প্রাপ্ত",
+    "TransactionLog": "লেনদেন লগ",
+    "BeforeAmount": "পূর্ববর্তী পরিমাণ",
+    "AfterAmount": "পরবর্তী পরিমাণ",
+    "Type": "ধরণ",
+    "ReceiveAmount": "গ্রহণের পরিমাণ",
+    "Reason": "উদ্দেশ্য",
+    "DateRange": "তারিখের পরিসীমা",
+    "Reset": "রিসেট",
+    "Filter": "ফিল্টার"
 }

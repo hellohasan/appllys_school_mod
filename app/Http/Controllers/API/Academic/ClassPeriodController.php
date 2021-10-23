@@ -2,47 +2,53 @@
 
 namespace App\Http\Controllers\API\Academic;
 
-use App\Http\Controllers\Controller;
+use Cache;
 use App\Models\ClassPeriod;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class ClassPeriodController extends Controller
-{
-    public function __construct()
-    {
+class ClassPeriodController extends Controller {
+    public function __construct() {
         $this->middleware(['role:Super Admin|Admin']);
     }
 
-    public function index()
-    {
+    public function index() {
         return ClassPeriod::get();
     }
 
-    public function store(Request $request)
-    {
+    /**
+     * @param Request $request
+     */
+    public function store(Request $request) {
         $request->validate([
             'title' => 'required|unique:class_periods',
             'start' => 'required',
-            'end' => 'required'
+            'end'   => 'required',
         ]);
 
         $in = $request->all();
         $in['show'] = $request->input("start") . '-' . $request->input("end");
         ClassPeriod::create($in);
+
+        Cache::flush('periods');
     }
 
-    public function update(Request $request, $id)
-    {
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function update(Request $request, $id) {
         $classPeriod = ClassPeriod::findOrFail($id);
         $request->validate([
-            'title' => 'required|unique:class_periods,title,'.$id,
+            'title' => 'required|unique:class_periods,title,' . $id,
             'start' => 'required',
-            'end' => 'required'
+            'end'   => 'required',
         ]);
 
         $in = $request->all();
         $in['show'] = $request->input("start") . '-' . $request->input("end");
         $classPeriod->update($in);
+        Cache::flush('periods');
     }
 
 }

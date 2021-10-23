@@ -25,10 +25,15 @@
     "/js/salary-index.js": "/js/salary-index.js",
     "/js/salary-show.js": "/js/salary-show.js",
     "/js/sms-setting.js": "/js/sms-setting.js",
+    "/js/subject-assign.js": "/js/subject-assign.js",
+    "/js/subject-assign-index.js": "/js/subject-assign-index.js",
+    "/js/subject-assign-new.js": "/js/subject-assign-new.js",
+    "/js/subject-assign-show.js": "/js/subject-assign-show.js",
     "/js/test-component.js": "/js/test-component.js",
     "/js/test-datatable.js": "/js/test-datatable.js",
     "/js/transaction-logs.js": "/js/transaction-logs.js",
-    "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show.js": "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show.js",
+    "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show~js/subject-assign-show.js": "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show~js/subject-assign-show.js",
+    "/vendors~js/subject-assign-new.js": "/vendors~js/subject-assign-new.js",
     "/vendors~js/test-component.js": "/vendors~js/test-component.js",
     "/vendors~js/transaction-logs.js": "/vendors~js/transaction-logs.js"
 }

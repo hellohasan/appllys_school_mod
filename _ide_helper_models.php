@@ -814,6 +814,23 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Day
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $name_bn
+ * @method static \Illuminate\Database\Eloquent\Builder|Day newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Day newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Day query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Day whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Day whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Day whereNameBn($value)
+ */
+	class Day extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Designation
  *
  * @property int $id
@@ -1158,6 +1175,81 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereUsername($value)
  */
 	class Student extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SubjectAssign
+ *
+ * @property int $id
+ * @property string|null $custom
+ * @property int $session_id
+ * @property int $academic_class_id
+ * @property int $type
+ * @property int|null $academic_section_id
+ * @property int|null $academic_group_id
+ * @property int|null $academic_group_section_id
+ * @property int|null $academic_department_id
+ * @property int|null $academic_year_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AcademicClass $academicClass
+ * @property-read \App\Models\AcademicSession $academicSession
+ * @property-read \App\Models\AcademicDepartment|null $department
+ * @property-read \App\Models\AcademicGroup|null $group
+ * @property-read \App\Models\AcademicSection|null $groupSection
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SubjectAssignList[] $lists
+ * @property-read int|null $lists_count
+ * @property-read \App\Models\AcademicSection|null $section
+ * @property-read \App\Models\AcademicYear|null $year
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereAcademicClassId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereAcademicDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereAcademicGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereAcademicGroupSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereAcademicSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereAcademicYearId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereCustom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereSessionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssign whereUpdatedAt($value)
+ */
+	class SubjectAssign extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SubjectAssignList
+ *
+ * @property int $id
+ * @property int $subject_assign_id
+ * @property int $academic_subject_id
+ * @property int $day_id
+ * @property int|null $teacher_id
+ * @property int|null $period_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AcademicSubject $academicSubject
+ * @property-read \App\Models\Day $day
+ * @property-read \App\Models\ClassPeriod|null $period
+ * @property-read \App\User|null $teacher
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereAcademicSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereDayId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList wherePeriodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereSubjectAssignId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereTeacherId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SubjectAssignList whereUpdatedAt($value)
+ */
+	class SubjectAssignList extends \Eloquent {}
 }
 
 namespace App\Models{

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Carbon\Carbon;
+use App\Models\Day;
 use App\Models\Account;
 use App\Models\Upazila;
 use App\Models\BillItem;
@@ -11,6 +12,7 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\Religion;
 use App\Models\BloodGroup;
+use App\Models\ClassPeriod;
 use App\Models\Designation;
 use App\Models\SalaryScale;
 use App\Models\AcademicData;
@@ -396,4 +398,34 @@ class CommonController extends Controller {
         return Account::where('isActive', true)->select(['id', 'name as text', 'isActive'])->get();
     }
 
+    public function loadTeacherList() {
+        return User::role('Teacher')->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])->get();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function loadClassAllDetails($id) {
+        return AcademicClass::select(['id', 'name', 'type'])->with([
+            'sections:id,name as text',
+            'academicGroups:id,name as text',
+            'academicGroups.sections:id,name as text',
+
+            'academicDepartments:id,name as text',
+            'academicDepartments.sections:id,name as text',
+        ])->findOrFail($id);
+    }
+
+    public function loadDayList() {
+        return Cache::rememberForever('days', function () {
+            return Day::select(['id', 'name as text', 'name_bn as text_bn'])->get();
+        });
+    }
+
+    public function loadPeriodList() {
+        return Cache::rememberForever('periods', function () {
+            return ClassPeriod::select(['id', DB::raw('CONCAT("(",start," - ",end,") ",title) AS text')])->get();
+        });
+    }
 }

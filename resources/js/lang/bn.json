@@ -281,5 +281,12 @@
     "Reason": "উদ্দেশ্য",
     "DateRange": "তারিখের পরিসীমা",
     "Reset": "রিসেট",
-    "Filter": "ফিল্টার"
+    "Filter": "ফিল্টার",
+    "TeacherSubjectAssign": "শিক্ষকের বিষয় বরাদ্দ",
+    "TeacherDetails": "শিক্ষকের বিবরণ",
+    "SelectTeacher": "শিক্ষক নির্বাচন",
+    "ClassList": "ক্লাসের তালিকা",
+    "SubjectAssignList": "বিষয় বরাদ্দের তালিকা",
+    "NewSubjectAssign": "নতুন বিষয় বরাদ্দ",
+    "ShowSubjectAssign": "বিষয় বরাদ্দের বিবরণ"
 }

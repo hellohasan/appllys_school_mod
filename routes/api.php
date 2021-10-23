@@ -10,6 +10,7 @@ use App\Http\Controllers\API\Accountant\AccountController;
 use App\Http\Controllers\API\Accountant\BillItemController;
 use App\Http\Controllers\API\Academic\ClassPeriodController;
 use App\Http\Controllers\API\Accountant\BillAssignController;
+use App\Http\Controllers\API\Academic\SubjectAssignController;
 use App\Http\Controllers\API\Academic\TeacherManageController;
 use App\Http\Controllers\API\Accountant\BillReceiveController;
 use App\Http\Controllers\API\Accountant\TransactionLogController;
@@ -70,12 +71,15 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('academic-sessions/update/{id}', 'API\Academic\SessionController@updateAcademicSession');
 
     Route::get('load-academic-sessions', 'API\Academic\SessionController@loadAcademicSession');
+    Route::get('load-active-academic-session', 'API\Academic\SessionController@loadActiveAcademicSession');
 
     Route::get('load-academic-grading-list', 'API\Academic\ClassController@loadAcademicGrading');
     Route::post('academic-class-store', 'API\Academic\ClassController@storeAcademicClass');
     Route::get('get-academic-classes', 'API\Academic\ClassController@getAcademicClass');
     Route::get('edit-academic-classes/{id}', 'API\Academic\ClassController@editAcademicClass');
     Route::put('academic-class-update/{id}', 'API\Academic\ClassController@updateAcademicClass');
+
+    Route::get('load-class-all-details/{id}', [CommonController::class, 'loadClassAllDetails']);
 
     Route::apiResource('academic-groups', 'API\Academic\GroupController', ['except' => ['show', 'destroy']]);
     Route::apiResource('academic-departments', 'API\Academic\DepartmentController', ['except' => ['show', 'destroy']]);
@@ -200,4 +204,15 @@ Route::group(['middleware' => 'jwt'], function () {
 
     /* Transaction Log Route list */
     Route::get('transaction-logs', [TransactionLogController::class, 'index']);
+
+    /* Teacher subject assign route list */
+    Route::post('get-academic-class-subjects', [SubjectAssignController::class, 'getSubjectList']);
+    Route::post('submit-academic-class-subject-list', [SubjectAssignController::class, 'submitAssignList']);
+    Route::get('show-academic-class-subject-list/{custom}', [SubjectAssignController::class, 'showAssignList']);
+    Route::get('subject-assign-list', [SubjectAssignController::class, 'subjectAssignList']);
+    Route::delete('delete-subject-assign/{custom}', [SubjectAssignController::class, 'subjectAssignDelete']);
+
+    /* days and periods route list */
+    Route::get('load-day-list', [CommonController::class, 'loadDayList']);
+    Route::get('load-period-list', [CommonController::class, 'loadPeriodList']);
 });

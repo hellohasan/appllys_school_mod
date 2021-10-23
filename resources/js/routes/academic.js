@@ -205,7 +205,7 @@ export const academic = [
   /* Teacher Subject Assign Route  */
   {
     path: "/subject-assign",
-    component: require("../components/Academic/SubjectAssign/SubjectAssign").default,
+    component: () => import(/*webpackChunkName: "js/subject-assign"*/"../components/Academic/SubjectAssign/SubjectAssign"),
     meta: {
       requireAuth: true,
       roles: ["Super Admin", 'Admin', 'Register']
@@ -213,11 +213,30 @@ export const academic = [
     children: [
       {
         path: "/",
+        component: () => import(/*webpackChunkName: "js/subject-assign-index"*/"../components/Academic/SubjectAssign/Index"),
+        requireAuth: true,
         meta: {
           permissions: ["subject-assign-index"],
-          title: "Subject Assign"
+          title: i18n.tc("SubjectAssignList")
         },
-        component: require("../components/Academic/SubjectAssign/Index").default
+      },
+      {
+        path:'new',
+        component: () => import(/*webpackChunkName: "js/subject-assign-new"*/"../components/Academic/SubjectAssign/New"),
+        requireAuth: true,
+        meta: {
+          permissions: ["subject-assign-add"],
+          title: i18n.tc("NewSubjectAssign")
+        },
+      },
+      {
+        path: ':custom/show',
+        component: () => import(/*webpackChunkName: "js/subject-assign-show"*/"../components/Academic/SubjectAssign/Show"),
+        requireAuth: true,
+        meta: {
+          permissions: ["subject-assign-show"],
+          title: i18n.tc("ShowSubjectAssign")
+        }
       }
     ]
   },

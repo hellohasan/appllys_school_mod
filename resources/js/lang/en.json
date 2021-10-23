@@ -281,7 +281,14 @@
     "SelectReason": "Select Reason",
     "DateRange": "Date Range",
     "Reset": "Reset",
-    "Filter": "Filter"
+    "Filter": "Filter",
+    "TeacherSubjectAssign": "Teacher Subject Assign",
+    "TeacherDetails": "Teacher Details",
+    "SelectTeacher": "Select Teacher",
+    "ClassList": "Class List",
+    "SubjectAssignList": "Subject Assign List",
+    "NewSubjectAssign": "New Subject Assign",
+    "ShowSubjectAssign": "Show Subject Assign"
 
 
 

@@ -142,7 +142,7 @@ class BillReceiveController extends Controller {
         $request->validate([
             'id' => 'required|numeric',
         ]);
-        $bill = BillStudent::with('package:id,custom,total,items')->find($request->input("id"));
+        $bill = BillStudent::with('package:id,total,items')->find($request->input("id"));
         if ($bill) {
             return response()->json($bill, 200);
         } else {

@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AcademicSubject extends Model
-{
+class AcademicSubject extends Model {
+    /**
+     * @var string
+     */
     protected $table = 'academic_subjects';
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'academic_class_id',
         'academic_class_type',
@@ -30,30 +35,46 @@ class AcademicSubject extends Model
         'status',
     ];
 
-    public function religion()
-    {
-        return $this->belongsTo(Religion::class,'religion_id');
+    /**
+     * @return mixed
+     */
+    public function religion() {
+        return $this->belongsTo(Religion::class, 'religion_id');
     }
 
-    public function academic_class()
-    {
-        return $this->belongsTo(AcademicClass::class,'academic_class_id');
+    /**
+     * @return mixed
+     */
+    public function academic_class() {
+        return $this->belongsTo(AcademicClass::class, 'academic_class_id');
     }
 
-    public function academic_group()
-    {
-        return $this->belongsTo(AcademicGroup::class,'academic_group_id');
+    /**
+     * @return mixed
+     */
+    public function academic_group() {
+        return $this->belongsTo(AcademicGroup::class, 'academic_group_id');
     }
 
-    public function academic_department()
-    {
-        return $this->belongsTo(AcademicDepartment::class,'academic_department_id');
+    /**
+     * @return mixed
+     */
+    public function academic_department() {
+        return $this->belongsTo(AcademicDepartment::class, 'academic_department_id');
     }
 
-    public function academic_section()
-    {
-        return $this->belongsTo(AcademicSection::class,'academic_section_id');
+    /**
+     * @return mixed
+     */
+    public function department_year() {
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 
+    /**
+     * @return mixed
+     */
+    public function academic_section() {
+        return $this->belongsTo(AcademicSection::class, 'academic_section_id');
+    }
 
 }

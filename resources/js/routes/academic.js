@@ -241,4 +241,60 @@ export const academic = [
     ]
   },
 
+  {
+    path: "/academic-exam",
+    component: () => import(/*webpackChunkName: "js/academic-exam"*/"../components/Academic/Exam/Exam"),
+    meta: {
+      requireAuth: true,
+      roles: ["Super Admin", 'Admin', 'Register']
+    },
+    children: [
+      {
+        path: "/",
+        component: () => import(/*webpackChunkName: "js/academic-exam-index"*/"../components/Academic/Exam/Index"),
+        requireAuth: true,
+        meta: {
+          permissions: ["academic-exam-index"],
+          title: i18n.tc("ExamList")
+        },
+      },
+      {
+        path:'create',
+        component: () => import(/*webpackChunkName: "js/academic-exam-create"*/"../components/Academic/Exam/Create"),
+        requireAuth: true,
+        meta: {
+          permissions: ["academic-exam-create"],
+          title: i18n.tc("NewExam")
+        },
+      },
+      {
+        path: ':custom/show',
+        component: () => import(/*webpackChunkName: "js/academic-exam-show"*/"../components/Academic/Exam/Show"),
+        requireAuth: true,
+        meta: {
+          permissions: ["academic-exam-show"],
+          title: i18n.tc("ShowExam")
+        }
+      },
+      {
+        path: ':custom/routine',
+        component: () => import(/*webpackChunkName: "js/academic-exam-routine"*/"../components/Academic/Exam/Routine"),
+        requireAuth: true,
+        meta: {
+          permissions: ["academic-exam-routine"],
+          title: i18n.tc("ExamRoutine")
+        }
+      },
+      {
+        path: ':custom/routine/show',
+        component: () => import(/*webpackChunkName: "js/academic-exam-routine-show"*/"../components/Academic/Exam/RoutineShow"),
+        requireAuth: true,
+        meta: {
+          permissions: ["academic-exam-routine-show"],
+          title: i18n.tc("ExamRoutine")
+        }
+      }
+    ]
+  },
+
 ]

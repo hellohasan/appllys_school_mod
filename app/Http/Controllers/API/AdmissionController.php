@@ -70,42 +70,43 @@ class AdmissionController extends Controller {
      * @param $groupDepartment
      * @return mixed
      */
-    public function createAcademicId($sessionId, $classId, $type, $groupDepartment) {
+    public function createAcademicId($sessionId, $classId, $type, $groupDepartment, $other = null) {
         $sessionCode = AcademicSession::findOrFail($sessionId)->code;
 
-        if ($type === 1) {
+        if ($type == 1) {
             $serial = AcademicData::whereAcademicSessionId($sessionId)
                 ->whereAcademicClassId($classId)
                 ->whereAcademicGroupId($groupDepartment)
+                ->whereAcademicSectionId($other)
                 ->orderBy('id', 'desc')
                 ->first();
             if ($serial) {
                 return $serial->custom + 1;
             }
 
-            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($this->findSerial($classId, $type, $groupDepartment), null, 2) . $this->customPad(1, null, 3);
-        }
-
-        if ($type === 2) {
+            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($groupDepartment, null, 2) . $this->customPad($other, null, 1) . $this->customPad(1, null, 3);
+        } elseif ($type == 2) {
             $serial = AcademicData::whereAcademicSessionId($sessionId)
                 ->whereAcademicClassId($classId)
                 ->whereAcademicDepartmentId($groupDepartment)
+                ->whereAcademicYearId($other)
                 ->first();
             if ($serial) {
                 return $serial->custom + 1;
             }
 
-            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($groupDepartment, '0', 2) . $this->customPad(1, null, 3);
-        }
+            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($groupDepartment, null, 2) . $this->customPad($other, null, 1) . $this->customPad(1, null, 3);
+        } else {
+            $serial = AcademicData::whereAcademicSessionId($sessionId)
+                ->whereAcademicClassId($classId)
+                ->whereAcademicSectionId($groupDepartment)
+                ->first();
+            if ($serial) {
+                return $serial->custom + 1;
+            }
 
-        $serial = AcademicData::whereAcademicSessionId($sessionId)
-            ->whereAcademicClassId($classId)
-            ->first();
-        if ($serial) {
-            return $serial->custom + 1;
+            return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad($groupDepartment, null, 3) . $this->customPad(1, null, 3);
         }
-
-        return $sessionCode . $this->customPad($classId, null, 2) . $this->customPad(1, null, 5);
     }
 
     /**
@@ -230,11 +231,11 @@ class AdmissionController extends Controller {
                 $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_section_id"));
                 $academic['academic_section_id'] = $request->input("academic_section_id");
             } elseif ($request->input("type") === 1) {
-                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_group_id"));
+                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_group_id"), $request->input("academic_group_section_id"));
                 $academic['academic_group_id'] = $request->input("academic_group_id");
                 $academic['academic_section_id'] = $request->input("academic_group_section_id");
             } else {
-                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_department_id"));
+                $academic['custom'] = $this->createAcademicId($request->input("session_id"), $request->input("academic_class_id"), $request->input("type"), $request->input("academic_department_id"), $request->input("academic_year_id"));
                 $academic['academic_department_id'] = $request->input("academic_department_id");
                 $academic['academic_year_id'] = $request->input("academic_year_id");
             }
@@ -537,8 +538,7 @@ class AdmissionController extends Controller {
         return Admission::whereAcademicSessionId($request->input("session_id"))
             ->with([
                 'user:id,name,custom,photo',
-                'academic:id,user_id,academic_class_id,type,academic_department_id,academic_group_id',
-                'academic.class:id,name',
+                'academic',
                 'user.guardian.guardian:id,name'])
             ->get();
     }

@@ -150,7 +150,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  "name": "New",
+  name: "New",
   components: {
     CustomSelect: _globals_CustomSelect_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     CustomSelectEmpty: _globals_CustomSelectEmpty_vue__WEBPACK_IMPORTED_MODULE_1__["default"]

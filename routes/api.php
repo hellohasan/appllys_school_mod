@@ -9,6 +9,7 @@ use App\Http\Controllers\API\Accountant\SalaryController;
 use App\Http\Controllers\API\Accountant\AccountController;
 use App\Http\Controllers\API\Accountant\BillItemController;
 use App\Http\Controllers\API\Academic\ClassPeriodController;
+use App\Http\Controllers\API\Academic\AcademicExamController;
 use App\Http\Controllers\API\Accountant\BillAssignController;
 use App\Http\Controllers\API\Academic\SubjectAssignController;
 use App\Http\Controllers\API\Academic\TeacherManageController;
@@ -80,6 +81,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('academic-class-update/{id}', 'API\Academic\ClassController@updateAcademicClass');
 
     Route::get('load-class-all-details/{id}', [CommonController::class, 'loadClassAllDetails']);
+    Route::get('load-only-class-sections-groups-departments/{id}', [CommonController::class, 'loadOnlyClassSectionGroupDepartment']); // return section, group, department
 
     Route::apiResource('academic-groups', 'API\Academic\GroupController', ['except' => ['show', 'destroy']]);
     Route::apiResource('academic-departments', 'API\Academic\DepartmentController', ['except' => ['show', 'destroy']]);
@@ -115,6 +117,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-class-section-group-department', [CommonController::class, 'loadClassSectionGroupDepartment']);
     Route::get('load-group-section', [CommonController::class, 'loadGroupSection']);
     Route::get('load-only-group-section', [CommonController::class, 'loadOnlyGroupSection']);
+    Route::get('load-only-department-year', [CommonController::class, 'loadOnlyDepartmentYear']);
 
     /*Route for subjects*/
     Route::post('store-academic-subject', [SubjectController::class, 'storeSubject']);
@@ -138,6 +141,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-academic-classes/{id}', 'API\Academic\ClassController@loadAcademicClass');
     Route::get('load-salary-scale-list', [CommonController::class, 'loadSalaryScaleList']);
     Route::get('load-designation-list', [CommonController::class, 'loadDesignationList']);
+    Route::get('load-academic-class-list', [CommonController::class, 'loadAcademicClassList']);
 
     /*Teacher Create Route*/
     Route::post('teacher-store', [TeacherManageController::class, 'storeTeacher']);
@@ -215,4 +219,11 @@ Route::group(['middleware' => 'jwt'], function () {
     /* days and periods route list */
     Route::get('load-day-list', [CommonController::class, 'loadDayList']);
     Route::get('load-period-list', [CommonController::class, 'loadPeriodList']);
+
+    /* Academic Exam Controller Route */
+    Route::apiResource('academic-exam', 'API\Academic\AcademicExamController');
+    Route::post('academic-exam-assign', [AcademicExamController::class, 'assignExam']);
+    Route::get('academic-exam-routine/{custom}', [AcademicExamController::class, 'examRoutine']);
+    Route::post('academic-exam-routine-submit', [AcademicExamController::class, 'examRoutineSubmit']);
+    Route::get('academic-exam-routine-show/{custom}', [AcademicExamController::class, 'examRoutineShow']);
 });

@@ -109,6 +109,27 @@
     <li v-role="['Super Admin','Admin','Register']" class="nav-item has-treeview">
       <a href="" class="nav-link">
         <i class="nav-icon fas fa-graduation-cap purple"></i>
+        <p>{{ $t('AcademicExam') }}<i class="fas fa-angle-left right"></i></p>
+      </a>
+      <ul class="nav nav-treeview" style="display: none;">
+        <li class="nav-item" v-permission="['academic-exam-create']">
+          <router-link to="/academic-exam/create" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>{{ $t('NewExam') }}</p>
+          </router-link>
+        </li>
+        <li class="nav-item" v-permission="['academic-exam-index']">
+          <router-link to="/academic-exam" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>{{ $t('ExamList') }}</p>
+          </router-link>
+        </li>
+      </ul>
+    </li>
+
+    <li v-role="['Super Admin','Admin','Register']" class="nav-item has-treeview">
+      <a href="" class="nav-link">
+        <i class="nav-icon fas fa-graduation-cap purple"></i>
         <p>{{ $t('Academic_teacher') }}<i class="fas fa-angle-left right"></i></p>
       </a>
       <ul class="nav nav-treeview" style="display: none;">
@@ -160,11 +181,12 @@
 
 <script>
   import role from '../../directive/role/index'
+  import permission from '../../directive/permission/index'
   import { Fragment } from 'vue-fragment'
 
   export default {
     name: "Register",
-    directives: { role },
+    directives: { role, permission },
     components: { Fragment },
   }
 </script>

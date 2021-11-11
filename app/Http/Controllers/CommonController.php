@@ -428,4 +428,26 @@ class CommonController extends Controller {
             return ClassPeriod::select(['id', DB::raw('CONCAT("(",start," - ",end,") ",title) AS text')])->get();
         });
     }
+
+    public function loadAcademicClassList() {
+        return AcademicClass::whereStatus(1)->select(['id', 'name as text', 'status'])->get();
+    }
+
+    /**
+     * @param $id
+     */
+    public function loadOnlyClassSectionGroupDepartment($id) {
+        return AcademicClass::select(['id', 'type'])->with([
+            'sections:id,name as text',
+            'academicGroups:id,name as text',
+            'academicDepartments:id,name as text',
+        ])->findOrFail($id);
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function loadOnlyDepartmentYear(Request $request) {
+        return AcademicDepartment::select(['id'])->with('sections:id,name as text')->findOrFail($request->input("id"));
+    }
 }

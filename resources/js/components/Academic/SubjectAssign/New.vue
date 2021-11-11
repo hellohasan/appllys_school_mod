@@ -130,7 +130,7 @@
   import CustomSelectEmpty from '../../globals/CustomSelectEmpty.vue'
   import * as Validator from 'validatorjs';
   export default {
-    "name": "New",
+    name: "New",
     components: { CustomSelect, CustomSelectEmpty },
     data() {
       return {

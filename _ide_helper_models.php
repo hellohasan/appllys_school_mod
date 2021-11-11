@@ -252,6 +252,150 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\AcademicExam
+ *
+ * @property int $id
+ * @property string|null $custom
+ * @property int $created_by
+ * @property int $academic_session_id
+ * @property string $title
+ * @property string $start_date
+ * @property string $end_date
+ * @property int $status
+ * @property int $is_routine
+ * @property int $is_assigned
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicExamClass[] $classes
+ * @property-read int|null $classes_count
+ * @property-read \App\User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicExamRoutine[] $routines
+ * @property-read int|null $routines_count
+ * @property-read \App\Models\AcademicSession $session
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicExamLog[] $students
+ * @property-read int|null $students_count
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereAcademicSessionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereCustom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereIsAssigned($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereIsRoutine($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExam whereUpdatedAt($value)
+ */
+	class AcademicExam extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\AcademicExamClass
+ *
+ * @property int $id
+ * @property int $academic_exam_id
+ * @property int $academic_class_id
+ * @property int|null $type
+ * @property int|null $academic_section_id
+ * @property int|null $academic_group_id
+ * @property int|null $group_section_id
+ * @property int|null $academic_department_id
+ * @property int|null $department_year_id
+ * @property int $is_assigned
+ * @property int $is_routine
+ * @property-read \App\Models\AcademicClass $academicClass
+ * @property-read \App\Models\AcademicDepartment|null $academicDepartment
+ * @property-read \App\Models\AcademicGroup|null $academicGroup
+ * @property-read \App\Models\AcademicExam|null $exam
+ * @property-read \App\Models\AcademicSection|null $groupSection
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicExamLog[] $logs
+ * @property-read int|null $logs_count
+ * @property-read \App\Models\AcademicSection|null $section
+ * @property-read \App\Models\AcademicYear|null $year
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereAcademicClassId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereAcademicDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereAcademicExamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereAcademicGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereAcademicSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereDepartmentYearId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereGroupSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereIsAssigned($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereIsRoutine($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamClass whereType($value)
+ */
+	class AcademicExamClass extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\AcademicExamLog
+ *
+ * @property int $id
+ * @property int $academic_exam_id
+ * @property int $academic_exam_class_id
+ * @property int $academic_data_subject_id
+ * @property float $total_gain
+ * @property int $is_optional
+ * @property int|null $academic_grade_id
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereAcademicDataSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereAcademicExamClassId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereAcademicExamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereAcademicGradeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereIsOptional($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereTotalGain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamLog whereUpdatedBy($value)
+ */
+	class AcademicExamLog extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\AcademicExamRoutine
+ *
+ * @property int $id
+ * @property int $academic_exam_id
+ * @property int $academic_subject_id
+ * @property string $date
+ * @property string $start_time
+ * @property string $end_time
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AcademicSubject $academic_subject
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereAcademicExamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereAcademicSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereEndTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereStartTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicExamRoutine whereUpdatedAt($value)
+ */
+	class AcademicExamRoutine extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\AcademicGrade
  *
  * @property int $id
@@ -405,6 +549,7 @@ namespace App\Models{
  * @property-read \App\Models\AcademicDepartment|null $academic_department
  * @property-read \App\Models\AcademicGroup|null $academic_group
  * @property-read \App\Models\AcademicSection|null $academic_section
+ * @property-read \App\Models\AcademicYear|null $department_year
  * @property-read \App\Models\Religion|null $religion
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject newQuery()

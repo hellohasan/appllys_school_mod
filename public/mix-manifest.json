@@ -1,6 +1,12 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/js/academic-exam.js": "/js/academic-exam.js",
+    "/js/academic-exam-create.js": "/js/academic-exam-create.js",
+    "/js/academic-exam-index.js": "/js/academic-exam-index.js",
+    "/js/academic-exam-routine.js": "/js/academic-exam-routine.js",
+    "/js/academic-exam-routine-show.js": "/js/academic-exam-routine-show.js",
+    "/js/academic-exam-show.js": "/js/academic-exam-show.js",
     "/js/balance-transfer.js": "/js/balance-transfer.js",
     "/js/balance-transfer-create.js": "/js/balance-transfer-create.js",
     "/js/balance-transfer-index.js": "/js/balance-transfer-index.js",
@@ -32,8 +38,8 @@
     "/js/test-component.js": "/js/test-component.js",
     "/js/test-datatable.js": "/js/test-datatable.js",
     "/js/transaction-logs.js": "/js/transaction-logs.js",
-    "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show~js/subject-assign-show.js": "/vendors~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~js/salary-show~js/subject-assign-show.js",
-    "/vendors~js/subject-assign-new.js": "/vendors~js/subject-assign-new.js",
-    "/vendors~js/test-component.js": "/vendors~js/test-component.js",
-    "/vendors~js/transaction-logs.js": "/vendors~js/transaction-logs.js"
+    "/vendors~js/academic-exam-create~js/academic-exam-routine~js/subject-assign-new.js": "/vendors~js/academic-exam-create~js/academic-exam-routine~js/subject-assign-new.js",
+    "/vendors~js/academic-exam-create~js/transaction-logs.js": "/vendors~js/academic-exam-create~js/transaction-logs.js",
+    "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~ac7b8efa.js": "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~ac7b8efa.js",
+    "/vendors~js/test-component.js": "/vendors~js/test-component.js"
 }

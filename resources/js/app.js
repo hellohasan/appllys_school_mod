@@ -11,7 +11,6 @@ import './directive/Tooltip'
 import Vuelidate from "vuelidate/src";
 Vue.use(Vuelidate)
 
-
 /*Vue Meta*/
 import Meta from 'vue-meta'
 Vue.use(Meta)
@@ -62,6 +61,7 @@ sync(store, router);
 
 import { Plugin } from 'vue-fragment'
 Vue.use(Plugin)
+
 
 /* main vue is running here */
 const app = new Vue({

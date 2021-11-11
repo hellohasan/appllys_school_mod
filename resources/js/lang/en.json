@@ -257,7 +257,7 @@
     "CreateBy": "Create By",
     "CreatedFor": "Created For",
     "CreatedAt": "Created At",
-    "Withdrawal" : "Withdrawal",
+    "Withdrawal": "Withdrawal",
     "Salary": "Salary",
     "Lifted": "Lifted",
     "Pending": "Pending",
@@ -288,8 +288,23 @@
     "ClassList": "Class List",
     "SubjectAssignList": "Subject Assign List",
     "NewSubjectAssign": "New Subject Assign",
-    "ShowSubjectAssign": "Show Subject Assign"
-
-
-
+    "ShowSubjectAssign": "Show Subject Assign",
+    "AcademicExam": "Academic Exam",
+    "NewExam": "New Exam",
+    "ExamList": "Exam List",
+    "ShowExam": "Show Exam",
+    "SelectMultiple": "Select Multiple",
+    "SelectOneByOne": "Select One by one",
+    "AddMore": "AddMore",
+    "AcademicGroupDepartment": "Academic Group / Department",
+    "SectionYear": "Section / Year",
+    "Published": "Published?",
+    "ExamRoutine": "ExamRoutine",
+    "ExamSubjects": "Exam Subjects",
+    "SelectDate": "Select Date",
+    "SelectTime": "Select Time",
+    "Time": "Time",
+    "RegisterSign": "RegisterSign",
+    "StartDate": "Start Date",
+    "EndDate": "End Date"
 }

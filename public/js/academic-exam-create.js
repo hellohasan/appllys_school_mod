@@ -239,6 +239,7 @@ __webpack_require__.r(__webpack_exports__);
         cancelButtonText: this.$t("cancel")
       }).then(function (result) {
         if (result.isConfirmed) {
+          /* FIXME: take decision for this comment lines */
           var validation = new validatorjs__WEBPACK_IMPORTED_MODULE_5__(_this4.form, {
             'title': ['required'],
             'daterange': ['required'],
@@ -870,7 +871,7 @@ var render = function() {
                           [
                             _c("i", { staticClass: "fas fa-plus" }),
                             _vm._v(
-                              " " + _vm._s(_vm.$t("AddMore")) + "\n            "
+                              " " + _vm._s(_vm.$t("AddMore")) + "\n\t\t\t\t\t\t"
                             )
                           ]
                         )

@@ -56,6 +56,7 @@ class ClassController extends Controller {
                 $academicClass->academicGroups()->attach($request->input("academic_group_ids"));
             } else {
                 $academicClass->sections()->attach($request->input("academic_section_ids"));
+
             }
 
             DB::commit();

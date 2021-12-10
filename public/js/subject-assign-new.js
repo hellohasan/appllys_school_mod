@@ -206,8 +206,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.$router.push("/subject-assign/".concat(res.data.custom, "/show"));
         });
       } else {
-        this.errors = validation.errors.all();
-        console.log(Object.keys(this.errors).length);
+        this.errors = validation.errors.all(); //console.log(Object.keys(this.errors).length);
       }
     },
     submitTeacher: function submitTeacher() {

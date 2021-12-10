@@ -17,3 +17,12 @@ function custom($value, $length = 7, $starter = 1) {
 function customRound($value, $length = 2) {
     return round($value, $length);
 }
+
+/**
+ * @param $value
+ * @param $percent
+ * @return mixed
+ */
+function customPercentage($value, $percent) {
+    return round(($value * ($percent / 100)), 2);
+}

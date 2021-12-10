@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Day;
 use Illuminate\Http\Request;
 use App\Models\SubjectAssign;
+use App\Models\TeacherSubject;
 use App\Models\AcademicSession;
 use App\Models\AcademicSubject;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +54,7 @@ class SubjectAssignController extends Controller {
                 ->whereAcademicGroupId($request->input("academic_group_id"))
                 ->get();
         } else {
-            $previous = $previous->whereAcademicDepartmentId($request->input("academic_department_id"))->whereAcademicClassId($request->input("academic_year_id"));
+            $previous = $previous->whereAcademicDepartmentId($request->input("academic_department_id"))->whereAcademicYearId($request->input("academic_year_id"));
             $subjects = $subjects->whereAcademicClassId($request->input("academic_class_id"))
                 ->whereAcademicDepartmentId($request->input("academic_department_id"))
                 ->whereAcademicYearId($request->input("academic_year_id"))
@@ -139,6 +140,7 @@ class SubjectAssignController extends Controller {
             }
 
             $assign->lists()->delete();
+            $assign->teachers()->delete();
 
             foreach ($request->input('subjects') as $subject) {
                 $data['academic_subject_id'] = $subject['subject_id'];
@@ -147,6 +149,20 @@ class SubjectAssignController extends Controller {
                     $data['teacher_id'] = $day['teacher_id'];
                     $data['period_id'] = $day['period_id'];
                     $assign->lists()->create($data);
+
+                    $chk = TeacherSubject::whereSubjectAssignId($assign->id)
+                        ->whereTeacherId($day['teacher_id'])
+                        ->whereAcademicSubjectId($subject['subject_id'])
+                        ->exists();
+
+                    if (!$chk) {
+                        $assign->teachers()->create([
+                            'academic_session_id' => $request->input("session_id"),
+                            'teacher_id'          => $day['teacher_id'],
+                            'academic_subject_id' => $subject['subject_id'],
+                        ]);
+                    }
+
                 }
             }
 

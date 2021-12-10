@@ -24,6 +24,7 @@
     "/js/expenses-show.js": "/js/expenses-show.js",
     "/js/image-setting.js": "/js/image-setting.js",
     "/js/manage-account.js": "/js/manage-account.js",
+    "/js/mark-input.js": "/js/mark-input.js",
     "/js/password.js": "/js/password.js",
     "/js/profile.js": "/js/profile.js",
     "/js/salary.js": "/js/salary.js",
@@ -31,6 +32,7 @@
     "/js/salary-index.js": "/js/salary-index.js",
     "/js/salary-show.js": "/js/salary-show.js",
     "/js/sms-setting.js": "/js/sms-setting.js",
+    "/js/student-list.js": "/js/student-list.js",
     "/js/subject-assign.js": "/js/subject-assign.js",
     "/js/subject-assign-index.js": "/js/subject-assign-index.js",
     "/js/subject-assign-new.js": "/js/subject-assign-new.js",
@@ -38,8 +40,8 @@
     "/js/test-component.js": "/js/test-component.js",
     "/js/test-datatable.js": "/js/test-datatable.js",
     "/js/transaction-logs.js": "/js/transaction-logs.js",
-    "/vendors~js/academic-exam-create~js/academic-exam-routine~js/subject-assign-new.js": "/vendors~js/academic-exam-create~js/academic-exam-routine~js/subject-assign-new.js",
+    "/vendors~js/academic-exam-create~js/academic-exam-routine~js/mark-input~js/student-list~js/subject-assign-new.js": "/vendors~js/academic-exam-create~js/academic-exam-routine~js/mark-input~js/student-list~js/subject-assign-new.js",
     "/vendors~js/academic-exam-create~js/transaction-logs.js": "/vendors~js/academic-exam-create~js/transaction-logs.js",
-    "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~ac7b8efa.js": "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~ac7b8efa.js",
+    "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~f9ab20ce.js": "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~f9ab20ce.js",
     "/vendors~js/test-component.js": "/vendors~js/test-component.js"
 }

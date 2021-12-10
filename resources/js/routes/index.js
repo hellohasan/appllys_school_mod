@@ -7,6 +7,7 @@ import {admission} from "./admission";
 import {test} from "./test";
 import {dashboard} from "./dashboard";
 import {accountant} from "./accountant";
+import {teacher} from "./teacher";
 export const routes = [
   ...auth,
   ...dashboard,
@@ -17,6 +18,7 @@ export const routes = [
   ...general,
   ...test,
   ...accountant,
+  ...teacher,
 
   /* 404 Page component */
   { path: "/server-error",meta:{title: "Server Error"}, component: require("../components/ServerError").default},

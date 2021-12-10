@@ -37,6 +37,13 @@ class SubjectAssign extends Model {
     /**
      * @return mixed
      */
+    public function teachers() {
+        return $this->hasMany(TeacherSubject::class, 'subject_assign_id');
+    }
+
+    /**
+     * @return mixed
+     */
     public function academicSession() {
         return $this->belongsTo(AcademicSession::class, 'session_id');
     }

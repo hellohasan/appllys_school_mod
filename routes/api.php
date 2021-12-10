@@ -4,8 +4,10 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\API\AdmissionController;
 use App\Http\Controllers\API\Academic\GradeController;
+use App\Http\Controllers\API\Teacher\TeacherController;
 use App\Http\Controllers\API\Academic\SubjectController;
 use App\Http\Controllers\API\Accountant\SalaryController;
+use App\Http\Controllers\API\Academic\MarkInputController;
 use App\Http\Controllers\API\Accountant\AccountController;
 use App\Http\Controllers\API\Accountant\BillItemController;
 use App\Http\Controllers\API\Academic\ClassPeriodController;
@@ -226,4 +228,16 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('academic-exam-routine/{custom}', [AcademicExamController::class, 'examRoutine']);
     Route::post('academic-exam-routine-submit', [AcademicExamController::class, 'examRoutineSubmit']);
     Route::get('academic-exam-routine-show/{custom}', [AcademicExamController::class, 'examRoutineShow']);
+
+    /* Student List */
+    Route::get('load-teacher-session-subject-list', [TeacherController::class, 'loadTeacherSessionSubjectList']);
+    Route::post('load-teacher-student-list', [TeacherController::class, 'loadTeacherStudentList']);
+
+    /* Exam Mark input */
+    Route::get('load-session-exams', [MarkInputController::class, 'loadSessionExam'])->middleware('permission:load-session-exam');
+    Route::get('load-exam-classes', [MarkInputController::class, 'loadExamClass'])->middleware('permission:load-exam-class');
+    Route::get('load-exam-class-subjects', [MarkInputController::class, 'loadExamClassSubject'])->middleware('permission:load-exam-class-subjects');
+    Route::post('load-mark-input-students', [MarkInputController::class, 'loadMarkInputStudents'])->middleware('permission:load-mark-input-students');
+    Route::post('submit-inputted-mark', [MarkInputController::class, 'submitInputtedMark'])->middleware('permission:mark-submit');
+    Route::post('mark-input-print', [MarkInputController::class, 'markInputPrint'])->middleware('permission:load-mark-input-students');
 });

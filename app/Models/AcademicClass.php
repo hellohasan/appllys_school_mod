@@ -57,4 +57,11 @@ class AcademicClass extends Model {
         return $this->belongsToMany(AcademicSession::class, 'academic_class_academic_session')
             ->withPivot('admission_fee');
     }
+
+    /**
+     * @return mixed
+     */
+    public function levels() {
+        return $this->hasMany(AcademicLevel::class, 'academic_class_id');
+    }
 }

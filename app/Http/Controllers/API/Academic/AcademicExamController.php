@@ -41,6 +41,7 @@ class AcademicExamController extends Controller {
             'lists'            => ['required', 'array'],
             'lists.*.class_id' => ['required'],
             'lists.*.type'     => ['required'],
+            /* FIXME: take decision for this comment */
             /* 'lists.*.section_ids'         => 'required_if:lists.*.type, 0',
         'lists.*.group_id'            => 'required_if:lists.*.type, 1',
         'lists.*.group_section_ids'   => 'required_if: lists.*.type, 1',
@@ -93,7 +94,7 @@ class AcademicExamController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return AcademicExam::with([
+        $data = AcademicExam::with([
             'creator:id,name',
             'session:id,duration',
             'classes',
@@ -104,8 +105,9 @@ class AcademicExamController extends Controller {
             'classes.groupSection:id,name',
             'classes.year:id,name',
             'classes.logs',
-        ])->whereCustom($id)
-            ->firstOrFail();
+        ])->whereCustom($id)->firstOrFail();
+
+        return $data;
     }
 
     /**
@@ -142,19 +144,21 @@ class AcademicExamController extends Controller {
         if ($class->type == 1) {
             $data = $data->whereAcademicGroupId($class->academic_group_id)->whereAcademicSectionId($class->group_section_id);
         } elseif ($class->type == 2) {
-            $data = $data->whereAcademicDepartmentId($class->academic_department_id)->whereAcademicSectionId($class->department_year_id);
+            $data = $data->whereAcademicDepartmentId($class->academic_department_id)->whereAcademicYearId($class->department_year_id);
         } else {
             $data = $data->whereAcademicSectionId($class->academic_section_id);
         }
 
         $studentData = $data->pluck('id')->toArray();
-        $subjects = AcademicDataSubject::whereIn('id', $studentData)->get();
+        $subjects = AcademicDataSubject::whereIn('academic_data_id', $studentData)->get();
 
         $class->logs()->delete();
 
         foreach ($subjects as $subject) {
             $tr['academic_exam_id'] = $exam->id;
             $tr['academic_exam_class_id'] = $class->id;
+            $tr['user_id'] = $subject->user_id;
+            $tr['academic_subject_id'] = $subject->academic_subject_id;
             $tr['academic_data_subject_id'] = $subject->id;
             $tr['is_optional'] = $subject->isOptional;
             $tr['updated_by'] = auth()->id();

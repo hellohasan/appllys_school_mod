@@ -156,6 +156,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -169,15 +179,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       form: new Form({
         session_id: '',
-        teacher_subject_id: ''
+        academic_class_id: '',
+        academic_class_type: '',
+        level_one_id: '',
+        level_two_id: ''
       }),
       basic: {},
       errors: [],
       sessions: [],
-      subjects: [],
-      assign: {},
-      subject: {},
-      students: []
+      classes: [],
+      levelOnes: [],
+      levelTwos: [],
+      levelTwoData: [],
+      info: null
     };
   },
   methods: {
@@ -206,46 +220,69 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.errors = [];
       var validation = new validatorjs__WEBPACK_IMPORTED_MODULE_3__(this.form, {
         'session_id': ['required'],
-        'teacher_subject_id': ['required']
+        'academic_class_id': ['required'],
+        'academic_class_type': ['required'],
+        'level_one_id': ['required']
       });
 
       if (validation.passes()) {
-        this.form.post('/api/load-teacher-student-list').then(function (res) {
+        this.form.post('/api/load-class-student-list').then(function (res) {
           _this2.basic = _this2.$store.getters.basicData;
-          _this2.assign = res.data.detail;
-          _this2.subject = res.data.subject;
-          _this2.students = res.data.students;
+          _this2.info = res.data;
         });
       } else {
         this.errors = validation.errors.all();
       }
     },
-    changeSession: function changeSession(e) {
+    changeGroupDepartment: function changeGroupDepartment(e) {
+      this.levelTwos = [];
+
       if (e) {
-        this.loadAcademicDetails(e);
+        this.levelTwos = _.find(this.levelOnes, function (o) {
+          return o.id == e;
+        }).sections;
       }
     },
-    loadAcademicDetails: function loadAcademicDetails(session_id) {
+    classChange: function classChange(e) {
       var _this3 = this;
 
-      axios.get('/api/load-teacher-session-subject-list', {
-        params: {
-          session_id: session_id
-        }
-      }).then(function (res) {
-        _this3.subjects = res.data;
+      if (e) {
+        axios.get("/api/load-class-all-details/".concat(e)).then(function (res) {
+          var type = res.data.type;
+          _this3.levelOnes = [];
+          _this3.LevelTwos = [];
+          _this3.form.academic_class_type = type;
+          _this3.form.level_one_id = '';
+          _this3.form.level_two_id = '';
+
+          if (type == 2) {
+            _this3.levelOnes = res.data.academic_departments;
+          } else if (type == 1) {
+            _this3.levelOnes = res.data.academic_groups;
+          } else {
+            _this3.levelOnes = res.data.sections;
+          }
+        });
+      }
+    },
+    loadClassList: function loadClassList() {
+      var _this4 = this;
+
+      axios.get("/api/load-class-list").then(function (res) {
+        _this4.classes = res.data;
       });
     },
     loadAcademicSession: function loadAcademicSession() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/api/load-only-session-list').then(function (res) {
-        _this4.sessions = res.data;
+        _this5.sessions = res.data;
       });
     }
   },
   created: function created() {
     this.loadAcademicSession();
+    this.loadClassList();
   }
 });
 
@@ -409,93 +446,271 @@ var render = function() {
           }
         },
         [
-          _c("div", { staticClass: "form-row" }, [
-            _c(
-              "div",
-              { staticClass: "form-group col-4" },
-              [
-                _c("label", { attrs: { for: "session_id" } }, [
-                  _vm._v(_vm._s(_vm.$t("Academic_Session")))
-                ]),
-                _vm._v(" "),
-                _c("custom-select", {
-                  attrs: {
-                    options: _vm.sessions,
-                    placeholder: _vm.$t("Select_One"),
-                    name: "session_id"
-                  },
-                  on: { change: _vm.changeSession },
-                  model: {
-                    value: _vm.form.session_id,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "session_id", $$v)
-                    },
-                    expression: "form.session_id"
-                  }
-                }),
-                _vm._v(" "),
-                _vm.errors.session_id
-                  ? _c("div", { staticClass: "invalid-feedback" }, [
-                      _vm._v(_vm._s(_vm.errors.session_id[0]))
-                    ])
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group col-8" },
-              [
-                _c("label", { attrs: { for: "teacher_subject_id" } }, [
-                  _vm._v(_vm._s(_vm.$t("Academic_subject")))
-                ]),
-                _vm._v(" "),
-                _c("custom-select-empty", {
-                  attrs: {
-                    options: _vm.subjects,
-                    placeholder: _vm.$t("Select_One")
-                  },
-                  model: {
-                    value: _vm.form.teacher_subject_id,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "teacher_subject_id", $$v)
-                    },
-                    expression: "form.teacher_subject_id"
-                  }
-                }),
-                _vm._v(" "),
-                _vm.errors.teacher_subject_id
-                  ? _c("div", { staticClass: "invalid-feedback" }, [
-                      _vm._v(_vm._s(_vm.errors.teacher_subject_id[0]))
-                    ])
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group col-12" }, [
+          _c(
+            "div",
+            { staticClass: "form-row" },
+            [
               _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary btn-lg btn-block",
-                  attrs: {
-                    type: "submit",
-                    id: "button",
-                    disabled: _vm.form.busy
-                  }
-                },
+                "div",
+                { staticClass: "form-group col-6" },
                 [
-                  _c("i", { staticClass: "fas fa-search" }),
-                  _vm._v(" " + _vm._s(_vm.$t("StudentList")))
-                ]
-              )
-            ])
-          ])
+                  _c("label", { attrs: { for: "session_id" } }, [
+                    _vm._v(_vm._s(_vm.$t("Academic_Session")))
+                  ]),
+                  _vm._v(" "),
+                  _c("custom-select", {
+                    attrs: {
+                      options: _vm.sessions,
+                      placeholder: _vm.$t("Select_One"),
+                      name: "session_id"
+                    },
+                    model: {
+                      value: _vm.form.session_id,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "session_id", $$v)
+                      },
+                      expression: "form.session_id"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.session_id
+                    ? _c("div", { staticClass: "invalid-feedback" }, [
+                        _vm._v(_vm._s(_vm.errors.session_id[0]))
+                      ])
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "form-group col-6" },
+                [
+                  _c("label", { attrs: { for: "academic_class_id" } }, [
+                    _vm._v(_vm._s(_vm.$t("Academic_Class")))
+                  ]),
+                  _vm._v(" "),
+                  _c("custom-select", {
+                    attrs: {
+                      options: _vm.classes,
+                      placeholder: _vm.$t("Select_One")
+                    },
+                    on: { change: _vm.classChange },
+                    model: {
+                      value: _vm.form.academic_class_id,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "academic_class_id", $$v)
+                      },
+                      expression: "form.academic_class_id"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.academic_class_id
+                    ? _c("div", { staticClass: "invalid-feedback" }, [
+                        _vm._v(_vm._s(_vm.errors.academic_class_id[0]))
+                      ])
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              this.form.academic_class_type == "0"
+                ? [
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-12" },
+                      [
+                        _c("label", { attrs: { for: "academic_section_id" } }, [
+                          _vm._v(_vm._s(_vm.$t("Group_section")))
+                        ]),
+                        _vm._v(" "),
+                        _c("custom-select-empty", {
+                          attrs: {
+                            options: _vm.levelOnes,
+                            placeholder: _vm.$t("Select_One")
+                          },
+                          model: {
+                            value: _vm.form.level_one_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "level_one_id", $$v)
+                            },
+                            expression: "form.level_one_id"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.level_one_id
+                          ? _c("div", { staticClass: "invalid-feedback" }, [
+                              _vm._v(_vm._s(_vm.errors.level_one_id[0]))
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    )
+                  ]
+                : _vm._e(),
+              _vm._v(" "),
+              this.form.academic_class_type == "1"
+                ? [
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-6" },
+                      [
+                        _c("label", { attrs: { for: "academic_group_id" } }, [
+                          _vm._v(_vm._s(_vm.$t("Academic_Group")))
+                        ]),
+                        _vm._v(" "),
+                        _c("custom-select-empty", {
+                          attrs: {
+                            options: _vm.levelOnes,
+                            placeholder: _vm.$t("Select_One")
+                          },
+                          on: { change: _vm.changeGroupDepartment },
+                          model: {
+                            value: _vm.form.level_one_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "level_one_id", $$v)
+                            },
+                            expression: "form.level_one_id"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.level_one_id
+                          ? _c("div", { staticClass: "invalid-feedback" }, [
+                              _vm._v(_vm._s(_vm.errors.level_one_id[0]))
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-6" },
+                      [
+                        _c(
+                          "label",
+                          { attrs: { for: "academic_group_section_id" } },
+                          [_vm._v(_vm._s(_vm.$t("Group_section")))]
+                        ),
+                        _vm._v(" "),
+                        _c("custom-select-empty", {
+                          attrs: {
+                            options: _vm.levelTwos,
+                            placeholder: _vm.$t("Select_One")
+                          },
+                          model: {
+                            value: _vm.form.level_two_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "level_two_id", $$v)
+                            },
+                            expression: "form.level_two_id"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.level_two_id
+                          ? _c("div", { staticClass: "invalid-feedback" }, [
+                              _vm._v(_vm._s(_vm.errors.level_two_id[0]))
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    )
+                  ]
+                : _vm._e(),
+              _vm._v(" "),
+              this.form.academic_class_type == "2"
+                ? [
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-6" },
+                      [
+                        _c(
+                          "label",
+                          { attrs: { for: "academic_department_id" } },
+                          [_vm._v(_vm._s(_vm.$t("Academic_Department")))]
+                        ),
+                        _vm._v(" "),
+                        _c("custom-select-empty", {
+                          attrs: {
+                            options: _vm.levelOnes,
+                            placeholder: _vm.$t("Select_One")
+                          },
+                          on: { change: _vm.changeGroupDepartment },
+                          model: {
+                            value: _vm.form.level_one_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "level_one_id", $$v)
+                            },
+                            expression: "form.level_one_id"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.level_one_id
+                          ? _c("div", { staticClass: "invalid-feedback" }, [
+                              _vm._v(_vm._s(_vm.errors.level_one_id[0]))
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group col-6" },
+                      [
+                        _c("label", { attrs: { for: "academic_year_id" } }, [
+                          _vm._v(_vm._s(_vm.$t("Department_year")))
+                        ]),
+                        _vm._v(" "),
+                        _c("custom-select-empty", {
+                          attrs: {
+                            options: _vm.levelTwos,
+                            placeholder: _vm.$t("Select_One")
+                          },
+                          model: {
+                            value: _vm.form.level_two_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "level_two_id", $$v)
+                            },
+                            expression: "form.level_two_id"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.level_two_id
+                          ? _c("div", { staticClass: "invalid-feedback" }, [
+                              _vm._v(_vm._s(_vm.errors.level_two_id[0]))
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    )
+                  ]
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-12" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-lg btn-block",
+                    attrs: {
+                      type: "submit",
+                      id: "button",
+                      disabled: _vm.form.busy
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fas fa-search" }),
+                    _vm._v(" " + _vm._s(_vm.$t("StudentList")))
+                  ]
+                )
+              ])
+            ],
+            2
+          )
         ]
       ),
       _vm._v(" "),
-      _vm.students.length
+      _vm.info != null
         ? [
             _c("div", { attrs: { id: "printAble" } }, [
               _c("div", { staticClass: "row" }, [
@@ -518,145 +733,27 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-12 mt-3" }, [
-                  _c(
-                    "table",
-                    { staticClass: "table table-bordered" },
-                    [
-                      _c("tr", [
-                        _c(
-                          "td",
-                          {
-                            staticClass: "text-right",
-                            attrs: { width: "50%" }
-                          },
-                          [_vm._v(_vm._s(_vm.$t("Academic_Session")))]
-                        ),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(_vm._s(_vm.assign.academic_session.duration))
-                        ])
-                      ]),
+                  _c("table", { staticClass: "table table-bordered" }, [
+                    _c("tr", [
+                      _c(
+                        "td",
+                        { staticClass: "text-right", attrs: { width: "50%" } },
+                        [_vm._v(_vm._s(_vm.$t("Academic_Session")))]
+                      ),
                       _vm._v(" "),
-                      _c("tr", [
-                        _c(
-                          "td",
-                          {
-                            staticClass: "text-right",
-                            attrs: { width: "50%" }
-                          },
-                          [_vm._v(_vm._s(_vm.$t("Academic_Class")))]
-                        ),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(_vm._s(_vm.assign.academic_class.name))
-                        ])
-                      ]),
+                      _c("td", [_vm._v(_vm._s(_vm.info.session.duration))])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c(
+                        "td",
+                        { staticClass: "text-right", attrs: { width: "50%" } },
+                        [_vm._v(_vm._s(_vm.$t("AcademicInfo")))]
+                      ),
                       _vm._v(" "),
-                      _vm.assign.type == 0
-                        ? [
-                            _c("tr", [
-                              _c(
-                                "td",
-                                {
-                                  staticClass: "text-right",
-                                  attrs: { width: "50%" }
-                                },
-                                [_vm._v(_vm._s(_vm.$t("Section")))]
-                              ),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(_vm.assign.section.name))
-                              ])
-                            ])
-                          ]
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.assign.type == 1
-                        ? [
-                            _c("tr", [
-                              _c(
-                                "td",
-                                {
-                                  staticClass: "text-right",
-                                  attrs: { width: "50%" }
-                                },
-                                [_vm._v(_vm._s(_vm.$t("Academic_Group")))]
-                              ),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(_vm.assign.group.name))])
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c(
-                                "td",
-                                {
-                                  staticClass: "text-right",
-                                  attrs: { width: "50%" }
-                                },
-                                [_vm._v(_vm._s(_vm.$t("Group_section")))]
-                              ),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(_vm.assign.group_section.name))
-                              ])
-                            ])
-                          ]
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.assign.type == 2
-                        ? [
-                            _c("tr", [
-                              _c(
-                                "td",
-                                {
-                                  staticClass: "text-right",
-                                  attrs: { width: "50%" }
-                                },
-                                [_vm._v(_vm._s(_vm.$t("Academic_Department")))]
-                              ),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(_vm.assign.department.name))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c(
-                                "td",
-                                {
-                                  staticClass: "text-right",
-                                  attrs: { width: "50%" }
-                                },
-                                [_vm._v(_vm._s(_vm.$t("Department_year")))]
-                              ),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(_vm.assign.year.name))])
-                            ])
-                          ]
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c(
-                          "td",
-                          {
-                            staticClass: "text-right",
-                            attrs: { width: "50%" }
-                          },
-                          [_vm._v(_vm._s(_vm.$t("Academic_subject")))]
-                        ),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(_vm.subject.name) +
-                              " - (" +
-                              _vm._s(_vm.subject.code) +
-                              ")"
-                          )
-                        ])
-                      ])
-                    ],
-                    2
-                  )
+                      _c("td", [_vm._v(_vm._s(_vm.info.academic_info.details))])
+                    ])
+                  ])
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-12 mt-3" }, [
@@ -698,94 +795,115 @@ var render = function() {
                         _vm._v(" "),
                         _c(
                           "tbody",
-                          _vm._l(_vm.students, function(s, index) {
-                            return _c("tr", { key: index }, [
-                              _c("td", [_vm._v(_vm._s(++index))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(s.custom))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _c("img", {
-                                  attrs: {
-                                    src: s.user.photo,
-                                    width: "75px",
-                                    alt: ""
-                                  }
+                          [
+                            _vm.info.students.length
+                              ? _vm._l(_vm.info.students, function(s, index) {
+                                  return _c("tr", { key: index }, [
+                                    _c("td", [_vm._v(_vm._s(++index))]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(s.custom))]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _c("img", {
+                                        attrs: {
+                                          src: s.user.photo,
+                                          width: "75px",
+                                          alt: ""
+                                        }
+                                      })
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                          _vm._s(s.user.name) +
+                                          " "
+                                      ),
+                                      _c("br"),
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                          _vm._s(s.user.phone) +
+                                          "\n\t\t\t\t\t\t\t\t\t\t"
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                          _vm._s(
+                                            s.user.guardian.guardian.name
+                                          ) +
+                                          " "
+                                      ),
+                                      _c("br"),
+                                      _vm._v(
+                                        "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                          _vm._s(
+                                            s.user.guardian.guardian.phone
+                                          ) +
+                                          "\n\t\t\t\t\t\t\t\t\t\t"
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      s.status == 0
+                                        ? _c(
+                                            "span",
+                                            {
+                                              staticClass: "badge badge-success"
+                                            },
+                                            [_vm._v(_vm._s(_vm.$t("Running")))]
+                                          )
+                                        : s.status == 1
+                                        ? _c(
+                                            "span",
+                                            {
+                                              staticClass: "badge badge-warning"
+                                            },
+                                            [_vm._v(_vm._s(_vm.$t("Stop")))]
+                                          )
+                                        : s.status == 2
+                                        ? _c(
+                                            "span",
+                                            {
+                                              staticClass: "badge badge-danger"
+                                            },
+                                            [_vm._v(_vm._s(_vm.$t("DropOut")))]
+                                          )
+                                        : _vm._e()
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      { staticClass: "d-print-none" },
+                                      [
+                                        _c(
+                                          "router-link",
+                                          {
+                                            staticClass:
+                                              "btn btn-sm btn-secondary",
+                                            attrs: { to: "#" }
+                                          },
+                                          [_vm._v(_vm._s(_vm.$t("Profile")))]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ])
                                 })
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(s.user.name) +
-                                    " "
-                                ),
-                                _c("br"),
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(s.user.phone) +
-                                    "\n\t\t\t\t\t\t\t\t\t\t"
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(s.user.guardian.guardian.name) +
-                                    " "
-                                ),
-                                _c("br"),
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(s.user.guardian.guardian.phone) +
-                                    "\n\t\t\t\t\t\t\t\t\t\t"
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td"),
-                              _vm._v(" "),
-                              _c("td"),
-                              _vm._v(" "),
-                              _c("td", [
-                                s.status == 0
-                                  ? _c(
-                                      "span",
-                                      { staticClass: "badge badge-success" },
-                                      [_vm._v(_vm._s(_vm.$t("Running")))]
-                                    )
-                                  : s.status == 1
-                                  ? _c(
-                                      "span",
-                                      { staticClass: "badge badge-warning" },
-                                      [_vm._v(_vm._s(_vm.$t("Stop")))]
-                                    )
-                                  : s.status == 2
-                                  ? _c(
-                                      "span",
-                                      { staticClass: "badge badge-danger" },
-                                      [_vm._v(_vm._s(_vm.$t("DropOut")))]
-                                    )
-                                  : _vm._e()
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "d-print-none" },
-                                [
-                                  _c(
-                                    "router-link",
-                                    {
-                                      staticClass: "btn btn-sm btn-secondary",
-                                      attrs: { to: "#" }
-                                    },
-                                    [_vm._v(_vm._s(_vm.$t("Profile")))]
-                                  )
-                                ],
-                                1
-                              )
-                            ])
-                          }),
-                          0
+                              : [
+                                  _c("tr", { staticClass: "text-center" }, [
+                                    _c("td", { attrs: { colspan: "9" } }, [
+                                      _vm._v("No Student are found ")
+                                    ])
+                                  ])
+                                ]
+                          ],
+                          2
                         )
                       ]
                     )

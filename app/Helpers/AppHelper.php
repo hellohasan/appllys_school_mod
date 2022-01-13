@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Models\AcademicClass;
 use Illuminate\Support\Facades\Artisan;
 
 class AppHelper {
@@ -60,17 +59,4 @@ class AppHelper {
         return explode('/', substr($file, 0, strpos($file, ';')))[1];
     }
 
-    /**
-     * @param $class
-     * @param $type
-     * @param null $levelOne
-     * @param $levelTwo
-     */
-    public static function findAcademicLevelID($classDetails, $type = null, $levelOne, $levelTwo) {
-        if (is_object($classDetails)) {
-
-        } else {
-            $class = AcademicClass::find($classDetails);
-        }
-    }
 }

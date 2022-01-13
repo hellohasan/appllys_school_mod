@@ -14,12 +14,6 @@ class AcademicSubject extends Model {
      * @var array
      */
     protected $fillable = [
-        'academic_class_id',
-        'academic_class_type',
-        'academic_group_id',
-        'academic_department_id',
-        'academic_section_id',
-        'academic_year_id',
         'name',
         'code',
         'mark_type',
@@ -32,6 +26,7 @@ class AcademicSubject extends Model {
         'optional_point',
         'religion_type',
         'religion_id',
+        'online_url',
         'status',
     ];
 
@@ -45,36 +40,7 @@ class AcademicSubject extends Model {
     /**
      * @return mixed
      */
-    public function academic_class() {
-        return $this->belongsTo(AcademicClass::class, 'academic_class_id');
+    public function levels() {
+        return $this->hasMany(AcademicSubjectLevel::class, 'academic_subject_id');
     }
-
-    /**
-     * @return mixed
-     */
-    public function academic_group() {
-        return $this->belongsTo(AcademicGroup::class, 'academic_group_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function academic_department() {
-        return $this->belongsTo(AcademicDepartment::class, 'academic_department_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function department_year() {
-        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function academic_section() {
-        return $this->belongsTo(AcademicSection::class, 'academic_section_id');
-    }
-
 }

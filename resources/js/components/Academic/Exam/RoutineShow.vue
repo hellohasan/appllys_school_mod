@@ -46,15 +46,8 @@
 								<td>
 									<table style="width: 100%;">
 										<tr v-for="(r, i) in routine" :key="i">
-											<template v-if="r.academic_subject.academic_class_type == 2">
-												<td> {{ r.academic_subject.academic_class.name }} - ({{ r.academic_subject.academic_department.name }}) - ({{ r.academic_subject.department_year.name }}) - {{ r.academic_subject.name }} - ({{ r.academic_subject.code }}) </td>
-											</template>
-											<template v-if="r.academic_subject.academic_class_type == 1">
-												<td> {{ r.academic_subject.academic_class.name }} - ({{ r.academic_subject.academic_group.name }}) - {{ r.academic_subject.name }} - ({{ r.academic_subject.code }}) </td>
-											</template>
-											<template v-if="r.academic_subject.academic_class_type == 0">
-												<td> {{ r.academic_subject.academic_class.name }} - {{ r.academic_subject.name }} ({{ r.academic_subject.code }}) </td>
-											</template>
+											<td> {{ r.academic_subject_level.level.details.details }} - ({{ r.academic_subject_level.subject.code }}) {{ r.academic_subject_level.subject.name }}</td>
+
 										</tr>
 									</table>
 								</td>

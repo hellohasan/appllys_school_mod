@@ -96,8 +96,8 @@
 											<custom-select-empty :options="teachers" v-model="sForm.subjects[index].days[d].teacher_id" :placeholder="$t('Select_One')" name="teacher_id"></custom-select-empty>
 											<span v-if="d == 0">
 												<div class="form-check">
-													<input type="checkbox" name="check_teacher" id="check_teacher" @click="choiceTeacher(index, d, $event)" class="form-check-input">
-													<label class="form-check-label" for="check_teacher">Check it if all are same</label>
+													<input type="checkbox" name="check_teacher" :id="'check_teacher'+d+index" @click="choiceTeacher(index, d, $event)" class="form-check-input">
+													<label class="form-check-label" :for="'check_teacher'+d+index">Check it if all are same</label>
 												</div>
 											</span>
 										</td>
@@ -105,8 +105,8 @@
 											<custom-select-empty :options="periods" v-model="sForm.subjects[index].days[d].period_id" :placeholder="$t('Select_One')" name="teacher_id"></custom-select-empty>
 											<span v-if="d == 0">
 												<div class="form-check">
-													<input type="checkbox" name="check_period" id="check_period" @click="choicePeriod(index, d, $event)" class="form-check-input">
-													<label class="form-check-label" for="check_period">Check it if all are same</label>
+													<input type="checkbox" name="check_period" :id="'check_period'+d+index" @click="choicePeriod(index, d, $event)" class="form-check-input">
+													<label class="form-check-label" :for="'check_period'+d+index">Check it if all are same</label>
 												</div>
 											</span>
 										</td>
@@ -198,6 +198,7 @@
 
 				if (validation.passes()) {
 					this.form.post('/api/get-academic-class-subjects').then((res) => {
+						this.sForm.subjects = []
 						this.sForm.subjects = res.data.subjects
 						this.sForm.custom = res.data.custom
 					})
@@ -243,6 +244,7 @@
 						this.sections = []
 						this.groups = []
 						this.form.academic_group_id = ''
+						this.form.academic_section_id = ''
 						this.form.academic_group_section_id = ''
 						this.form.academic_department_id = ''
 						this.form.academic_year_id = ''

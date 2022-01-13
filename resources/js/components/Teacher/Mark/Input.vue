@@ -18,25 +18,25 @@
 
 			<div class="form-row">
 				<div class="form-group col-6">
-					<label for="academic_session_id">Select Session</label>
+					<label for="academic_session_id">{{ $t('SelectSession') }}</label>
 					<custom-select @change="changeSession($event)" :options="sessions" v-model="form.academic_session_id" :placeholder="$t('Select_One')"></custom-select>
 					<has-error :form="form" field="academic_session_id"></has-error>
 				</div>
 
 				<div class="form-group col-6">
-					<label for="academic_exam_id">Select Exams</label>
+					<label for="academic_exam_id">{{ $t('SelectExam') }}</label>
 					<custom-select-empty @change="changeExam($event)" :options="exams" v-model="form.academic_exam_id" :placeholder="$t('Select_One')"></custom-select-empty>
 					<has-error :form="form" field="academic_exam_id"></has-error>
 				</div>
 
 				<div class="form-group col-6">
-					<label for="academic_exam_class_id">Select Academic Class</label>
+					<label for="academic_exam_class_id">{{ $t('SelectAcademicClass') }}</label>
 					<custom-select-empty @change="changeExamClass($event)" :options="classes" v-model="form.academic_exam_class_id" :placeholder="$t('Select_One')"></custom-select-empty>
 					<has-error :form="form" field="academic_exam_class_id"></has-error>
 				</div>
 
 				<div class="form-group col-6">
-					<label for="academic_subject_id">Select Academic Subject</label>
+					<label for="academic_subject_id">{{ $t('SelectAcademicSubject') }}</label>
 					<custom-select-empty :options="subjects" v-model="form.academic_subject_id" :placeholder="$t('Select_One')"></custom-select-empty>
 					<has-error :form="form" field="academic_subject_id"></has-error>
 				</div>
@@ -229,8 +229,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('Close') }}</button>
-						<button type="button" class="btn btn-primary" @click.prevent="printMe('printMe')">{{ $t('Print') }}</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> {{ $t('Close') }}</button>
+						<button type="button" class="btn btn-primary" @click.prevent="printMe('printMe')"><i class="fas fa-print"></i> {{ $t('Print') }}</button>
 					</div>
 				</div>
 			</div>

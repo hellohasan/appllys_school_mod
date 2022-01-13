@@ -694,7 +694,7 @@ var render = function() {
               { staticClass: "form-group col-6" },
               [
                 _c("label", { attrs: { for: "academic_session_id" } }, [
-                  _vm._v("Select Session")
+                  _vm._v(_vm._s(_vm.$t("SelectSession")))
                 ]),
                 _vm._v(" "),
                 _c("custom-select", {
@@ -728,7 +728,7 @@ var render = function() {
               { staticClass: "form-group col-6" },
               [
                 _c("label", { attrs: { for: "academic_exam_id" } }, [
-                  _vm._v("Select Exams")
+                  _vm._v(_vm._s(_vm.$t("SelectExam")))
                 ]),
                 _vm._v(" "),
                 _c("custom-select-empty", {
@@ -762,7 +762,7 @@ var render = function() {
               { staticClass: "form-group col-6" },
               [
                 _c("label", { attrs: { for: "academic_exam_class_id" } }, [
-                  _vm._v("Select Academic Class")
+                  _vm._v(_vm._s(_vm.$t("SelectAcademicClass")))
                 ]),
                 _vm._v(" "),
                 _c("custom-select-empty", {
@@ -796,7 +796,7 @@ var render = function() {
               { staticClass: "form-group col-6" },
               [
                 _c("label", { attrs: { for: "academic_subject_id" } }, [
-                  _vm._v("Select Academic Subject")
+                  _vm._v(_vm._s(_vm.$t("SelectAcademicSubject")))
                 ]),
                 _vm._v(" "),
                 _c("custom-select-empty", {
@@ -1719,7 +1719,10 @@ var render = function() {
                       staticClass: "btn btn-secondary",
                       attrs: { type: "button", "data-dismiss": "modal" }
                     },
-                    [_vm._v(_vm._s(_vm.$t("Close")))]
+                    [
+                      _c("i", { staticClass: "fas fa-times" }),
+                      _vm._v(" " + _vm._s(_vm.$t("Close")))
+                    ]
                   ),
                   _vm._v(" "),
                   _c(
@@ -1734,7 +1737,10 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v(_vm._s(_vm.$t("Print")))]
+                    [
+                      _c("i", { staticClass: "fas fa-print" }),
+                      _vm._v(" " + _vm._s(_vm.$t("Print")))
+                    ]
                   )
                 ])
               ])

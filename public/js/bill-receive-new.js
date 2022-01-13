@@ -496,31 +496,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -823,7 +798,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.table-user-information > tbody > tr[data-v-091ad0e3]:first-child {\n    border-top: 0;\n}\n.table-user-information > tbody > tr > td[data-v-091ad0e3] {\n    border-top: 0;\n}\n@media print {\n#printMe[data-v-091ad0e3],\n    #printMe *[data-v-091ad0e3] {\n        visibility: visible;\n}\n#printMe[data-v-091ad0e3] {\n        position: absolute;\n        left: 0;\n        top: 0;\n}\n}\n", ""]);
+exports.push([module.i, "\n.table-user-information > tbody > tr[data-v-091ad0e3]:first-child {\n\tborder-top: 0;\n}\n.table-user-information > tbody > tr > td[data-v-091ad0e3] {\n\tborder-top: 0;\n}\n@media print {\n#printMe[data-v-091ad0e3],\n\t#printMe *[data-v-091ad0e3] {\n\t\tvisibility: visible;\n}\n#printMe[data-v-091ad0e3] {\n\t\tposition: absolute;\n\t\tleft: 0;\n\t\ttop: 0;\n}\n}\n", ""]);
 
 // exports
 
@@ -1248,9 +1223,9 @@ var render = function() {
                         _c("div", { staticClass: "card-header" }, [
                           _c("h3", { staticClass: "text-center" }, [
                             _vm._v(
-                              "\n                                " +
+                              "\n\t\t\t\t\t\t\t\t" +
                                 _vm._s(_vm.student.student_data.name) +
-                                "\n                            "
+                                "\n\t\t\t\t\t\t\t"
                             )
                           ])
                         ]),
@@ -1289,205 +1264,108 @@ var render = function() {
                                     "table table-user-information table-striped table-bordered"
                                 },
                                 [
-                                  _c(
-                                    "tbody",
-                                    [
-                                      _c("tr", [
-                                        _c("td", [
-                                          _vm._v(_vm._s(_vm.$t("AcademicID")))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.student.academic_data
-                                                .academic_id
-                                            )
-                                          )
-                                        ])
+                                  _c("tbody", [
+                                    _c("tr", [
+                                      _c("td", [
+                                        _vm._v(_vm._s(_vm.$t("AcademicID")))
                                       ]),
                                       _vm._v(" "),
-                                      _c("tr", [
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(_vm.$t("Academic_Class")) +
-                                              ":"
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.student.academic_data.custom
                                           )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.student.academic_data.class
-                                            )
-                                          )
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _vm.type == 1
-                                        ? [
-                                            _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.$t("Academic_Group")
-                                                  )
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.student.academic_data
-                                                      .group
-                                                  )
-                                                )
-                                              ])
-                                            ])
-                                          ]
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _vm.type == 1 || _vm.type == 0
-                                        ? [
-                                            _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.$t("Group_section")
-                                                  )
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.student.academic_data
-                                                      .section
-                                                  )
-                                                )
-                                              ])
-                                            ])
-                                          ]
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _vm.type == 2
-                                        ? [
-                                            _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.$t(
-                                                      "Academic_Department"
-                                                    )
-                                                  )
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.student.academic_data
-                                                      .department
-                                                  )
-                                                )
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.$t("Department_year")
-                                                  )
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.student.academic_data
-                                                      .year
-                                                  )
-                                                )
-                                              ])
-                                            ])
-                                          ]
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c("tr", [
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(_vm.$t("FatherName")) +
-                                              " - " +
-                                              _vm._s(_vm.$t("Phone"))
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.student.guardian_data
-                                                .father_name
-                                            ) +
-                                              " - " +
-                                              _vm._s(
-                                                _vm.student.guardian_data
-                                                  .father_phone
-                                              )
-                                          )
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("tr", [
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(_vm.$t("MotherName")) +
-                                              " - " +
-                                              _vm._s(_vm.$t("Phone"))
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.student.guardian_data
-                                                .mother_name
-                                            ) +
-                                              " - " +
-                                              _vm._s(
-                                                _vm.student.guardian_data
-                                                  .mother_phone
-                                              )
-                                          )
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("tr", [
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(_vm.$t("GuardianName")) +
-                                              " - " +
-                                              _vm._s(_vm.$t("Phone"))
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.student.guardian_data
-                                                .guardian_name
-                                            ) +
-                                              " - " +
-                                              _vm._s(
-                                                _vm.student.guardian_data
-                                                  .guardian_phone
-                                              )
-                                          )
-                                        ])
+                                        )
                                       ])
-                                    ],
-                                    2
-                                  )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _vm._v(_vm._s(_vm.$t("AcademicInfo")))
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.student.academic_data.level
+                                              .details.details
+                                          )
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(_vm.$t("FatherName")) +
+                                            " - " +
+                                            _vm._s(_vm.$t("Phone"))
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.student.guardian_data
+                                              .father_name
+                                          ) +
+                                            " - " +
+                                            _vm._s(
+                                              _vm.student.guardian_data
+                                                .father_phone
+                                            )
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(_vm.$t("MotherName")) +
+                                            " - " +
+                                            _vm._s(_vm.$t("Phone"))
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.student.guardian_data
+                                              .mother_name
+                                          ) +
+                                            " - " +
+                                            _vm._s(
+                                              _vm.student.guardian_data
+                                                .mother_phone
+                                            )
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(_vm.$t("GuardianName")) +
+                                            " - " +
+                                            _vm._s(_vm.$t("Phone"))
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.student.guardian_data
+                                              .guardian_name
+                                          ) +
+                                            " - " +
+                                            _vm._s(
+                                              _vm.student.guardian_data
+                                                .guardian_phone
+                                            )
+                                        )
+                                      ])
+                                    ])
+                                  ])
                                 ]
                               ),
                               _vm._v(" "),
@@ -1502,7 +1380,7 @@ var render = function() {
                                     _c("tr", { staticClass: "bg-indigo" }, [
                                       _c("td", [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("TotalBill")) +
                                             ": " +
                                             _vm._s(
@@ -1510,13 +1388,13 @@ var render = function() {
                                                 _vm.student.bills.total_bill
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ]),
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("PaidBill")) +
                                             ": " +
                                             _vm._s(
@@ -1524,7 +1402,7 @@ var render = function() {
                                                 _vm.student.bills.complete_bill
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ])
                                     ]),
@@ -1535,7 +1413,7 @@ var render = function() {
                                         { staticClass: "bg-secondary" },
                                         [
                                           _vm._v(
-                                            "\n                                                    " +
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                               _vm._s(_vm.$t("TotalDemand")) +
                                               ": " +
                                               _vm._s(
@@ -1543,14 +1421,14 @@ var render = function() {
                                                   _vm.student.bills.total_demand
                                                 )
                                               ) +
-                                              "\n                                                "
+                                              "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                           )
                                         ]
                                       ),
                                       _vm._v(" "),
                                       _c("td", { staticClass: "bg-success" }, [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("TotalPaid")) +
                                             ": " +
                                             _vm._s(
@@ -1558,7 +1436,7 @@ var render = function() {
                                                 _vm.student.bills.total_paid
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ])
                                     ]),
@@ -1566,7 +1444,7 @@ var render = function() {
                                     _c("tr", [
                                       _c("td", { staticClass: "bg-danger" }, [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("TotalFine")) +
                                             ": " +
                                             _vm._s(
@@ -1574,13 +1452,13 @@ var render = function() {
                                                 _vm.student.bills.total_fine
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ]),
                                       _vm._v(" "),
                                       _c("td", { staticClass: "bg-green" }, [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("TotalDiscount")) +
                                             ": " +
                                             _vm._s(
@@ -1588,7 +1466,7 @@ var render = function() {
                                                 _vm.student.bills.total_discount
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ])
                                     ]),
@@ -1596,7 +1474,7 @@ var render = function() {
                                     _c("tr", [
                                       _c("td", { staticClass: "bg-info" }, [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("LastPay")) +
                                             ": " +
                                             _vm._s(
@@ -1604,13 +1482,13 @@ var render = function() {
                                                 _vm.student.bills.last_paid_at
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ]),
                                       _vm._v(" "),
                                       _c("td", { staticClass: "bg-warning" }, [
                                         _vm._v(
-                                          "\n                                                    " +
+                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
                                             _vm._s(_vm.$t("StillDue")) +
                                             ": " +
                                             _vm._s(
@@ -1618,7 +1496,7 @@ var render = function() {
                                                 _vm.student.bills.total_due
                                               )
                                             ) +
-                                            "\n                                                "
+                                            "\n\t\t\t\t\t\t\t\t\t\t\t\t"
                                         )
                                       ])
                                     ])
@@ -1714,13 +1592,13 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("td", [
                                     _vm._v(
-                                      "\n                                    " +
+                                      "\n\t\t\t\t\t\t\t\t\t" +
                                         _vm._s(
                                           _vm._f("withCurrency")(
                                             bill.total + bill.fine - bill.waiver
                                           )
                                         ) +
-                                        "\n                                "
+                                        "\n\t\t\t\t\t\t\t\t"
                                     )
                                   ]),
                                   _vm._v(" "),
@@ -1750,18 +1628,18 @@ var render = function() {
                                                     bill.updated_at
                                                   )
                                                 ) +
-                                                "\n                                    "
+                                                "\n\t\t\t\t\t\t\t\t\t"
                                             )
                                           ]
                                         : [
                                             _vm._v(
-                                              "\n                                        " +
+                                              "\n\t\t\t\t\t\t\t\t\t\t" +
                                                 _vm._s(
                                                   _vm._f("withCurrency")(
                                                     bill.due
                                                   )
                                                 ) +
-                                                "\n                                    "
+                                                "\n\t\t\t\t\t\t\t\t\t"
                                             )
                                           ]
                                     ],
@@ -2299,7 +2177,7 @@ var render = function() {
                                 ": " +
                                 _vm._s(_vm.student.student_data.name) +
                                 " - (" +
-                                _vm._s(_vm.student.academic_data.academic_id) +
+                                _vm._s(_vm.student.academic_data.custom) +
                                 ")"
                             )
                           ])

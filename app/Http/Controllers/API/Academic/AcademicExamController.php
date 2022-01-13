@@ -5,19 +5,20 @@ namespace App\Http\Controllers\API\Academic;
 use Carbon\Carbon;
 use App\Models\AcademicData;
 use App\Models\AcademicExam;
-use App\Models\AcademicYear;
 use Illuminate\Http\Request;
-use App\Models\AcademicGroup;
+use App\Models\AcademicLevel;
 use App\Models\AcademicExamLog;
 use App\Models\AcademicSession;
-use App\Models\AcademicSubject;
+use App\Http\Traits\HelperTrait;
 use App\Models\AcademicExamClass;
-use App\Models\AcademicDepartment;
+use Illuminate\Support\Facades\DB;
 use App\Models\AcademicDataSubject;
 use App\Models\AcademicExamRoutine;
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSubjectLevel;
 
 class AcademicExamController extends Controller {
+    use HelperTrait;
     /**
      * Display a listing of the resource.
      *
@@ -63,21 +64,22 @@ class AcademicExamController extends Controller {
             $ll['academic_exam_id'] = $exam->id;
             $ll['academic_class_id'] = $list['class_id'];
             $ll['type'] = $list['type'];
+            $levelId = AcademicLevel::query();
+            $levelId = $levelId->whereAcademicClassId($list['class_id']);
+
             if ($list['type'] == 1) {
-                $ll['academic_group_id'] = $list['group_id'];
                 foreach ($list['group_section_ids'] as $sId) {
-                    $ll['group_section_id'] = $sId;
+                    $ll['academic_level_id'] = $this->findAcademicLevelID($list['class_id'], $list['type'], $list['group_id'], $sId);
                     AcademicExamClass::create($ll);
                 }
             } elseif ($list['type'] == 2) {
-                $ll['academic_department_id'] = $list['department_id'];
-                foreach ($list['department_year_ids'] as $sId) {
-                    $ll['department_year_id'] = $sId;
+                foreach ($list['department_year_ids'] as $sIdd) {
+                    $ll['academic_level_id'] = $this->findAcademicLevelID($list['class_id'], $list['type'], $list['department_id'], $sIdd);
                     AcademicExamClass::create($ll);
                 }
             } else {
-                foreach ($list['section_ids'] as $sId) {
-                    $ll['academic_section_id'] = $sId;
+                foreach ($list['section_ids'] as $s) {
+                    $ll['academic_level_id'] = $this->findAcademicLevelID($list['class_id'], $list['type'], $s);
                     AcademicExamClass::create($ll);
                 }
             }
@@ -98,13 +100,7 @@ class AcademicExamController extends Controller {
             'creator:id,name',
             'session:id,duration',
             'classes',
-            'classes.academicClass:id,name',
-            'classes.academicGroup:id,name',
-            'classes.academicDepartment:id,name',
-            'classes.section:id,name',
-            'classes.groupSection:id,name',
-            'classes.year:id,name',
-            'classes.logs',
+            'classes.level',
         ])->whereCustom($id)->firstOrFail();
 
         return $data;
@@ -135,38 +131,33 @@ class AcademicExamController extends Controller {
      * @param Request $request
      */
     public function assignExam(Request $request) {
+
         $exam = AcademicExam::whereCustom($request->input("custom"))->first();
-        $class = AcademicExamClass::find($request->input("id"));
+        $examClass = AcademicExamClass::find($request->input("id"));
 
-        $data = AcademicData::query();
-        $data = $data->where('academic_session_id', $exam->academic_session_id)->whereAcademicClassId($class->academic_class_id);
+        $studentData = AcademicData::whereAcademicSessionId($exam->academic_session_id)
+            ->whereAcademicLevelId($examClass->academic_level_id)->pluck('id')->toArray();
 
-        if ($class->type == 1) {
-            $data = $data->whereAcademicGroupId($class->academic_group_id)->whereAcademicSectionId($class->group_section_id);
-        } elseif ($class->type == 2) {
-            $data = $data->whereAcademicDepartmentId($class->academic_department_id)->whereAcademicYearId($class->department_year_id);
-        } else {
-            $data = $data->whereAcademicSectionId($class->academic_section_id);
-        }
-
-        $studentData = $data->pluck('id')->toArray();
         $subjects = AcademicDataSubject::whereIn('academic_data_id', $studentData)->get();
 
-        $class->logs()->delete();
+        $examClass->total_students = count($studentData);
+        $examClass->save();
+        $examClass->logs()->delete();
 
         foreach ($subjects as $subject) {
             $tr['academic_exam_id'] = $exam->id;
-            $tr['academic_exam_class_id'] = $class->id;
+            $tr['academic_exam_class_id'] = $examClass->id;
             $tr['user_id'] = $subject->user_id;
             $tr['academic_subject_id'] = $subject->academic_subject_id;
             $tr['academic_data_subject_id'] = $subject->id;
+            $tr['academic_level_id'] = $examClass->academic_level_id;
             $tr['is_optional'] = $subject->isOptional;
             $tr['updated_by'] = auth()->id();
             AcademicExamLog::create($tr);
         }
 
-        $class->is_assigned = true;
-        $class->save();
+        $examClass->is_assigned = true;
+        $examClass->save();
 
         return response()->json(['message' => 'Successfully Submitted'], 200);
     }
@@ -182,40 +173,23 @@ class AcademicExamController extends Controller {
         ])->whereCustom($custom)->firstOrFail();
         $data['exam'] = $exam;
 
-        $classes = AcademicExamClass::whereAcademicExamId($exam->id)->get();
-        $subjects = [];
-        foreach ($classes->groupBy('academic_class_id') as $class) {
-            $forClass = $class->first();
-            if ($forClass->type == 0) {
-                $subjects[] = AcademicSubject::with(['academic_class:id,name'])
-                    ->whereAcademicClassId($forClass->academic_class_id)
-                    ->select('id', 'name', 'code', 'academic_class_id', 'academic_class_type', 'academic_group_id', 'academic_section_id', 'academic_department_id', 'academic_year_id')->get();
-            } elseif ($forClass->type == 1) {
-                $forGroup = $class->groupBy(['academic_group_id']);
-                $subjects[] = AcademicSubject::with(['academic_class:id,name'])
-                    ->whereAcademicClassId($forClass->academic_class_id)
-                    ->whereIn('academic_group_id', $forGroup->keys()->toArray())
-                    ->select('id', 'name', 'code', 'academic_class_id', 'academic_class_type', 'academic_group_id', 'academic_section_id', 'academic_department_id', 'academic_year_id')->get();
-            } else {
-                $forDepartment = $class->groupBy(['academic_department_id', 'department_year_id']);
-                foreach ($forDepartment as $m => $d) {
-                    $subjects[] = AcademicSubject::with(['academic_class:id,name'])
-                        ->whereAcademicClassId($forClass->academic_class_id)
-                        ->where('academic_department_id', $m)
-                        ->whereIn('academic_year_id', $d->keys())
-                        ->select('id', 'name', 'code', 'academic_class_id', 'academic_class_type', 'academic_group_id', 'academic_section_id', 'academic_department_id', 'academic_year_id')->get();
-                }
-            }
-        }
-        $index = 0;
+        $classes = DB::table('academic_exam_classes')->select('academic_class_id', 'academic_level_id')->whereAcademicExamId($exam->id)->get();
+
         $sub = [];
-        foreach ($subjects as $subject) {
-            foreach ($subject as $s) {
-                $sub[$index]['id'] = $s->id;
-                $sub[$index]['text'] = $this->findSubjectName($s);
+        $index = 0;
+        foreach ($classes as $class) {
+            $subjects = AcademicSubjectLevel::with([
+                'subject:id,name,code',
+                'level',
+            ])->whereAcademicClassId($class->academic_class_id)->whereAcademicLevelId($class->academic_level_id)->get();
+
+            foreach ($subjects as $subject) {
+                $sub[$index]['id'] = $subject->id;
+                $sub[$index]['text'] = $subject->level->details['details'] . ' - (' . $subject->subject->code . ') - ' . $subject->subject->name;
                 $index++;
             }
         }
+
         $data['subjects'] = $sub;
 
         $routines = $exam->routines->groupBy('date');
@@ -232,10 +206,10 @@ class AcademicExamController extends Controller {
                 $index++;
             }
         } else {
-            $rr['date'] = '';
-            $rr['subject_ids'] = [];
-            $rr['start_time'] = '';
-            $rr['end_time'] = '';
+            $rr[0]['date'] = '';
+            $rr[0]['subject_ids'] = [];
+            $rr[0]['start_time'] = '';
+            $rr[0]['end_time'] = '';
         }
         $data['routines'] = $rr;
 
@@ -247,18 +221,19 @@ class AcademicExamController extends Controller {
      * @param $id
      */
     public function findSubjectName($s) {
-        if ($s->academic_class_type == 2) {
-            $department = AcademicDepartment::find($s->academic_department_id)->name;
-            $year = AcademicYear::find($s->academic_year_id)->name;
-            $su = $s->academic_class->name . ' - (' . $department . ') - (' . $year . ') - ' . $s->name . ' - (' . $s->code . ')';
-        } elseif ($s->academic_class_type == 1) {
-            $group = AcademicGroup::find($s->academic_group_id)->name;
-            $su = $s->academic_class->name . ' - (' . $group . ') - ' . $s->name . ' - (' . $s->code . ')';
-        } else {
-            $su = $s->academic_class->name . ' - ' . $s->name . ' - (' . $s->code . ')';
-        }
 
-        return $su;
+        /* if ($s->academic_class_type == 2) {
+        $department = AcademicDepartment::find($s->academic_department_id)->name;
+        $year = AcademicYear::find($s->academic_year_id)->name;
+        $su = $s->academic_class->name . ' - (' . $department . ') - (' . $year . ') - ' . $s->name . ' - (' . $s->code . ')';
+        } elseif ($s->academic_class_type == 1) {
+        $group = AcademicGroup::find($s->academic_group_id)->name;
+        $su = $s->academic_class->name . ' - (' . $group . ') - ' . $s->name . ' - (' . $s->code . ')';
+        } else {
+        $su = $s->academic_class->name . ' - ' . $s->name . ' - (' . $s->code . ')';
+        } */
+
+        return 'hasanb';
     }
 
     /**
@@ -284,7 +259,7 @@ class AcademicExamController extends Controller {
             $in['start_time'] = $routine['start_time'];
             $in['end_time'] = $routine['end_time'];
             foreach ($routine['subject_ids'] as $subject) {
-                $in['academic_subject_id'] = $subject;
+                $in['academic_subject_level_id'] = $subject;
                 AcademicExamRoutine::create($in);
             }
         }
@@ -303,11 +278,8 @@ class AcademicExamController extends Controller {
             'creator:id,name',
             'session:id,duration',
             'routines',
-            'routines.academic_subject',
-            'routines.academic_subject.academic_class:id,name',
-            'routines.academic_subject.academic_group:id,name',
-            'routines.academic_subject.academic_department:id,name',
-            'routines.academic_subject.department_year:id,name',
+            'routines.academic_subject_level.subject:id,name,code',
+            'routines.academic_subject_level.level',
         ])->whereCustom($custom)->firstOrFail();
         $data['exam'] = $exam;
 

@@ -236,6 +236,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (validation.passes()) {
         this.form.post('/api/get-academic-class-subjects').then(function (res) {
+          _this2.sForm.subjects = [];
           _this2.sForm.subjects = res.data.subjects;
           _this2.sForm.custom = res.data.custom;
         });
@@ -289,6 +290,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this3.sections = [];
           _this3.groups = [];
           _this3.form.academic_group_id = '';
+          _this3.form.academic_section_id = '';
           _this3.form.academic_group_section_id = '';
           _this3.form.academic_department_id = '';
           _this3.form.academic_year_id = '';
@@ -931,7 +933,10 @@ var render = function() {
                                                   attrs: {
                                                     type: "checkbox",
                                                     name: "check_teacher",
-                                                    id: "check_teacher"
+                                                    id:
+                                                      "check_teacher" +
+                                                      d +
+                                                      index
                                                   },
                                                   on: {
                                                     click: function($event) {
@@ -950,7 +955,10 @@ var render = function() {
                                                     staticClass:
                                                       "form-check-label",
                                                     attrs: {
-                                                      for: "check_teacher"
+                                                      for:
+                                                        "check_teacher" +
+                                                        d +
+                                                        index
                                                     }
                                                   },
                                                   [
@@ -1004,7 +1012,8 @@ var render = function() {
                                                   attrs: {
                                                     type: "checkbox",
                                                     name: "check_period",
-                                                    id: "check_period"
+                                                    id:
+                                                      "check_period" + d + index
                                                   },
                                                   on: {
                                                     click: function($event) {
@@ -1023,7 +1032,10 @@ var render = function() {
                                                     staticClass:
                                                       "form-check-label",
                                                     attrs: {
-                                                      for: "check_period"
+                                                      for:
+                                                        "check_period" +
+                                                        d +
+                                                        index
                                                     }
                                                   },
                                                   [

@@ -91,16 +91,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Show',
   data: function data() {
@@ -129,6 +119,11 @@ __webpack_require__.r(__webpack_exports__);
             id: id
           }).then(function (res) {
             _this.loadAcademicExamDetails();
+
+            Toast.fire({
+              icon: "success",
+              text: _this.$t("success_message_create")
+            });
           });
         }
       });
@@ -268,11 +263,7 @@ var render = function() {
             _c("table", { staticClass: "table table-bordered table-striped" }, [
               _c("thead", [
                 _c("tr", [
-                  _c("th", [_vm._v(_vm._s(_vm.$t("Academic_Class")))]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v(_vm._s(_vm.$t("AcademicGroupDepartment")))]),
-                  _vm._v(" "),
-                  _c("th", [_vm._v(_vm._s(_vm.$t("SectionYear")))]),
+                  _c("th", [_vm._v(_vm._s(_vm.$t("AcademicDetails")))]),
                   _vm._v(" "),
                   _c("th", [_vm._v(_vm._s(_vm.$t("TotalStudent")))]),
                   _vm._v(" "),
@@ -286,36 +277,18 @@ var render = function() {
                 "tbody",
                 _vm._l(_vm.exam.classes, function(list, i) {
                   return _c("tr", { key: i }, [
-                    _c("td", [_vm._v(_vm._s(list.academic_class.name))]),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      [
-                        list.type == 1
-                          ? [_vm._v(_vm._s(list.academic_group.name))]
-                          : list.type == 2
-                          ? [_vm._v(_vm._s(list.academic_department.name))]
-                          : [_vm._v("N/A")]
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      [
-                        list.type == 2
-                          ? [_vm._v(_vm._s(list.year.name))]
-                          : list.type == 1
-                          ? [_vm._v(_vm._s(list.group_section.name))]
-                          : [_vm._v(_vm._s(list.section.name))]
-                      ],
-                      2
-                    ),
+                    _c("td", [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\t" +
+                          _vm._s(list.level.details.details) +
+                          "\n\t\t\t\t\t\t\t"
+                      )
+                    ]),
                     _vm._v(" "),
                     _c("td", [
                       _vm._v(
                         "\n\t\t\t\t\t\t\t\t" +
-                          _vm._s(_vm._f("students")(list.logs.length)) +
+                          _vm._s(_vm._f("students")(list.total_students)) +
                           "\n\t\t\t\t\t\t\t"
                       )
                     ]),

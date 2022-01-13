@@ -14,6 +14,7 @@ class CreateAcademicSubjectLevelsTable extends Migration {
         Schema::create('academic_subject_levels', function (Blueprint $table) {
             $table->id();
             $table->foreignId('academic_class_id')->constrained();
+            $table->foreignId('academic_subject_id')->constrained();
             $table->foreignId('academic_level_id')->constrained();
             $table->timestamps();
         });

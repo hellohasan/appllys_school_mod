@@ -77,8 +77,8 @@
 									<input type="time" v-model="r.start_time" :placeholder="$t('SelectTime')" class="form-control" id="">
 									<span v-if="index == 0">
 										<div class="form-check">
-											<input type="checkbox" name="check_start" id="check_start" @click="choiceStart(index, $event)" class="form-check-input">
-											<label class="form-check-label" for="check_start">Check for all</label>
+											<input type="checkbox" name="check_start" :id="'check_start'+index" @click="choiceStart(index, $event)" class="form-check-input">
+											<label class="form-check-label" :for="'check_start'+index">Check for all</label>
 										</div>
 									</span>
 								</td>
@@ -86,8 +86,8 @@
 									<input type="time" v-model="r.end_time" :placeholder="$t('SelectTime')" class="form-control" id="">
 									<span v-if="index == 0">
 										<div class="form-check">
-											<input type="checkbox" name="check_end" id="check_end" @click="choiceEnd(index, $event)" class="form-check-input">
-											<label class="form-check-label" for="check_end">Check for all</label>
+											<input type="checkbox" name="check_end" :id="'check_end'+index" @click="choiceEnd(index, $event)" class="form-check-input">
+											<label class="form-check-label" :for="'check_end'+index">Check for all</label>
 										</div>
 									</span>
 								</td>

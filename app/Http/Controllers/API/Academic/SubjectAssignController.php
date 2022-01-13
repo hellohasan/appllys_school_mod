@@ -9,10 +9,14 @@ use App\Models\SubjectAssign;
 use App\Models\TeacherSubject;
 use App\Models\AcademicSession;
 use App\Models\AcademicSubject;
+use App\Http\Traits\HelperTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\AcademicSubjectLevel;
 
 class SubjectAssignController extends Controller {
+
+    use HelperTrait;
     public function __construct() {
         // middleware goes here
 
@@ -24,47 +28,29 @@ class SubjectAssignController extends Controller {
     public function getSubjectList(Request $request) {
 
         $type = $request->input("academic_class_type");
-
-        $subjects = AcademicSubject::query();
+        if ($type == 2) {
+            $levelId = $this->findAcademicLevelID(request('academic_class_id'), $type, request('academic_department_id'), request('academic_year_id'));
+        } elseif ($type == 1) {
+            $levelId = $this->findAcademicLevelID(request('academic_class_id'), $type, request('academic_group_id'), request('academic_group_section_id'));
+        } else {
+            $levelId = $this->findAcademicLevelID(request('academic_class_id'), $type, request('academic_section_id'));
+        }
+        $subjectIds = AcademicSubjectLevel::whereAcademicLevelId($levelId)->pluck('academic_subject_id')->toArray();
         $session = AcademicSession::where('isCurrent', 1)->first();
         $days = Day::where('name', '!=', $session->off_day)->get();
 
-        $subjects->select([
+        $subjects = AcademicSubject::whereIn('id', $subjectIds)->select([
             'id',
-            'academic_class_id',
-            'academic_class_type',
-            'academic_group_id',
-            'academic_section_id',
-            'academic_department_id',
-            'academic_year_id',
             'name',
             'code',
             'subject_type',
             'point',
-        ]);
-        $previous = SubjectAssign::query();
-        $previous = $previous->whereSessionId($request->input("session_id"))
-            ->whereAcademicClassId($request->input("academic_class_id"));
-        if ($type == 0) {
-            $previous = $previous->whereAcademicSectionId($request->input("academic_section_id"));
-            $subjects = $subjects->whereAcademicClassId($request->input("academic_class_id"))->get();
-        } elseif ($type == 1) {
-            $previous = $previous->whereAcademicGroupId($request->input("academic_group_id"))->whereAcademicGroupSectionId($request->input("academic_group_section_id"));
-            $subjects = $subjects->whereAcademicClassId($request->input("academic_class_id"))
-                ->whereAcademicGroupId($request->input("academic_group_id"))
-                ->get();
-        } else {
-            $previous = $previous->whereAcademicDepartmentId($request->input("academic_department_id"))->whereAcademicYearId($request->input("academic_year_id"));
-            $subjects = $subjects->whereAcademicClassId($request->input("academic_class_id"))
-                ->whereAcademicDepartmentId($request->input("academic_department_id"))
-                ->whereAcademicYearId($request->input("academic_year_id"))
-                ->get();
-        }
+        ])->whereStatus(1)->get();
 
-        $previous = $previous->first();
+        $previous = SubjectAssign::whereSessionId(request('session_id'))->whereAcademicLevelId($levelId)->first();
         $data['custom'] = $previous ? $previous->custom : '';
+        $data['subjects'] = [];
         foreach ($subjects as $key => $subject) {
-
             if ($previous) {
                 $lists = $previous->lists->where('academic_subject_id', $subject->id);
             } else {
@@ -124,15 +110,19 @@ class SubjectAssignController extends Controller {
             if ($request->input("custom")) {
                 $assign = SubjectAssign::whereCustom($request->input("custom"))->firstOrFail();
             } else {
+
+                if ($type == 2) {
+                    $levelId = $this->findAcademicLevelID(request('academic_class_id'), $type, request('academic_department_id'), request('academic_year_id'));
+                } elseif ($type == 1) {
+                    $levelId = $this->findAcademicLevelID(request('academic_class_id'), $type, request('academic_group_id'), request('academic_group_section_id'));
+                } else {
+                    $levelId = $this->findAcademicLevelID(request('academic_class_id'), $type, request('academic_section_id'));
+                }
                 $assign = SubjectAssign::create([
-                    "session_id"                => $request->input("session_id"),
-                    'academic_class_id'         => $request->input("academic_class_id"),
-                    'type'                      => $type,
-                    'academic_section_id'       => $type == 0 ? $request->input("academic_section_id") : null,
-                    'academic_group_id'         => $type == 1 ? $request->input("academic_group_id") : null,
-                    'academic_group_section_id' => $type == 1 ? $request->input("academic_group_section_id") : null,
-                    'academic_department_id'    => $type == 2 ? $request->input("academic_department_id") : null,
-                    'academic_year_id'          => $type == 2 ? $request->input("academic_year_id") : null,
+                    "session_id"        => $request->input("session_id"),
+                    'academic_class_id' => $request->input("academic_class_id"),
+                    'type'              => $type,
+                    'academic_level_id' => $levelId,
                 ]);
 
                 $assign->custom = custom($assign->id);
@@ -160,6 +150,7 @@ class SubjectAssignController extends Controller {
                             'academic_session_id' => $request->input("session_id"),
                             'teacher_id'          => $day['teacher_id'],
                             'academic_subject_id' => $subject['subject_id'],
+                            'academic_level_id'   => $levelId,
                         ]);
                     }
 
@@ -180,19 +171,15 @@ class SubjectAssignController extends Controller {
      * @param $custom
      */
     public function showAssignList($custom) {
+
         return $assign = SubjectAssign::whereCustom($custom)->with([
             'academicSession:id,title,duration',
-            'academicClass:id,name',
-            'section:id,name',
-            'group:id,name',
-            'groupSection:id,name',
-            'department:id,name',
-            'year:id,name',
             'lists.teacher:id,name',
             'lists.teacher.teacher:id,user_id,code',
             'lists.day:id,name',
             'lists.academicSubject:id,name,code',
             'lists.period:id,title,show',
+            'academicLevel',
         ])->firstOrFail();
     }
 
@@ -202,12 +189,7 @@ class SubjectAssignController extends Controller {
     public function subjectAssignList() {
         $data = SubjectAssign::with([
             'academicSession:id,duration',
-            'academicClass:id,name',
-            'group:id,name',
-            'department:id,name',
-            'groupSection:id,name',
-            'year:id,name',
-            'section:id,name',
+            'academicLevel',
         ])->orderBy('id', 'desc')->get();
 
         return datatables()->of($data)
@@ -218,33 +200,11 @@ class SubjectAssignController extends Controller {
             ->editColumn('session_id', function ($row) {
                 return $row->academicSession->duration;
             })
-            ->editColumn('academic_class_id', function ($row) {
-                return $row->academicClass->name;
-            })
-            ->addColumn('group_or_department', function ($row) {
-                if ($row->type == 1) {
-                    $gd = $row->group->name;
-                } elseif ($row->type == 2) {
-                    $gd = $row->department->name;
-                } else {
-                    $gd = 'N/A';
-                }
-
-                return $gd;
-            })
-            ->addColumn('section_or_year', function ($row) {
-                if ($row->type == 1) {
-                    $gd = $row->groupSection->name;
-                } elseif ($row->type == 2) {
-                    $gd = $row->year->name;
-                } else {
-                    $gd = $row->section->name;
-                }
-
-                return $gd;
+            ->addColumn('academic_details', function ($row) {
+                return $row->academicLevel->details['details'];
             })
             ->addColumn('action', function ($row) {
-                return '<button data-id="' . $row->custom . '" data-action="show" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> ' . __('show') . '</button> <button data-id="' . $row->custom . '" data-action="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> ' . __('delete') . '</button>';
+                return '<button data-id="' . $row->custom . '" data-action="show" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> ' . __('show') . '</button>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -256,21 +216,21 @@ class SubjectAssignController extends Controller {
      */
     public function subjectAssignDelete($custom) {
 
-        try {
-            DB::beginTransaction();
+        /* try { */
+        DB::beginTransaction();
 
-            $assign = SubjectAssign::whereCustom($custom)->firstOrFail();
-            $assign->lists()->delete();
-            $assign->delete();
+        $assign = SubjectAssign::whereCustom($custom)->firstOrFail();
+        //$assign->lists()->delete();
+        $assign->delete();
 
-            DB::commit();
+        DB::commit();
 
-            return response()->json(['message' => 'Successfully Accepted'], 200);
-        } catch (\Exception $e) {
-            DB::rollback();
+        /* return response()->json(['message' => 'Successfully Accepted'], 200);
+    } catch (\Exception $e) {
+    DB::rollback();
 
-            return response()->json(['message' => 'Something is wrong there'], 503);
-        }
+    return response()->json(['message' => 'Something is wrong there'], 503);
+    } */
 
     }
 }

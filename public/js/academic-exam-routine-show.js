@@ -92,13 +92,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "RoutineShow",
   data: function data() {
@@ -260,84 +253,23 @@ var render = function() {
                         "table",
                         { staticStyle: { width: "100%" } },
                         _vm._l(routine, function(r, i) {
-                          return _c(
-                            "tr",
-                            { key: i },
-                            [
-                              r.academic_subject.academic_class_type == 2
-                                ? [
-                                    _c("td", [
-                                      _vm._v(
-                                        " " +
-                                          _vm._s(
-                                            r.academic_subject.academic_class
-                                              .name
-                                          ) +
-                                          " - (" +
-                                          _vm._s(
-                                            r.academic_subject
-                                              .academic_department.name
-                                          ) +
-                                          ") - (" +
-                                          _vm._s(
-                                            r.academic_subject.department_year
-                                              .name
-                                          ) +
-                                          ") - " +
-                                          _vm._s(r.academic_subject.name) +
-                                          " - (" +
-                                          _vm._s(r.academic_subject.code) +
-                                          ") "
-                                      )
-                                    ])
-                                  ]
-                                : _vm._e(),
-                              _vm._v(" "),
-                              r.academic_subject.academic_class_type == 1
-                                ? [
-                                    _c("td", [
-                                      _vm._v(
-                                        " " +
-                                          _vm._s(
-                                            r.academic_subject.academic_class
-                                              .name
-                                          ) +
-                                          " - (" +
-                                          _vm._s(
-                                            r.academic_subject.academic_group
-                                              .name
-                                          ) +
-                                          ") - " +
-                                          _vm._s(r.academic_subject.name) +
-                                          " - (" +
-                                          _vm._s(r.academic_subject.code) +
-                                          ") "
-                                      )
-                                    ])
-                                  ]
-                                : _vm._e(),
-                              _vm._v(" "),
-                              r.academic_subject.academic_class_type == 0
-                                ? [
-                                    _c("td", [
-                                      _vm._v(
-                                        " " +
-                                          _vm._s(
-                                            r.academic_subject.academic_class
-                                              .name
-                                          ) +
-                                          " - " +
-                                          _vm._s(r.academic_subject.name) +
-                                          " (" +
-                                          _vm._s(r.academic_subject.code) +
-                                          ") "
-                                      )
-                                    ])
-                                  ]
-                                : _vm._e()
-                            ],
-                            2
-                          )
+                          return _c("tr", { key: i }, [
+                            _c("td", [
+                              _vm._v(
+                                " " +
+                                  _vm._s(
+                                    r.academic_subject_level.level.details
+                                      .details
+                                  ) +
+                                  " - (" +
+                                  _vm._s(
+                                    r.academic_subject_level.subject.code
+                                  ) +
+                                  ") " +
+                                  _vm._s(r.academic_subject_level.subject.name)
+                              )
+                            ])
+                          ])
                         }),
                         0
                       )

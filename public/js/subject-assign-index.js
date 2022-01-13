@@ -28,8 +28,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
   data: function data() {
@@ -62,11 +60,7 @@ __webpack_require__.r(__webpack_exports__);
         }, {
           data: "session_id"
         }, {
-          data: "academic_class_id"
-        }, {
-          data: "group_or_department"
-        }, {
-          data: "section_or_year"
+          data: "academic_details"
         }, {
           data: "action"
         }],
@@ -223,23 +217,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("th", [_vm._v(_vm._s(_vm.$t("Academic_Session")))]),
                 _vm._v(" "),
-                _c("th", [_vm._v(_vm._s(_vm.$t("Academic_Class")))]),
-                _vm._v(" "),
-                _c("th", [
-                  _vm._v(
-                    _vm._s(_vm.$t("Academic_Group")) +
-                      "/" +
-                      _vm._s(_vm.$t("Academic_Department"))
-                  )
-                ]),
-                _vm._v(" "),
-                _c("th", [
-                  _vm._v(
-                    _vm._s(_vm.$t("Section")) +
-                      "/" +
-                      _vm._s(_vm.$t("Department_year"))
-                  )
-                ]),
+                _c("th", [_vm._v(_vm._s(_vm.$t("AcademicDetails")))]),
                 _vm._v(" "),
                 _c("th", { staticClass: "not-export-col" }, [
                   _vm._v(_vm._s(_vm.$t("Action")))

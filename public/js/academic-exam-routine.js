@@ -635,7 +635,7 @@ var render = function() {
                                     attrs: {
                                       type: "checkbox",
                                       name: "check_start",
-                                      id: "check_start"
+                                      id: "check_start" + index
                                     },
                                     on: {
                                       click: function($event) {
@@ -648,7 +648,7 @@ var render = function() {
                                     "label",
                                     {
                                       staticClass: "form-check-label",
-                                      attrs: { for: "check_start" }
+                                      attrs: { for: "check_start" + index }
                                     },
                                     [_vm._v("Check for all")]
                                   )
@@ -692,7 +692,7 @@ var render = function() {
                                     attrs: {
                                       type: "checkbox",
                                       name: "check_end",
-                                      id: "check_end"
+                                      id: "check_end" + index
                                     },
                                     on: {
                                       click: function($event) {
@@ -705,7 +705,7 @@ var render = function() {
                                     "label",
                                     {
                                       staticClass: "form-check-label",
-                                      attrs: { for: "check_end" }
+                                      attrs: { for: "check_end" + index }
                                     },
                                     [_vm._v("Check for all")]
                                   )

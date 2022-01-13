@@ -16,8 +16,8 @@ class AcademicExamRoutine extends Model {
     /**
      * @return mixed
      */
-    public function academic_subject() {
-        return $this->belongsTo(AcademicSubject::class, 'academic_subject_id');
+    public function academic_subject_level() {
+        return $this->belongsTo(AcademicSubjectLevel::class, 'academic_subject_level_id');
     }
 
 }

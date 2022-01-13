@@ -74,36 +74,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Show",
   data: function data() {
@@ -210,72 +180,25 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-md-12" }, [
-            _c(
-              "table",
-              { staticClass: "table table-bordered" },
-              [
-                _c("tr", [
-                  _c("td", [_vm._v(_vm._s(_vm.$t("Academic_Session")))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(_vm.assign.academic_session.duration))
-                  ])
+            _c("table", { staticClass: "table table-bordered" }, [
+              _c("tr", [
+                _c("td", { staticClass: "text-right" }, [
+                  _vm._v(_vm._s(_vm.$t("Academic_Session")))
                 ]),
                 _vm._v(" "),
-                _c("tr", [
-                  _c("td", [_vm._v(_vm._s(_vm.$t("Academic_Class")))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(_vm.assign.academic_class.name))])
+                _c("td", [_vm._v(_vm._s(_vm.assign.academic_session.duration))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("td", { staticClass: "text-right" }, [
+                  _vm._v(_vm._s(_vm.$t("AcademicDetails")))
                 ]),
                 _vm._v(" "),
-                _vm.assign.type == 0
-                  ? [
-                      _c("tr", [
-                        _c("td", [_vm._v(_vm._s(_vm.$t("Section")))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(_vm.assign.section.name))])
-                      ])
-                    ]
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.assign.type == 1
-                  ? [
-                      _c("tr", [
-                        _c("td", [_vm._v(_vm._s(_vm.$t("Academic_Group")))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(_vm.assign.group.name))])
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v(_vm._s(_vm.$t("Group_section")))]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(_vm._s(_vm.assign.group_section.name))
-                        ])
-                      ])
-                    ]
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.assign.type == 2
-                  ? [
-                      _c("tr", [
-                        _c("td", [
-                          _vm._v(_vm._s(_vm.$t("Academic_Department")))
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(_vm.assign.department.name))])
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v(_vm._s(_vm.$t("Department_year")))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(_vm.assign.year.name))])
-                      ])
-                    ]
-                  : _vm._e()
-              ],
-              2
-            )
+                _c("td", [
+                  _vm._v(_vm._s(_vm.assign.academic_level.details.details))
+                ])
+              ])
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12" }, [

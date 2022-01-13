@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Response;
 use Carbon\Carbon;
 use App\Models\Day;
 use App\Models\Account;
@@ -11,6 +12,7 @@ use App\Models\BillItem;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Religion;
+use App\Models\Admission;
 use App\Models\BloodGroup;
 use App\Models\ClassPeriod;
 use App\Models\Designation;
@@ -20,16 +22,21 @@ use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use App\Models\AcademicClass;
 use App\Models\AcademicGroup;
+use App\Models\AcademicLevel;
 use App\Models\AcademicSection;
 use App\Models\AcademicSession;
 use App\Models\AcademicSubject;
+use App\Http\Traits\HelperTrait;
 use App\Models\AcademicDepartment;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Models\AcademicClassSession;
+use App\Models\AcademicSubjectLevel;
 use Illuminate\Support\Facades\Cache;
 
 class CommonController extends Controller {
+
+    use HelperTrait;
 
     public function loadReligionList() {
         return Cache::rememberForever('religions', function () {
@@ -83,31 +90,20 @@ class CommonController extends Controller {
      */
     public function searchClassSubject(Request $request) {
         $request->validate([
-            'academic_class_id'      => 'required',
-            'academic_class_type'    => 'required',
-            'academic_group_id'      => 'required_if:academic_class_type,1',
-            'academic_department_id' => 'required_if:academic_class_type,2',
-            'academic_section_id'    => 'required_if:academic_class_type,2',
+            'academic_class_id'   => 'required',
+            'academic_class_type' => 'required',
+            'level_one_id'        => 'required',
+            'level_two_id'        => 'required_if:academic_class_type,1,2',
         ]);
 
-        if ($request->input("academic_class_type") == 2) {
-            $subjects = AcademicSubject::with(['religion'])
-                ->where('academic_class_id', $request->input("academic_class_id"))
-                ->where('academic_department_id', $request->input("academic_department_id"))
-                ->where('academic_section_id', $request->input("academic_section_id"))
-                ->get();
-        } elseif ($request->input("academic_class_type") == 1) {
-            $subjects = AcademicSubject::with(['religion'])
-                ->where('academic_class_id', $request->input("academic_class_id"))
-                ->where('academic_group_id', $request->input("academic_group_id"))
-                ->get();
-        } else {
-            $subjects = AcademicSubject::with(['religion'])
-                ->where('academic_class_id', $request->input("academic_class_id"))
-                ->get();
-        }
+        $levelId = $this->findAcademicLevelID($request->input("academic_class_id"), $request->input("academic_class_type"), $request->input("level_one_id"), $request->input("level_two_id"));
 
-        return $subjects;
+        $subjects = AcademicSubjectLevel::with([
+            'subject',
+            'subject.religion:id,name',
+        ])->whereAcademicLevelId($levelId)->get();
+
+        return Response::json($subjects, 200);
     }
 
     public function loadOnlyClassList() {
@@ -174,10 +170,12 @@ class CommonController extends Controller {
         $groupId = $request->input("id");
         $classId = $request->input("classId");
 
-        $data['optionals'] = AcademicSubject::whereAcademicClassId($classId)
-            ->whereAcademicGroupId($groupId)
+        $levelId = AcademicLevel::whereAcademicClassId($classId)->whereLevelOneId($groupId)->first();
+        $subjectLevel = AcademicSubjectLevel::whereAcademicLevelId($levelId->id)->pluck('academic_subject_id')->toArray();
+
+        $data['optionals'] = AcademicSubject::whereIn('id', $subjectLevel)
             ->whereSubjectType(1)
-            ->select(['id', 'name as text'])
+            ->select(['id', DB::raw('CONCAT("(",code,") - ",name) as text')])
             ->get();
 
         $data['groups'] = AcademicGroup::select(['id'])
@@ -223,31 +221,55 @@ class CommonController extends Controller {
         ]);
         $custom = $request->input("custom");
 
-        return User::whereCustom($custom)
-            ->with([
-                'information',
-                'information.religion:id,name',
-                'father',
-                'mother',
-                'guardian.guardianInformation',
-                'familyInfo',
-                'address',
-                'address.division:id,name',
-                'address.district:id,name',
-                'address.upazila:id,name',
-                'address.presentDivision:id,name',
-                'address.presentDistrict:id,name',
-                'address.presentUpazila:id,name',
-                'admission.academic',
-                'admission.academic.session:id,duration',
-                'admission.academic.class:id,name,code',
-                'admission.academic.section:id,name',
-                'admission.academic.year:id,name',
-                'admission.academic.optionalSubject.academicSubject:id,name',
-                'previousInstitute',
-                'documents',
-            ])
-            ->firstOrFail();
+        $admission = Admission::whereCustom($custom)->first();
+
+        $data['user'] = User::with([
+            'information',
+            'information.religion:id,name',
+            'father',
+            'mother',
+            'guardian.guardianInformation',
+            'familyInfo',
+            'address',
+            'address.division:id,name',
+            'address.district:id,name',
+            'address.upazila:id,name',
+            'address.presentDivision:id,name',
+            'address.presentDistrict:id,name',
+            'address.presentUpazila:id,name',
+            /* 'admission.academic',
+            'admission.academic.session:id,duration',
+            'admission.academic.class:id,name,code',
+            'admission.academic.section:id,name',
+            'admission.academic.year:id,name',*/
+            'admission.academic.optionalSubject.academicSubject:id,name',
+            'previousInstitute',
+            'documents',
+        ])->find($admission->user_id);
+
+        $academicData = AcademicData::with([
+            'session:id,duration',
+            'class:id,name,code,type',
+            'level',
+        ])->find($admission->academic_data_id);
+
+        $level = $academicData->level;
+
+        if ($level->type == 2) {
+            $data['groupDepartment'] = $level->department->name;
+            $data['year'] = $level->year->name;
+        } elseif ($level->type == 1) {
+            $data['groupDepartment'] = $level->group->name;
+            $data['section'] = $level->groupSection->name;
+        } else {
+            $data['section'] = $level->section->name;
+        }
+
+        $data['session'] = $academicData->session->duration;
+        $data['class'] = $academicData->class->name;
+        $data['class_type'] = $academicData->class->type;
+
+        return $data;
 
     }
 
@@ -321,9 +343,11 @@ class CommonController extends Controller {
     public function loadStudentForClassGroup(Request $request) {
         if ($request->has('class_id') && $request->has('group_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
+
+            $levelIds = AcademicLevel::whereAcademicClassId(request('class_id'))->whereLevelOneId(request('group_id'))->pluck('id')->toArray();
+
             $students = AcademicData::whereAcademicSessionId($session->id)
-                ->whereAcademicClassId($request->get("class_id"))
-                ->whereAcademicGroupId($request->get("group_id"))
+                ->whereIn('academic_level_id', $levelIds)
                 ->pluck('user_id')
                 ->toArray();
 
@@ -339,10 +363,12 @@ class CommonController extends Controller {
     public function loadStudentForClassDepartmentYear(Request $request) {
         if ($request->has('class_id') && $request->has('department_id') && $request->has('year_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
+            $levelIds = AcademicLevel::whereAcademicClassId(request('class_id'))
+                ->whereLevelOneId(request('department_id'))
+                ->whereLevelTwoId(request('year_id'))
+                ->pluck('id')->toArray();
             $students = AcademicData::whereAcademicSessionId($session->id)
-                ->whereAcademicClassId($request->get("class_id"))
-                ->whereAcademicDepartmentId($request->get("department_id"))
-                ->whereAcademicYearId($request->get("year_id"))
+                ->whereIn('academic_level_id', $levelIds)
                 ->pluck('user_id')
                 ->toArray();
 
@@ -358,27 +384,29 @@ class CommonController extends Controller {
     public function loadSpecificStudent(Request $request) {
         if ($request->has('academic_class_id')) {
             $session = AcademicSession::whereIscurrent(1)->first();
-            $data = AcademicData::query();
-            $data = $data->where('academic_session_id', $session->id)
-                ->where('academic_class_id', $request->input("academic_class_id"))
-                ->where('type', $request->input("academic_class_type"));
 
-            if ($request->input('academic_group_id')) {
-                $data = $data->where('academic_group_id', $request->input("academic_group_id"));
-            }
-            if ($request->input('academic_section_id')) {
-                $data = $data->where('academic_section_id', $request->input("academic_section_id"));
-            }
-            if ($request->input('academic_department_id')) {
-                $data = $data->where('academic_department_id', $request->input("academic_department_id"));
-            }
-            if ($request->input('academic_year_id')) {
-                $data = $data->where('academic_year_id', $request->input("academic_year_id"));
+            $level = AcademicLevel::query();
+            $level = $level->whereAcademicClassId(request('academic_class_id'));
+            if ($request->input("academic_class_type") == 2) {
+                $level = $level->whereLevelOneId(request('academic_department_id'))
+                    ->whereLevelTwoId(request('academic_year_id'));
+            } elseif ($request->input("academic_class_type") == 1) {
+                $level = $level->whereLevelOneId(request('academic_group_id'))
+                    ->whereLevelTwoId(request('academic_section_id'));
+            } else {
+                $level = $level->whereLevelOneId(request('academic_section_id'));
             }
 
-            $data = $data->pluck('user_id')->toArray();
+            $levelId = $level->first();
 
-            return User::whereIn('id', $data)->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])->get();
+            if ($levelId) {
+                $data = AcademicData::query();
+                $data = $data->where('academic_session_id', $session->id)->whereAcademicLevelId($levelId->id)->pluck('user_id')->toArray();
+                $students = User::whereIn('id', $data)->select(['id', DB::raw('CONCAT("(",custom,") ",name) AS text')])->get();
+                return response()->json($students, 200);
+            } else {
+                return;
+            }
         }
     }
 
@@ -450,4 +478,39 @@ class CommonController extends Controller {
     public function loadOnlyDepartmentYear(Request $request) {
         return AcademicDepartment::select(['id'])->with('sections:id,name as text')->findOrFail($request->input("id"));
     }
+
+    /**
+     * @param Request $request
+     */
+    public function loadClassStudentList(Request $request) {
+        $request->validate([
+            'session_id'          => 'required',
+            'academic_class_id'   => 'required',
+            'academic_class_type' => 'required',
+            'level_one_id'        => 'required',
+            'level_two_id'        => 'required_unless:academic_class_type,0',
+        ]);
+
+        $level = AcademicLevel::whereAcademicClassId(request('academic_class_id'))
+            ->whereLevelOneId(request('level_one_id'))
+            ->whereLevelTwoId(request('level_two_id'))
+            ->first();
+
+        $data['session'] = AcademicSession::find(request('session_id'));
+        $data['academic_info'] = $level->details;
+
+        $students = AcademicData::query();
+        $students = $students->with([
+            'user:id,name,photo,phone',
+            'user.guardian.guardian:id,name,photo,phone',
+        ])->whereAcademicSessionId($request->input("session_id"))
+            ->whereAcademicClassId(request('academic_class_id'))
+            ->whereAcademicLevelId($level->id)
+            ->get();
+
+        $data['students'] = $students;
+
+        return response()->json($data, 200);
+    }
+
 }

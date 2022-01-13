@@ -29,6 +29,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicSession[] $academic_sessions
  * @property-read int|null $academic_sessions_count
  * @property-read \App\Models\AcademicGrade $grading
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicLevel[] $levels
+ * @property-read int|null $levels_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicSection[] $sections
  * @property-read int|null $sections_count
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicClass newModelQuery()
@@ -138,33 +140,27 @@ namespace App\Models{
  * @property int|null $academic_session_id
  * @property int|null $academic_class_id
  * @property int $type
- * @property int|null $academic_group_id
- * @property int|null $academic_section_id
- * @property int|null $academic_department_id
- * @property int|null $academic_year_id
+ * @property int|null $academic_level_id
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\AcademicClass|null $class
- * @property-read \App\Models\AcademicDepartment|null $department
+ * @property-read \App\Models\AcademicDepartment $department
  * @property-read mixed $academic_data
  * @property-read mixed $group_department
- * @property-read \App\Models\AcademicGroup|null $group
- * @property-read \App\Models\AcademicSection|null $section
+ * @property-read \App\Models\AcademicGroup $group
+ * @property-read \App\Models\AcademicSection $section
  * @property-read \App\Models\AcademicSession|null $session
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicDataSubject[] $subjects
  * @property-read int|null $subjects_count
  * @property-read \App\User $user
- * @property-read \App\Models\AcademicYear|null $year
+ * @property-read \App\Models\AcademicYear $year
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData query()
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicClassId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicDepartmentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicLevelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicSessionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereAcademicYearId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereCustom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicData whereId($value)
@@ -480,6 +476,40 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\AcademicLevel
+ *
+ * @property int $id
+ * @property int $academic_class_id
+ * @property int $type
+ * @property int $level_one_id
+ * @property int|null $level_two_id
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AcademicClass $academicClass
+ * @property-read \App\Models\AcademicDepartment $department
+ * @property-read mixed $details
+ * @property-read \App\Models\AcademicGroup $group
+ * @property-read \App\Models\AcademicSection|null $groupSection
+ * @property-read \App\Models\AcademicSection $section
+ * @property-read \App\Models\AcademicYear|null $year
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereAcademicClassId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereLevelOneId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereLevelTwoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicLevel whereUpdatedAt($value)
+ */
+	class AcademicLevel extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\AcademicSection
  *
  * @property int $id
@@ -541,12 +571,6 @@ namespace App\Models{
  * App\Models\AcademicSubject
  *
  * @property int $id
- * @property int $academic_class_id
- * @property int $academic_class_type
- * @property int|null $academic_group_id
- * @property int|null $academic_section_id
- * @property int|null $academic_department_id
- * @property int|null $academic_year_id
  * @property string $name
  * @property string $code
  * @property int $mark_type
@@ -562,21 +586,12 @@ namespace App\Models{
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\AcademicClass $academic_class
- * @property-read \App\Models\AcademicDepartment|null $academic_department
- * @property-read \App\Models\AcademicGroup|null $academic_group
- * @property-read \App\Models\AcademicSection|null $academic_section
- * @property-read \App\Models\AcademicYear|null $department_year
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AcademicSubjectLevel[] $levels
+ * @property-read int|null $levels_count
  * @property-read \App\Models\Religion|null $religion
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject query()
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereAcademicClassId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereAcademicClassType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereAcademicDepartmentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereAcademicGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereAcademicSectionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereAcademicYearId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereFullMark($value)
@@ -595,6 +610,31 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubject whereUpdatedAt($value)
  */
 	class AcademicSubject extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\AcademicSubjectLevel
+ *
+ * @property int $id
+ * @property int $academic_class_id
+ * @property int $academic_level_id
+ * @property int $academic_subject_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AcademicLevel $level
+ * @property-read \App\Models\AcademicSubject $subject
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel whereAcademicClassId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel whereAcademicLevelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel whereAcademicSubjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AcademicSubjectLevel whereUpdatedAt($value)
+ */
+	class AcademicSubjectLevel extends \Eloquent {}
 }
 
 namespace App\Models{

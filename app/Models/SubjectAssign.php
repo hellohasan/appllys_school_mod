@@ -20,11 +20,7 @@ class SubjectAssign extends Model {
         'session_id',
         'academic_class_id',
         'type',
-        'academic_section_id',
-        'academic_group_id',
-        'academic_group_section_id',
-        'academic_department_id',
-        'academic_year_id',
+        'academic_level_id',
     ];
 
     /**
@@ -52,42 +48,14 @@ class SubjectAssign extends Model {
      * @return mixed
      */
     public function academicClass() {
-        return $this->belongsTo(AcademicClass::class);
+        return $this->belongsTo(AcademicClass::class, 'academic_class_id');
     }
 
     /**
      * @return mixed
      */
-    public function section() {
-        return $this->belongsTo(AcademicSection::class, 'academic_section_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function group() {
-        return $this->belongsTo(AcademicGroup::class, 'academic_group_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function groupSection() {
-        return $this->belongsTo(AcademicSection::class, 'academic_group_section_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function department() {
-        return $this->belongsTo(AcademicDepartment::class, 'academic_department_id');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function year() {
-        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    public function academicLevel() {
+        return $this->belongsTo(AcademicLevel::class, 'academic_level_id');
     }
 
 }

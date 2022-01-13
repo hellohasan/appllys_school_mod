@@ -46,9 +46,7 @@
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>{{ $t('Academic_Class') }}</th>
-								<th>{{ $t('AcademicGroupDepartment') }}</th>
-								<th>{{ $t('SectionYear') }}</th>
+								<th>{{ $t('AcademicDetails') }}</th>
 								<th>{{ $t('TotalStudent') }}</th>
 								<th>{{ $t('Published') }}</th>
 								<th>{{ $t('Action') }}</th>
@@ -56,19 +54,11 @@
 						</thead>
 						<tbody>
 							<tr v-for="(list , i) in exam.classes" :key="i">
-								<td>{{ list.academic_class.name }}</td>
 								<td>
-									<template v-if="list.type == 1">{{ list.academic_group.name }}</template>
-									<template v-else-if="list.type == 2">{{ list.academic_department.name }}</template>
-									<template v-else>N/A</template>
+									{{ list.level.details.details }}
 								</td>
 								<td>
-									<template v-if="list.type == 2">{{ list.year.name }}</template>
-									<template v-else-if="list.type == 1">{{ list.group_section.name }}</template>
-									<template v-else>{{ list.section.name }}</template>
-								</td>
-								<td>
-									{{ list.logs.length | students }}
+									{{ list.total_students | students }}
 								</td>
 								<td>
 									<template v-if="list.is_assigned">
@@ -114,6 +104,10 @@
 					if (result.isConfirmed) {
 						axios.post('/api/academic-exam-assign', { custom, id }).then((res) => {
 							this.loadAcademicExamDetails();
+							Toast.fire({
+								icon: "success",
+								text: this.$t("success_message_create"),
+							});
 						})
 					}
 				})

@@ -17,4 +17,18 @@ class AcademicSubjectLevel extends Model {
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @return mixed
+     */
+    public function subject() {
+        return $this->belongsTo(AcademicSubject::class, 'academic_subject_id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function level() {
+        return $this->belongsTo(AcademicLevel::class, 'academic_level_id');
+    }
 }

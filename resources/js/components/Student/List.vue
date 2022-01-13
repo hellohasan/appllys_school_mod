@@ -2,22 +2,57 @@
 	<card :title="$t('StudentList')">
 		<form @submit.prevent="loadStudent">
 			<div class="form-row">
-				<div class="form-group col-4">
+				<div class="form-group col-6">
 					<label for="session_id">{{ $t('Academic_Session') }}</label>
-					<custom-select :options="sessions" @change="changeSession" v-model="form.session_id" :placeholder="$t('Select_One')" name="session_id"></custom-select>
+					<custom-select :options="sessions" v-model="form.session_id" :placeholder="$t('Select_One')" name="session_id"></custom-select>
 					<div class="invalid-feedback" v-if="errors.session_id">{{ errors.session_id[0] }}</div>
 				</div>
-				<div class="form-group col-8">
-					<label for="teacher_subject_id">{{ $t('Academic_subject') }}</label>
-					<custom-select-empty :options="subjects" v-model="form.teacher_subject_id" :placeholder="$t('Select_One')"></custom-select-empty>
-					<div class="invalid-feedback" v-if="errors.teacher_subject_id">{{ errors.teacher_subject_id[0] }}</div>
+
+				<div class="form-group col-6">
+					<label for="academic_class_id">{{ $t('Academic_Class') }}</label>
+					<custom-select @change="classChange" :options="classes" v-model="form.academic_class_id" :placeholder="$t('Select_One')"></custom-select>
+					<div class="invalid-feedback" v-if="errors.academic_class_id">{{ errors.academic_class_id[0] }}</div>
 				</div>
+
+				<template v-if="this.form.academic_class_type == '0'">
+					<div class="form-group col-12">
+						<label for="academic_section_id">{{ $t('Group_section') }}</label>
+						<custom-select-empty :options="levelOnes" v-model="form.level_one_id" :placeholder="$t('Select_One')"></custom-select-empty>
+						<div class="invalid-feedback" v-if="errors.level_one_id">{{ errors.level_one_id[0] }}</div>
+					</div>
+				</template>
+
+				<template v-if="this.form.academic_class_type == '1'">
+					<div class="form-group col-6">
+						<label for="academic_group_id">{{ $t('Academic_Group') }}</label>
+						<custom-select-empty :options="levelOnes" @change="changeGroupDepartment" v-model="form.level_one_id" :placeholder="$t('Select_One')"></custom-select-empty>
+						<div class="invalid-feedback" v-if="errors.level_one_id">{{ errors.level_one_id[0] }}</div>
+					</div>
+					<div class="form-group col-6">
+						<label for="academic_group_section_id">{{ $t('Group_section') }}</label>
+						<custom-select-empty :options="levelTwos" v-model="form.level_two_id" :placeholder="$t('Select_One')"></custom-select-empty>
+						<div class="invalid-feedback" v-if="errors.level_two_id">{{ errors.level_two_id[0] }}</div>
+					</div>
+				</template>
+				<template v-if="this.form.academic_class_type == '2'">
+					<div class="form-group col-6">
+						<label for="academic_department_id">{{ $t('Academic_Department') }}</label>
+						<custom-select-empty @change="changeGroupDepartment" :options="levelOnes" v-model="form.level_one_id" :placeholder="$t('Select_One')"></custom-select-empty>
+						<div class="invalid-feedback" v-if="errors.level_one_id">{{ errors.level_one_id[0] }}</div>
+					</div>
+					<div class="form-group col-6">
+						<label for="academic_year_id">{{ $t('Department_year') }}</label>
+						<custom-select-empty :options="levelTwos" v-model="form.level_two_id" :placeholder="$t('Select_One')"></custom-select-empty>
+						<div class="invalid-feedback" v-if="errors.level_two_id">{{ errors.level_two_id[0] }}</div>
+					</div>
+				</template>
+
 				<div class="form-group col-12">
 					<button type="submit" id="button" :disabled="form.busy" class="btn btn-primary btn-lg btn-block"><i class="fas fa-search"></i> {{ $t('StudentList') }}</button>
 				</div>
 			</div>
 		</form>
-		<template v-if="students.length">
+		<template v-if="info != null">
 			<div id="printAble">
 				<div class="row">
 					<div class="col-12">
@@ -32,44 +67,11 @@
 						<table class="table table-bordered">
 							<tr>
 								<td class="text-right" width="50%">{{$t("Academic_Session") }}</td>
-								<td>{{ assign.academic_session.duration }}</td>
+								<td>{{ info.session.duration }}</td>
 							</tr>
 							<tr>
-								<td class="text-right" width="50%">{{$t("Academic_Class") }}</td>
-								<td>{{ assign.academic_class.name }}</td>
-							</tr>
-
-							<template v-if="assign.type == 0">
-								<tr>
-									<td class="text-right" width="50%">{{$t("Section") }}</td>
-									<td>{{ assign.section.name }}</td>
-								</tr>
-							</template>
-
-							<template v-if="assign.type == 1">
-								<tr>
-									<td class="text-right" width="50%">{{$t("Academic_Group") }}</td>
-									<td>{{ assign.group.name }}</td>
-								</tr>
-								<tr>
-									<td class="text-right" width="50%">{{$t("Group_section") }}</td>
-									<td>{{ assign.group_section.name }}</td>
-								</tr>
-							</template>
-
-							<template v-if="assign.type == 2">
-								<tr>
-									<td class="text-right" width="50%">{{$t("Academic_Department") }}</td>
-									<td>{{ assign.department.name }}</td>
-								</tr>
-								<tr>
-									<td class="text-right" width="50%">{{$t("Department_year") }}</td>
-									<td>{{ assign.year.name }}</td>
-								</tr>
-							</template>
-							<tr>
-								<td class="text-right" width="50%">{{$t("Academic_subject") }}</td>
-								<td>{{ subject.name }} - ({{ subject.code }})</td>
+								<td class="text-right" width="50%">{{$t("AcademicInfo") }}</td>
+								<td>{{ info.academic_info.details }}</td>
 							</tr>
 						</table>
 					</div>
@@ -90,36 +92,44 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="(s, index) in students" :key="index">
-										<td>{{ ++index }}</td>
-										<td>{{ s.custom }}</td>
-										<td>
-											<img :src="s.user.photo" width="75px" alt="">
-										</td>
-										<td>
-											{{ s.user.name }} <br>
-											{{ s.user.phone }}
-										</td>
-										<td>
-											{{ s.user.guardian.guardian.name }} <br>
-											{{ s.user.guardian.guardian.phone }}
-										</td>
-										<td>
-                    <!-- TODO:attendance percentage show show here -->
-                    </td>
-										<td>
-                      <!-- TODO:Last semester result should show here  -->
-                    </td>
-										<td>
-                      <span v-if="s.status == 0" class="badge badge-success">{{ $t('Running') }}</span>
-                      <span v-else-if="s.status == 1" class="badge badge-warning">{{ $t('Stop') }}</span>
-                      <span v-else-if="s.status == 2" class="badge badge-danger">{{ $t('DropOut') }}</span>
-                    </td>
-                    <td class="d-print-none">
-                      <!-- FIXME: add the student profile link -->
-                      <router-link to="#" class="btn btn-sm btn-secondary">{{ $t('Profile') }}</router-link>
-                    </td>
-									</tr>
+									<template v-if="info.students.length">
+
+										<tr v-for="(s, index) in info.students" :key="index">
+											<td>{{ ++index }}</td>
+											<td>{{ s.custom }}</td>
+											<td>
+												<img :src="s.user.photo" width="75px" alt="">
+											</td>
+											<td>
+												{{ s.user.name }} <br>
+												{{ s.user.phone }}
+											</td>
+											<td>
+												{{ s.user.guardian.guardian.name }} <br>
+												{{ s.user.guardian.guardian.phone }}
+											</td>
+											<td>
+												<!-- TODO:attendance percentage show show here -->
+											</td>
+											<td>
+												<!-- TODO:Last semester result should show here  -->
+											</td>
+											<td>
+												<span v-if="s.status == 0" class="badge badge-success">{{ $t('Running') }}</span>
+												<span v-else-if="s.status == 1" class="badge badge-warning">{{ $t('Stop') }}</span>
+												<span v-else-if="s.status == 2" class="badge badge-danger">{{ $t('DropOut') }}</span>
+											</td>
+											<td class="d-print-none">
+												<!-- FIXME: add the student profile link -->
+												<router-link to="#" class="btn btn-sm btn-secondary">{{ $t('Profile') }}</router-link>
+											</td>
+										</tr>
+									</template>
+									<template v-else>
+										<tr class="text-center">
+											<td colspan="9">No Student are found </td>
+										</tr>
+									</template>
 								</tbody>
 
 							</table>
@@ -127,7 +137,7 @@
 					</div>
 				</div>
 			</div>
-      <button type="button" @click="printMe('printAble')" class="btn btn-success"><i class="fas fa-print"></i> {{ $t('Print') }}</button>
+			<button type="button" @click="printMe('printAble')" class="btn btn-success"><i class="fas fa-print"></i> {{ $t('Print') }}</button>
 		</template>
 
 	</card>
@@ -146,48 +156,74 @@
 			return {
 				form: new Form({
 					session_id: '',
-					teacher_subject_id: ''
+					academic_class_id: '',
+					academic_class_type: '',
+					level_one_id: '',
+					level_two_id: ''
 				}),
 				basic: {},
 				errors: [],
 				sessions: [],
-				subjects: [],
-				assign: {},
-				subject: {},
-				students: []
+				classes: [],
+				levelOnes: [],
+				levelTwos: [],
+				levelTwoData: [],
+				info: null
 			}
 		},
 		methods: {
-      async printMe(divName) {
-        await this.$htmlToPaper(divName);
-      },
+			async printMe(divName) {
+				await this.$htmlToPaper(divName);
+			},
 			loadStudent() {
 				this.errors = [];
 				let validation = new Validator(this.form, {
 					'session_id': ['required'],
-					'teacher_subject_id': ['required'],
+					'academic_class_id': ['required'],
+					'academic_class_type': ['required'],
+					'level_one_id': ['required'],
 				});
 
 				if (validation.passes()) {
-					this.form.post('/api/load-teacher-student-list').then((res) => {
+					this.form.post('/api/load-class-student-list').then((res) => {
 						this.basic = this.$store.getters.basicData;
-						this.assign = res.data.detail
-						this.subject = res.data.subject
-						this.students = res.data.students
+						this.info = res.data
 					})
 				} else {
 					this.errors = validation.errors.all();
 				}
 			},
-			changeSession(e) {
+			changeGroupDepartment(e) {
+				this.levelTwos = [];
 				if (e) {
-					this.loadAcademicDetails(e);
+					this.levelTwos = _.find(this.levelOnes, function (o) { return o.id == e }).sections;
 				}
 			},
-			loadAcademicDetails(session_id) {
-				axios.get('/api/load-teacher-session-subject-list', { params: { session_id } }).then((res) => {
-					this.subjects = res.data
-				})
+			classChange: function (e) {
+				if (e) {
+					axios.get(`/api/load-class-all-details/${e}`).then((res) => {
+
+						let type = res.data.type;
+						this.levelOnes = [];
+						this.LevelTwos = [];
+						this.form.academic_class_type = type;
+						this.form.level_one_id = '';
+						this.form.level_two_id = '';
+
+						if (type == 2) {
+							this.levelOnes = res.data.academic_departments;
+						} else if (type == 1) {
+							this.levelOnes = res.data.academic_groups;
+						} else {
+							this.levelOnes = res.data.sections;
+						}
+					});
+				}
+			},
+			loadClassList() {
+				axios.get("/api/load-class-list").then((res) => {
+					this.classes = res.data;
+				});
 			},
 			loadAcademicSession() {
 				axios.get('/api/load-only-session-list').then((res) => {
@@ -197,6 +233,7 @@
 		},
 		created() {
 			this.loadAcademicSession();
+			this.loadClassList();
 		},
 	}
 </script>

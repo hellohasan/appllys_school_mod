@@ -23,12 +23,16 @@ class BillReceiveController extends Controller {
         ]);
 
         $user = User::with([
-            'father', 'mother', 'guardian.guardianInformation', 'address',
-        ])->role('Student')->find($request->input("id"));
+            'father',
+            'mother',
+            'guardian.guardianInformation',
+            'address',
+        ])->role('Student')
+            ->find($request->input("id"));
 
         if ($user) {
-            $academicData = AcademicData::orderByDesc('academic_session_id')->whereUserId($user->id)->first();
-            $data['academic_data'] = $academicData->academic_data;
+            $academicData = AcademicData::with('level')->orderByDesc('academic_session_id')->whereUserId($user->id)->first();
+            $data['academic_data'] = $academicData;
             $data['student_data'] = [
                 'name'  => $user->name,
                 'phone' => $user->phone,

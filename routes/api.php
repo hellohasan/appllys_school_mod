@@ -85,6 +85,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('load-class-all-details/{id}', [CommonController::class, 'loadClassAllDetails']);
     Route::get('load-only-class-sections-groups-departments/{id}', [CommonController::class, 'loadOnlyClassSectionGroupDepartment']); // return section, group, department
 
+    Route::post('load-class-student-list', [CommonController::class, 'loadClassStudentList']);
+
     Route::apiResource('academic-groups', 'API\Academic\GroupController', ['except' => ['show', 'destroy']]);
     Route::apiResource('academic-departments', 'API\Academic\DepartmentController', ['except' => ['show', 'destroy']]);
     Route::apiResource('academic-years', 'API\Academic\YearController', ['except' => ['show', 'destroy']]);

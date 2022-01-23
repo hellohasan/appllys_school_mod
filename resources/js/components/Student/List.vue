@@ -182,6 +182,7 @@
 					'academic_class_id': ['required'],
 					'academic_class_type': ['required'],
 					'level_one_id': ['required'],
+					'level_two_id': ['required_unless:academic_class_type,0'],
 				});
 
 				if (validation.passes()) {
@@ -206,7 +207,7 @@
 						let type = res.data.type;
 						this.levelOnes = [];
 						this.LevelTwos = [];
-						this.form.academic_class_type = type;
+						this.form.academic_class_type = String(type);
 						this.form.level_one_id = '';
 						this.form.level_two_id = '';
 

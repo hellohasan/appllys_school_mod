@@ -354,5 +354,11 @@
     "AcademicInfo": "একাডেমিক তথ্য",
     "SelectSession": "সেশন নির্বাচন করুন",
     "SelectExam": "পরীক্ষা নির্বাচন করুন",
-    "SelectAcademicSubject": "একাডেমিক বিষয় নির্বাচন করুন"
+    "SelectAcademicSubject": "একাডেমিক বিষয় নির্বাচন করুন",
+    "NewAttendance": "নতুন উপস্থিতি",
+    "AttendanceList": "উপস্থিতি তালিকা",
+    "SelectSubject": "বিষয় নির্বাচন করুন",
+    "LoadSubject": "একাডেমিক বিষয় লোড করুন",
+    "PleaseWait": "অনুগ্রহপূর্বক অপেক্ষা করুন...",
+    "NoRecordFound": "ওহো.. কোনো রেকর্ড পাওয়া যায়নি।"
 }

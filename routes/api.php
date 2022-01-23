@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\API\AdmissionController;
+use App\Http\Controllers\API\AttendanceController;
 use App\Http\Controllers\API\Academic\GradeController;
 use App\Http\Controllers\API\Teacher\TeacherController;
 use App\Http\Controllers\API\Academic\SubjectController;
@@ -242,4 +243,9 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('load-mark-input-students', [MarkInputController::class, 'loadMarkInputStudents'])->middleware('permission:load-mark-input-students');
     Route::post('submit-inputted-mark', [MarkInputController::class, 'submitInputtedMark'])->middleware('permission:mark-submit');
     Route::post('mark-input-print', [MarkInputController::class, 'markInputPrint'])->middleware('permission:load-mark-input-students');
+
+    /* Attendance Route List */
+    Route::post('load-subject-for-attendance', [AttendanceController::class, 'getSubjectList'])->name('load-subject-for-attendance');
+    Route::post('load-subject-student-for-attendance', [AttendanceController::class, 'getSubjectStudentList'])->name('load-subject-student-for-attendance');
+
 });

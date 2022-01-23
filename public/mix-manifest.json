@@ -40,8 +40,8 @@
     "/js/test-component.js": "/js/test-component.js",
     "/js/test-datatable.js": "/js/test-datatable.js",
     "/js/transaction-logs.js": "/js/transaction-logs.js",
-    "/vendors~js/academic-exam-create~js/academic-exam-routine~js/mark-input~js/student-list~js/subject-assign-new.js": "/vendors~js/academic-exam-create~js/academic-exam-routine~js/mark-input~js/student-list~js/subject-assign-new.js",
     "/vendors~js/academic-exam-create~js/transaction-logs.js": "/vendors~js/academic-exam-create~js/transaction-logs.js",
     "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~f9ab20ce.js": "/vendors~js/academic-exam-routine-show~js/balance-transfer-show~js/bill-receive-new~js/expenses-show~~f9ab20ce.js",
-    "/vendors~js/test-component.js": "/vendors~js/test-component.js"
+    "/vendors~js/test-component.js": "/vendors~js/test-component.js",
+    "/vendors~js/academic-exam-create~js/academic-exam-routine~js/mark-input~js/student-list~js/subject-assign-new.js": "/vendors~js/academic-exam-create~js/academic-exam-routine~js/mark-input~js/student-list~js/subject-assign-new.js"
 }

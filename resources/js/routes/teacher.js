@@ -12,7 +12,9 @@ export const teacher = [
       ],
       title: i18n.tc('StudentList')
     }
-  },{
+  },
+
+  {
     path: "/mark-input",
     component: () => import(/*webpackChunkName: "js/mark-input"*/"../components/Teacher/Mark/Input"),
     name: "mark-input",
@@ -24,4 +26,33 @@ export const teacher = [
       title: i18n.tc('MarkInput')
     }
   },
+
+  {
+    path: "/attendance",
+    component: require("../components/Academic/Subject/Subject").default,
+    meta: {
+      requireAuth: true,
+      roles: ["Super Admin", 'Admin', 'Register','Teacher']
+    },
+    children: [
+      {
+        path: "/",
+        meta: {
+          permissions: ["attendance-list"],
+          title: i18n.tc('AttendanceList')
+        },
+        component: require("../components/Teacher/Attendance/Index").default
+      },
+      
+      {
+        path: "new",
+        meta: {
+          permissions: ["attendance-new"],
+          title: i18n.tc('NewAttendance')
+        },
+        component: require("../components/Teacher/Attendance/New").default
+      }
+    ]
+  },
+
 ];

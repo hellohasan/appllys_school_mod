@@ -26,3 +26,15 @@ function customRound($value, $length = 2) {
 function customPercentage($value, $percent) {
     return round(($value * ($percent / 100)), 2);
 }
+
+/**
+ * @return mixed
+ */
+function getRoleName() {
+    $roles = Auth::user()->roles();
+    if ($roles) {
+        return $roles->first()->name;
+    } else {
+        return 'N/A';
+    }
+}

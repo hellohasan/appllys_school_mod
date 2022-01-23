@@ -67,6 +67,13 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     /**
+     * @param $value
+     */
+    public function getPhotoAttribute($value) {
+        return asset($value);
+    }
+
+    /**
      * @return mixed
      */
     public function guardian() {

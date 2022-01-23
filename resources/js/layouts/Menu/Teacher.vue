@@ -16,6 +16,20 @@
 			</router-link>
 		</li>
 
+		<li v-permission="['attendance-new']" class="nav-item">
+			<router-link to="/attendance/new" class="nav-link">
+				<i class="nav-icon fas fa-notes-medical cyan"></i>
+				<p>{{ $t('NewAttendance') }}</p>
+			</router-link>
+		</li>
+
+		<li v-permission="['attendance-list']" class="nav-item">
+			<router-link to="/attendance" class="nav-link">
+				<i class="nav-icon fas fa-clipboard-list cyan"></i>
+				<p>{{ $t('AttendanceList') }}</p>
+			</router-link>
+		</li>
+
 	</Fragment>
 </template>
 

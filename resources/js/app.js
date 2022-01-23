@@ -19,6 +19,10 @@ Vue.use(Meta)
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
+/* Vue Element Loading */
+import VueElementLoading from 'vue-element-loading'
+Vue.component('VueElementLoading', VueElementLoading)
+
 /* Vuex for the store */
 import Vuex from "vuex";
 Vue.use(Vuex);

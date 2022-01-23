@@ -354,6 +354,12 @@
     "AcademicInfo": "Academic Information",
     "SelectSession": "Select Session",
     "SelectExam": "Select Exam",
-    "SelectAcademicSubject": "Select Academic Subject"
+    "SelectAcademicSubject": "Select Academic Subject",
+    "NewAttendance": "New Attendance",
+    "AttendanceList": "Attendance List",
+    "SelectSubject": "Select Subject",
+    "LoadSubject": "Load Subject",
+    "PleaseWait": "Please wait...",
+    "NoRecordFound": "Oopps.. No record found."
 
 }

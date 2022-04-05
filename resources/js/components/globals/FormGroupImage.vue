@@ -152,7 +152,7 @@
   .image-preview-input {
     position: relative;
     overflow: hidden;
-    margin: 0px;
+    margin: 0;
     color: #333;
     background-color: #fff;
     border-color: #ccc;

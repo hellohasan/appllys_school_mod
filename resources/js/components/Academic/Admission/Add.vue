@@ -92,7 +92,7 @@
 						<has-error :form="form" field="religion_id"></has-error>
 					</div>
 					<div class="form-group col-md-4">
-						<label for="blood">{{$t('Blood Group')}}</label>
+						<label for="blood">{{$t('BloodGroup')}}</label>
 						<select2 :options="bloods" v-model="form.blood" :placeholder="$t('Select_One')" name="blood"></select2>
 						<has-error :form="form" field="blood"></has-error>
 					</div>

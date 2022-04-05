@@ -1,0 +1,203 @@
+{
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Learn with Sumit - Vintage",
+    "workbench.tree.indent": 16,
+    "workbench.list.horizontalScrolling": true,
+    "editor.fontFamily": "'Fira Code','JetBrains Mono'",
+    "editor.fontSize": 19,
+    "editor.fontLigatures": true,
+    "editor.formatOnPaste": false,
+    "editor.tabCompletion": "on",
+    "editor.semanticHighlighting.enabled": false,
+    "editor.formatOnSave": true,
+    "editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?",
+    "editor.defaultFormatter": null,
+    "editor.tabSize": 2,
+    "files.autoSave": "onFocusChange",
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "auto-close-tag.enableAutoCloseTag": true,
+    "auto-close-tag.enableAutoCloseSelfClosingTag": true,
+    "fontAwesomeAutocomplete.version": "5",
+    "fontAwesomeAutocomplete.patterns": [
+        "**/*.html",
+        "**/*.blade.php",
+        "**/*.vue"
+    ],
+    "fontAwesomeAutocomplete.triggerWord": "fa-",
+    "fontAwesomeAutocomplete.disableTriggerWordAutoClearPatterns": [
+        "**/*.html",
+        "**/*.blade.php",
+        "**/*.vue"
+    ],
+    "fontAwesomeAutocomplete.insertionTemplate": {
+        "**/*.html": "{style} {prefix}{name}",
+        "**/*.blade.php": "{style} {prefix}{name}",
+        "**/*.vue": "{style} {prefix}{name}"
+    },
+    "fontAwesomeAutocomplete.enableElevatedSortPriority": true,
+    "[php]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "kokororin.vscode-phpfmt"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnPaste": true
+    },
+    "[vue]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.defaultFormatter": "octref.vetur",
+    },
+    //"phpfmt.php_bin": "E:\\xampp\\php7.4\\php.exe",
+    "phpfmt.php_bin": "E:\\xampp\\php\\php.exe",
+    "phpfmt.passes": [
+        "AlignDoubleArrow",
+        "ShortArray",
+        "MergeElseIf",
+        "SpaceBetweenMethods",
+        "AutoSemicolon",
+        "GeneratePHPDoc",
+        "IndentTernaryConditions",
+        "ReplaceBooleanAndOr",
+        "ReindentSwitchBlocks",
+        //"StripExtraCommaInArray",
+        "NewLineBeforeReturn",
+        "OrderAndRemoveUseClauses",
+        //"SortUseNameSpace",
+        //"StripNewlineWithinClassBody",
+        "RemoveUseLeadingSlash"
+    ],
+    "phpfmt.exclude": [
+        "AllmanStyleBraces",
+        "ReindentComments",
+        "StripNewlineWithinClassBody"
+    ],
+    "phpfmt.psr2": true,
+    "[markdown]": {
+        "editor.quickSuggestions": true
+    },
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+    "emmet.triggerExpansionOnTab": true, // enable tab to expanse emmet tags
+    "blade.format.enable": true, // if you would like to enable blade format
+    "[blade]": {
+        "editor.tabSize": 2,
+        "editor.autoClosingBrackets": "always",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+    },
+    "path-intellisense.extensionOnImport": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
+    },
+    "files.associations": {
+        "*.js": "javascript",
+        "*.vue": "vue",
+        /* "*.blade.php": "html",
+      "*.tpl": "html" */
+    },
+    "editor.lineHeight": 30,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "emmet.showAbbreviationSuggestions": true,
+    "emmet.showExpandedAbbreviation": "always",
+    "emmet.includeLanguages": {
+        "vue-html": "html",
+        "vue": "html",
+        "blade": "html",
+        "edge": "html",
+        "php": "html"
+    },
+    "vsicons.dontShowNewVersionMessage": true,
+    "namespaceResolver.exclude": "**/node_modules/**", // Exclude glob pattern while finding files
+    "namespaceResolver.showMessageOnStatusBar": false, // Show message on status bar instead of notification box
+    "namespaceResolver.autoSort": true, // Auto sort after imports
+    "namespaceResolver.sortOnSave": false, // Auto sort when a file is saved
+    "namespaceResolver.sortAlphabetically": false, // Sort imports in alphabetical order instead of line length
+    "namespaceResolver.sortNatural": false, // Sort imports using a 'natural order' algorithm
+    "namespaceResolver.leadingSeparator": true, // Expand class with leading namespace separator
+    "namespaceResolver.highlightOnSave": false, // Auto highlight not imported and not used when a file is saved
+    "namespaceResolver.highlightOnOpen": false, // Auto highlight not imported and not used when a file is opened
+    "vetur.format.options.tabSize": 2,
+    "vetur.format.styleInitialIndent": true,
+    "vetur.format.scriptInitialIndent": true,
+    "vetur.format.defaultFormatterOptions": {
+        "js-beautify-html": {
+            "wrap_attributes": "aligned-multiple",
+            "printWidth": 500,
+            "indent_size": 2
+        },
+        "prettyhtml": {
+            "printWidth": 500,
+            "singleQuote": false,
+            "wrapAttributes": false,
+            "sortAttributes": true,
+            "useTabs": true,
+            "proseWrap": "preserve"
+        },
+        "vscode-typescript": {
+            "indent_size": 2
+        }
+    },
+    "vetur.format.options.useTabs": true,
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    "diffEditor.codeLens": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": true,
+    "cSpell.language": "en",
+    "cSpell.enabled": true,
+    "cSpell.enableFiletypes": [
+        "blade",
+        "vue"
+    ],
+    "cSpell.userWords": [
+        "axios",
+        "daterange",
+        "endforeach",
+        "endsection",
+        "offstyle",
+        "onstyle"
+    ],
+    "cSpell.diagnosticLevel": "Hint",
+    "editor.suggest.snippetsPreventQuickSuggestions": true,
+    "bracketPairColorizer.depreciation-notice": false,
+    "editor.guides.bracketPairs": true,
+    "explorer.confirmDelete": false,
+    "gitlens.advanced.messages": {
+        "suppressGitMissingWarning": true
+    },
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "ALERT"
+    ],
+    "todo-tree.regex.regex": "(//|#|<!--|;|\\{\\{--|/\\*|^|^[ \\t]*(-|\\d+.))\\s*($TAGS)",
+    "bladeFormatter.format.wrapLineLength": 90000000000000000,
+    "bladeFormatter.format.wrapAttributes": "preserve-aligned",
+    "explorer.autoReveal": false,
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "turboConsoleLog.addSemicolonInTheEnd": true,
+    "path-intellisense.absolutePathToWorkspace": false,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
+}
